@@ -1,0 +1,28 @@
+
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Environments
+.venv/
+env/
+venv/
+
+# Daten & Modelle & Artefakte
+data/
+datasets/
+logs/
+*.log
+*.csv
+*.parquet
+*.pt
+*.pth
+*.h5
+*.npy
+*.npz
+*.joblib
+
+# Build/Cache
+dist/
+build/
+*.egg-info/
