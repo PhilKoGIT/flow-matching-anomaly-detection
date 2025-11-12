@@ -1,0 +1,19 @@
+== Job start ==
+Feature-Shape nach One-Hot-Encoding: (2202, 3091)
+Anzahl Anomalien (y=1): 11 von 2202
+Train-Shape: (1752, 3091), Test-Shape: (450, 3091)
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n903
+Job ID: 2097670
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: TIMEOUT (exit code 0)
+Nodes: 1
+Cores per node: 2
+CPU Utilized: 00:00:01
+CPU Efficiency: 0.00% of 06:00:38 core-walltime
+Job Wall-clock time: 03:00:19
+Memory Utilized: 13.12 GB
+Memory Efficiency: 40.98% of 32.00 GB (32.00 GB/node)

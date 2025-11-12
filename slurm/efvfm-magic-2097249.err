@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/test_copy.py", line 14, in <module>
+    from ForestDiffusion.script_generation import X_test
+ModuleNotFoundError: No module named 'ForestDiffusion.script_generation'
