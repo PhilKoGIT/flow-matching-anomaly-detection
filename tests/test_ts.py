@@ -78,7 +78,7 @@ def main():
     df = load_business_dataset()
     df = create_time_series_features(df)
     print(df.head())
-    columns_to_drop = ["bank_account_uuid", "ref_bank", "currency", "trns_type"]
+    columns_to_drop = ["bank_account_uuid", "ref_bank", "ref_name", "currency", "trns_type"]
     df = df.drop(columns=columns_to_drop)
 
     #nochmal mischen
@@ -93,27 +93,38 @@ def main():
     anomaly_mask = df[target_col].notna()
     df[target_col] = anomaly_mask.astype(int)
 
-    print(df.head())
+
+    
+    print(df.isna().any().any())
+
 
     # Train/Test-Split by time (letzte 20% der Daten als Test-Set)
     split_index = int(0.8 * len(df))
 
     y = df[target_col].astype(int).values
+    for c in ["business_partner_name", "pay_method", "channel"]:
+        df[c] = pd.factorize(df[c])[0]  # oder .astype("category").cat.codes
     X = df.drop(columns=[target_col]).values
 
     X_train, X_test = X[:split_index], X[split_index:]
     y_train, y_test = y[:split_index], y[split_index:]  
 
 
-    # noch sortieren!!!!
+    int_index = [
+    0,1,2,3,4,5,6,7,8,9,       # paym_note*
+    10,11,12,13,14,15,16,17,18,19,   # swift_hash_*
+    20,21,22,23,24,25,26,27,28,29,   # iban_hash_*
+    37,  # month
+    38,  # dayofweek
+    39   # year
+    ]
+    cat_index = [
+    30,   # business_partner_name
+    32,   #pay_method
+    33,    # channel
+    ]
+    bin_index = []
 
-    print(f"Train-Shape: {X_train.shape}, Test-Shape: {X_test.shape}")
-
-    n_features = X_train.shape[1]
-    int_indexes = list(range(n_features)) 
-    not_int = [13,14,15,18] # alle Spalten numerisch
-    for i in not_int:
-        int_indexes.remove(i)
     # model = ForestDiffusionModel(
     #     X=X_train,
     #     label_y=y_train,
@@ -139,7 +150,9 @@ def main():
     #     remove_miss=False,
     #     p_in_one=True,
     # )
-    print("Starte Training des Forest Diffusion Modells...")
+
+# ZIIEELL ist einziges binär
+
 
     model = ForestDiffusionModel(
         X=X_train,
@@ -150,9 +163,9 @@ def main():
         n_batch=32,
         seed=666,
         n_jobs=4,
-        bin_indexes=[],
-        cat_indexes=[],
-        int_indexes=list(range(n_features)),
+        bin_indexes= bin_index,
+        cat_indexes= cat_index,
+        int_indexes=int_index,
         max_depth=4,
         n_estimators=20,
         gpu_hist=True,
