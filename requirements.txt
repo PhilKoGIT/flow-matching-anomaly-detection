@@ -1,5 +1,5 @@
 tqdm
-numpy==1.23.1
+numpy==1.23.5
 scipy
 torch
 lightgbm
