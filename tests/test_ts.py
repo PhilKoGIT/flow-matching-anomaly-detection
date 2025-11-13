@@ -14,6 +14,32 @@ import matplotlib
 
 matplotlib.use("Agg")  # falls irgendwo Plots erzeugt werden
 
+def hashers(df):
+    # Hashing der ref_iban Spalte
+    hasher_iban = FeatureHasher(input_type='string', n_features=10)
+    hashed_features = hasher_iban.transform(df['ref_iban'].astype(str).values.reshape(-1,1))
+    hashed_df = pd.DataFrame(hashed_features.toarray(), columns=[f'iban_hash_{i}' for i in range(10)])
+    df = pd.concat([hashed_df, df], axis=1)
+    df = df.drop("ref_iban", axis=1)
+
+    # Hashing der ref_swift Spalte
+    hasher_swift = FeatureHasher(input_type='string', n_features=10)
+    hashed_features_swift = hasher_swift.transform(df['ref_swift'].astype(str).values.reshape(-1,1))
+    hashed_df_swift = pd.DataFrame(hashed_features_swift.toarray(), columns=[f'swift_hash_{i}' for i in range(10)])
+    df = pd.concat([hashed_df_swift, df], axis=1)
+    df = df.drop("ref_swift", axis=1)
+
+    # Hashing der paym_note Spalte
+    hasher_paym_note = FeatureHasher(input_type='string', n_features=10)
+    hashed_paym_note = hasher_paym_note.transform(df['paym_note'].astype(str).values.reshape(-1,1))
+    hashed_df_payment_note = pd.DataFrame(hashed_paym_note.toarray(), columns=[f'paym_note{i}' for i in range(10)])
+    df = pd.concat([hashed_df_payment_note, df], axis=1)
+    df = df.drop("paym_note", axis=1)
+
+
+    return df
+
+
 def create_time_series_features(df):
     # Sort by account and date first
     df['date_post'] = pd.to_datetime(df['date_post'], format='%Y%m%d')
@@ -26,89 +52,60 @@ def create_time_series_features(df):
                         .transform(lambda x: x.rolling(5, min_periods=1).std()).fillna(0)
     df['amount_change'] = df.groupby('bank_account_uuid')['amount'].diff()
     df['amount_change'] = df['amount_change'].fillna(0)
-
-
     df['month'] = df['date_post'].dt.month
     df['dayofweek'] = df['date_post'].dt.dayofweek
     df["year"] = df['date_post'].dt.year
-
     # Time delta since last transaction
     # Abstand berechnen
     df['time_since_last_tx'] = (
         df.groupby(['bank_account_uuid', 'ref_iban'])['date_post']
         .diff().dt.days
     )
-    df.drop("date_post", axis=1, inplace=True)
 
     # NaN durch den Wert 30 ersetzen
     df['time_since_last_tx'] = df['time_since_last_tx'].fillna(30)
     return df
 
-def load_business_dataset(max_rows=1000):
+def load_business_dataset():
     base_dir = Path(__file__).resolve().parent
-    file_path = base_dir.parent / "data" / "business_dataset.csv"
-
+    file_path = base_dir.parent / "data" / "1311dataset.csv"
     df = pd.read_csv(file_path)
 
-    target_col = "anomaly_description"
-
-
-    # Anomalie: 1 = es gibt eine Beschreibung, 0 = keine
-    anomaly_mask = df[target_col].notna()
-    df[target_col] = anomaly_mask.astype(int)
-
-    df = create_time_series_features(df)
-    y = df[target_col].astype(int).values
-    X_raw = df.drop(columns=[target_col])
-
-    # One-Hot-Encoding aller kategorialen Spalten
-    # (numerische Spalten bleiben numerisch)
-    X_dummies = pd.get_dummies(X_raw, drop_first=False)
-
-    print(f"Feature-Shape nach One-Hot-Encoding: {X_dummies.shape}")
-    print(f"Anzahl Anomalien (y=1): {y.sum()} von {len(y)}")
-
-    return X_dummies, y
+    return df
 
 def main():
 
-    X_df, y = load_business_dataset(max_rows=700)
-    X = X_df.values  # numpy-Array
+    df = load_business_dataset()
+    df = create_time_series_features(df)
+    print(df.head())
+    columns_to_drop = ["bank_account_uuid", "ref_bank", "currency", "trns_type"]
+    df = df.drop(columns=columns_to_drop)
 
-    # Train/Test-Split (stratifiziert, weil binäres Label)
-    X_train, X_test, y_train, y_test = train_test_split(
-        X,
-        y,
-        test_size=0.2,
-        random_state=42,
-        stratify=y
-    )
-   # ============================================================
+    #nochmal mischen
+    df = df.sample(frac=1, random_state=42).reset_index(drop=True)
+    df = df.sort_values(["date_post"])
+    df.drop("date_post", axis=1, inplace=True)
+    df = hashers(df)
+    print(df.head())
 
-#achtung hier werden die anomalien ins test set reingemischt
+    # anomaly_description contains 0 or 1
+    target_col = "anomaly_description"
+    anomaly_mask = df[target_col].notna()
+    df[target_col] = anomaly_mask.astype(int)
 
+    print(df.head())
 
-# ============================================================
-    df_train = pd.concat([pd.DataFrame(X_train).reset_index(drop=True),
-                pd.Series(y_train, name="target")], axis=1)
+    # Train/Test-Split by time (letzte 20% der Daten als Test-Set)
+    split_index = int(0.8 * len(df))
 
-    df_test = pd.concat([pd.DataFrame(X_test).reset_index(drop=True),
-                pd.Series(y_test, name="target")], axis=1)
+    y = df[target_col].astype(int).values
+    X = df.drop(columns=[target_col]).values
 
-    df_train_anomalies = df_train[df_train["target"] == 1]
-
-    df_test_augmented = pd.concat([df_test, df_train_anomalies], ignore_index=True)
-
-    df_train_reduced = df_train[df_train["target"] != 1]
-
-    X_train = df_train_reduced.drop(columns=["target"]).to_numpy()
-    y_train = df_train_reduced["target"].to_numpy()
-    # ============================================================
-# ============================================================
+    X_train, X_test = X[:split_index], X[split_index:]
+    y_train, y_test = y[:split_index], y[split_index:]  
 
 
-    X_test = df_test_augmented.drop(columns=["target"]).to_numpy()
-    y_test = df_test_augmented["target"].to_numpy()
+    # noch sortieren!!!!
 
     print(f"Train-Shape: {X_train.shape}, Test-Shape: {X_test.shape}")
 
