@@ -1,0 +1,53 @@
+== Job start ==
+                     bank_account_uuid  ... time_since_last_tx
+1009  1C447D4F1599450AB2AB4DFC163B529F  ...               30.0
+1077  1C447D4F1599450AB2AB4DFC163B529F  ...               30.0
+269   1C447D4F1599450AB2AB4DFC163B529F  ...               30.0
+1766  1C447D4F1599450AB2AB4DFC163B529F  ...               30.0
+61    1C447D4F1599450AB2AB4DFC163B529F  ...               30.0
+
+[5 rows x 21 columns]
+   paym_note0  paym_note1  paym_note2  ...  dayofweek  year  time_since_last_tx
+0         0.0         0.0         0.0  ...          4  2023                31.0
+1         0.0         0.0         0.0  ...          3  2022                31.0
+2         0.0         0.0         0.0  ...          1  2023                29.0
+3         0.0         0.0         0.0  ...          0  2022                31.0
+4         0.0         0.0         0.0  ...          4  2024                32.0
+
+[5 rows x 42 columns]
+False
+
+Klassifikationsreport (0=normal, 1=Anomalie):
+              precision    recall  f1-score   support
+
+           0       1.00      0.91      0.95       360
+           1       0.06      1.00      0.11         2
+
+    accuracy                           0.91       362
+   macro avg       0.53      0.96      0.53       362
+weighted avg       0.99      0.91      0.95       362
+
+Konfusionsmatrix:
+[[328  32]
+ [  0   2]]
+
+Wahre Anomalien im Test-Set: 2 von 362
+Vom Modell als Anomalie (1) vorhergesagt: 34 von 362
+
+Wahrscheinlichkeiten-Array Form: (2, 362)
+== Job abgeschlossen ==
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n911
+Job ID: 2134777
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 2
+CPU Utilized: 00:01:49
+CPU Efficiency: 57.37% of 00:03:10 core-walltime
+Job Wall-clock time: 00:01:35
+Memory Utilized: 1.36 GB
+Memory Efficiency: 4.25% of 32.00 GB (32.00 GB/node)

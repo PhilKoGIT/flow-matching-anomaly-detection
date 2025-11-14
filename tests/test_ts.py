@@ -113,18 +113,21 @@ def main():
     int_index = [
     0,1,2,3,4,5,6,7,8,9,       # paym_note*
     10,11,12,13,14,15,16,17,18,19,   # swift_hash_*
-    20,21,22,23,24,25,26,27,28,29,   # iban_hash_*
+    20,21,22,23,24,25,26,27,28,29,   
+    30,   # business_partner_name
+    32,   #pay_method
+    33,    # channel# iban_hash_*
     37,  # month
     38,  # dayofweek
     39   # year
     ]
-    cat_index = [
-    30,   # business_partner_name
-    32,   #pay_method
-    33,    # channel
-    ]
+    # cat_index = [
+    # 30,   # business_partner_name
+    # 32,   #pay_method
+    # 33,    # channel
+    # ]
     bin_index = []
-
+    cat_index = []
     # model = ForestDiffusionModel(
     #     X=X_train,
     #     label_y=y_train,
@@ -194,10 +197,12 @@ def main():
 
     print(f"\nWahre Anomalien im Test-Set: {n_anomalies_true} von {len(y_test)}")
     print(f"Vom Modell als Anomalie (1) vorhergesagt: {n_anomalies_pred} von {len(y_test)}")
-
+    print(f"richtige Vorhersagen: {(y_test == y_pred).sum()} von {len(y_test)}")
 
     y_probs = model.predict_proba(X_test, n_t=10, n_z=5)
     y_probs = np.asarray(y_probs)
+    print("\nWahrscheinlichkeiten (erste 10):", y_probs[:10])
+    print(y_probs)
     print("\nWahrscheinlichkeiten-Array Form:", y_probs.shape)
 
 
