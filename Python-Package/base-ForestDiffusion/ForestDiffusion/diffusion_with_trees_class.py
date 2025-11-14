@@ -133,6 +133,7 @@ class ForestDiffusionModel():
       X0 = np.random.normal(size=X1.shape) # Noise data
 
       # Make Datasets of interpolation
+      #ja einfach was wir predicten wollen; nämlich velocity field;  und xt
       X_train, y_train = build_data_xt(X0, X1, X_covs, n_t=self.n_t, diffusion_type=self.diffusion_type, eps=self.eps, sde=self.sde)
 
     if self.label_y is not None:

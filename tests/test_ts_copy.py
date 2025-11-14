@@ -123,12 +123,11 @@ def main():
     # 32,   #pay_method
     # 33,    # channel
     # ]
- 
-    bin_index = []
+    bin_index = [X_train.shape[1]]  # letzte Spalte ist Zielvariable
     cat_index = []
     model = ForestDiffusionModel(
         X=X_train,
-       # label_y=y_train,
+        label_y=y_train,
         # Diffusion / Training
         n_t=30,                 # weniger Zeitschritte für schnellere Tests
         duplicate_K=10,          # weniger Duplikate für schnellere Tests
