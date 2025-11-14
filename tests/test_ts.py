@@ -35,10 +35,7 @@ def hashers(df):
     hashed_df_payment_note = pd.DataFrame(hashed_paym_note.toarray(), columns=[f'paym_note{i}' for i in range(10)])
     df = pd.concat([hashed_df_payment_note, df], axis=1)
     df = df.drop("paym_note", axis=1)
-
-
     return df
-
 
 def create_time_series_features(df):
     # Sort by account and date first
@@ -68,7 +65,7 @@ def create_time_series_features(df):
 
 def load_business_dataset():
     base_dir = Path(__file__).resolve().parent
-    file_path = base_dir.parent / "data" / "business_dataset_very_big.csv"
+    file_path = base_dir.parent / "data" / "business_transactions_big.csv"
     df = pd.read_csv(file_path)
 
     return df
@@ -154,7 +151,6 @@ def main():
         p_in_one=True,
     )
 
-# ZIIEELL ist einziges binär
     # model = ForestDiffusionModel(
     #     X=X_train,
     #     label_y=y_train,

@@ -52,14 +52,14 @@ Wahrscheinlichkeiten-Array Form: (2, 2718)
 ============================= JOB FEEDBACK =============================
 
 NodeName=uc2n902
-Job ID: 2135022
+Job ID: 2135174
 Cluster: uc3
 User/Group: ma_pkonz/ma_ma
 State: COMPLETED (exit code 0)
 Nodes: 1
 Cores per node: 2
-CPU Utilized: 00:45:25
-CPU Efficiency: 97.67% of 00:46:30 core-walltime
-Job Wall-clock time: 00:23:15
-Memory Utilized: 4.86 GB
-Memory Efficiency: 15.19% of 32.00 GB (32.00 GB/node)
+CPU Utilized: 00:45:09
+CPU Efficiency: 97.87% of 00:46:08 core-walltime
+Job Wall-clock time: 00:23:04
+Memory Utilized: 4.92 GB
+Memory Efficiency: 15.38% of 32.00 GB (32.00 GB/node)

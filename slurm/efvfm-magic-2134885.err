@@ -1,3 +1,0 @@
-  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/test_ts.py", line 203
-    y_probs = model.predict_proba(X_test, n_t=10, n_z=5)
-IndentationError: unexpected indent
