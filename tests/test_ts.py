@@ -46,10 +46,10 @@ def create_time_series_features(df):
     df = df.sort_values(["bank_account_uuid", "date_post"])
 
     # Calculate rolling features
-    df['amount_mean_5'] = df.groupby('bank_account_uuid')['amount'] \
-                            .transform(lambda x: x.rolling(5, min_periods=1).mean())
-    df['amount_std_5'] = df.groupby('bank_account_uuid')['amount'] \
-                        .transform(lambda x: x.rolling(5, min_periods=1).std()).fillna(0)
+    mean_rolling = lambda x: x.rolling(5, min_periods=1).mean()
+    std_rolling = lambda x: x.rolling(5, min_periods=1).std()
+    df['amount_mean_5'] = df.groupby('bank_account_uuid')['amount'].transform(mean_rolling)
+    df['amount_std_5'] = df.groupby('bank_account_uuid')['amount'].transform(std_rolling).fillna(0)
     df['amount_change'] = df.groupby('bank_account_uuid')['amount'].diff()
     df['amount_change'] = df['amount_change'].fillna(0)
     df['month'] = df['date_post'].dt.month
@@ -68,7 +68,7 @@ def create_time_series_features(df):
 
 def load_business_dataset():
     base_dir = Path(__file__).resolve().parent
-    file_path = base_dir.parent / "data" / "business_transactions_big.csv"
+    file_path = base_dir.parent / "data" / "business_dataset_very_big.csv"
     df = pd.read_csv(file_path)
 
     return df
@@ -189,6 +189,8 @@ def main():
     print("Konfusionsmatrix:")
     print(confusion_matrix(y_test, y_pred))
 
+    n_anomalies_trainingsset = (y_train == 1).sum()
+    print(f"\nAnomalien im Trainings-Set: {n_anomalies_trainingsset} von {len(y_train)}")
 
     n_anomalies_true = (y_test == 1).sum()
     n_anomalies_pred = (y_pred == 1).sum()

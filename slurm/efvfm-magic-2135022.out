@@ -1,0 +1,18 @@
+== Job start ==
+                      bank_account_uuid  ... time_since_last_tx
+9169   089A305886DA44178D1417BF0C26B67C  ...               30.0
+4988   089A305886DA44178D1417BF0C26B67C  ...               30.0
+12549  089A305886DA44178D1417BF0C26B67C  ...               30.0
+12069  089A305886DA44178D1417BF0C26B67C  ...               30.0
+11265  089A305886DA44178D1417BF0C26B67C  ...               30.0
+
+[5 rows x 21 columns]
+   paym_note0  paym_note1  paym_note2  ...  dayofweek  year  time_since_last_tx
+0         0.0         0.0         0.0  ...          0  2021                28.0
+1         0.0         1.0         0.0  ...          4  2020                31.0
+2         0.0        -1.0         0.0  ...          2  2021                27.0
+3         0.0         0.0         0.0  ...          0  2020                31.0
+4         0.0         0.0         1.0  ...          1  2023                29.0
+
+[5 rows x 42 columns]
+False
