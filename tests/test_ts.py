@@ -68,7 +68,7 @@ def create_time_series_features(df):
 
 def load_business_dataset():
     base_dir = Path(__file__).resolve().parent
-    file_path = base_dir.parent / "data" / "1311dataset.csv"
+    file_path = base_dir.parent / "data" / "business_transactions_big.csv"
     df = pd.read_csv(file_path)
 
     return df
@@ -126,55 +126,53 @@ def main():
     # 32,   #pay_method
     # 33,    # channel
     # ]
-    bin_index = []
+    bin_index = [X_train.shape[1]]  # letzte Spalte ist Zielvariable
     cat_index = []
-    # model = ForestDiffusionModel(
-    #     X=X_train,
-    #     label_y=y_train,
-    #     # Diffusion / Training
-    #     n_t=30,                 # weniger Zeitschritte für schnellere Tests
-    #     duplicate_K=10,          # weniger Duplikate für schnellere Tests
-    #     diffusion_type='flow',  # für Zero-Shot-Klassifikation ok
-    #     n_batch=64,
-    #     seed=666,
-    #     n_jobs=-1,
-
-    #     # Spaltentypen: alles numerisch
-    #     bin_indexes=[],                     # optional könntest du hier echte 0/1-Spalten eintragen
-    #     cat_indexes=[],                     # WICHTIG: keine Kategorien mehr, alles schon One-Hot
-    #     int_indexes=int_indexes,
-
-   
-    #     max_depth=8,
-    #     n_estimators=150,
-    #     gpu_hist=True,          # nur aktiv lassen, wenn du wirklich eine GPU+CUDA hast
-
-    #     # Sonstiges
-    #     remove_miss=False,
-    #     p_in_one=True,
-    # )
-
-# ZIIEELL ist einziges binär
-
-
     model = ForestDiffusionModel(
         X=X_train,
         label_y=y_train,
-        n_t=10,
-        duplicate_K=5,
-        diffusion_type='flow',
-        n_batch=32,
+        # Diffusion / Training
+        n_t=30,                 # weniger Zeitschritte für schnellere Tests
+        duplicate_K=10,          # weniger Duplikate für schnellere Tests
+        diffusion_type='flow',  # für Zero-Shot-Klassifikation ok
+        n_batch=64,
         seed=666,
-        n_jobs=4,
+        n_jobs=-1,
+
+        # Spaltentypen: alles numerisch
         bin_indexes= bin_index,
         cat_indexes= cat_index,
         int_indexes=int_index,
-        max_depth=4,
-        n_estimators=20,
-        gpu_hist=True,
+
+   
+        max_depth=8,
+        n_estimators=150,
+        gpu_hist=True,          # nur aktiv lassen, wenn du wirklich eine GPU+CUDA hast
+
+        # Sonstiges
         remove_miss=False,
         p_in_one=True,
     )
+
+# ZIIEELL ist einziges binär
+    # model = ForestDiffusionModel(
+    #     X=X_train,
+    #     label_y=y_train,
+    #     n_t=10,
+    #     duplicate_K=5,
+    #     diffusion_type='flow',
+    #     n_batch=32,
+    #     seed=666,
+    #     n_jobs=4,
+    #     bin_indexes= bin_index,
+    #     cat_indexes= cat_index,
+    #     int_indexes=int_index,
+    #     max_depth=4,
+    #     n_estimators=20,
+    #     gpu_hist=True,
+    #     remove_miss=False,
+    #     p_in_one=True,
+    # )
 
     
 
@@ -197,7 +195,8 @@ def main():
 
     print(f"\nWahre Anomalien im Test-Set: {n_anomalies_true} von {len(y_test)}")
     print(f"Vom Modell als Anomalie (1) vorhergesagt: {n_anomalies_pred} von {len(y_test)}")
-    print(f"richtige Vorhersagen: {(y_test == y_pred).sum()} von {len(y_test)}")
+    tp = ((y_test == 1) & (y_pred == 1)).sum()
+    print(f"Richtig erkannte Anomalien: {tp} von {(y_test == 1).sum()}")
 
     y_probs = model.predict_proba(X_test, n_t=10, n_z=5)
     y_probs = np.asarray(y_probs)

@@ -1,0 +1,63 @@
+== Job start ==
+                     bank_account_uuid  ... time_since_last_tx
+1088  152776ABDE2B452C84C6C6926300FD7C  ...               30.0
+1597  152776ABDE2B452C84C6C6926300FD7C  ...               30.0
+5278  152776ABDE2B452C84C6C6926300FD7C  ...               30.0
+2622  152776ABDE2B452C84C6C6926300FD7C  ...               30.0
+1567  152776ABDE2B452C84C6C6926300FD7C  ...               31.0
+
+[5 rows x 21 columns]
+   paym_note0  paym_note1  paym_note2  ...  dayofweek  year  time_since_last_tx
+0         0.0         0.0         0.0  ...          3  2022                30.0
+1         1.0         0.0         0.0  ...          2  2021                30.0
+2         0.0        -1.0         0.0  ...          2  2021                30.0
+3         0.0         0.0         0.0  ...          2  2023                30.0
+4         0.0         1.0         0.0  ...          0  2020                28.0
+
+[5 rows x 42 columns]
+False
+
+Klassifikationsreport (0=normal, 1=Anomalie):
+              precision    recall  f1-score   support
+
+           0       1.00      0.93      0.96      1297
+           1       0.03      0.50      0.06         6
+
+    accuracy                           0.93      1303
+   macro avg       0.52      0.72      0.51      1303
+weighted avg       0.99      0.93      0.96      1303
+
+Konfusionsmatrix:
+[[1209   88]
+ [   3    3]]
+
+Wahre Anomalien im Test-Set: 6 von 1303
+Vom Modell als Anomalie (1) vorhergesagt: 91 von 1303
+Richtig erkannte Anomalien: 3 von 6
+
+Wahrscheinlichkeiten (erste 10): [[1.00000000e+00 1.00000000e+00 1.00000000e+00 ... 1.00000000e+00
+  1.00000000e+00 1.00000000e+00]
+ [1.60956860e-15 7.31829737e-16 1.75622785e-14 ... 2.24441586e-16
+  1.55213752e-16 1.05900309e-13]]
+[[1.00000000e+00 1.00000000e+00 1.00000000e+00 ... 1.00000000e+00
+  1.00000000e+00 1.00000000e+00]
+ [1.60956860e-15 7.31829737e-16 1.75622785e-14 ... 2.24441586e-16
+  1.55213752e-16 1.05900309e-13]]
+
+Wahrscheinlichkeiten-Array Form: (2, 1303)
+== Job abgeschlossen ==
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n911
+Job ID: 2134899
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 2
+CPU Utilized: 00:01:45
+CPU Efficiency: 76.09% of 00:02:18 core-walltime
+Job Wall-clock time: 00:01:09
+Memory Utilized: 1.38 GB
+Memory Efficiency: 4.32% of 32.00 GB (32.00 GB/node)
