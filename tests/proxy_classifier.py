@@ -15,8 +15,8 @@ import matplotlib
 matplotlib.use("Agg")  # falls irgendwo Plots erzeugt werden
 
 def uniqueness(df):
-    df['account_partner_id'] = df['bank_account_uuid'].astype(str) + "_" + df['business_partner_name'].astype(str)
-    df = df.drop(columns=['bank_account_uuid', 'business_partner_name'])
+    #df['account_partner_id'] = df['bank_account_uuid'].astype(str) + "_" + df['business_partner_name'].astype(str)
+    df = df.drop(columns=['business_partner_name'])
 
     combo_cols = ["ref_name", "ref_iban", "ref_swift", "pay_method", "channel", "currency", "trns_type"]
 
@@ -108,34 +108,75 @@ def main():
 
     y = df[target_col]
     X = df.drop(columns=[target_col])
+    # # 1. Nur die Features im Training kodieren und die Abbildung speichern
+    codes, uniques = pd.factorize(X["bank_account_uuid"])
+    X["bank_account_uuid"] = codes
 
-    X_train, X_test = X[:split_index], X[split_index:]
-    y_train, y_test = y[:split_index], y[split_index:]  
+
+    X_train, X_test = X[:split_index].copy(), X[split_index:].copy()
+    y_train, y_test = y[:split_index].copy(), y[split_index:].copy()
 
     X_train = uniqueness(X_train)
     X_test = uniqueness(X_test)
 
 
-# 1. Nur die Features im Training kodieren und die Abbildung speichern
-    codes, uniques = pd.factorize(X_train["account_partner_id"])
-    X_train["account_partner_id"] = codes
+# # 1. Nur die Features im Training kodieren und die Abbildung speichern
+#     codes, uniques = pd.factorize(X_train["account_partner_id"])
+#     X_train["account_partner_id"] = codes
 
-    # 2. Test-Set mit der im Training gelernten Abbildung kodieren
-    # Unbekannte Werte werden standardmäßig zu -1 (oder NaN/spez. Code)
-    X_test["account_partner_id"] = pd.Categorical(
-        X_test["account_partner_id"], categories=uniques
-    ).codes
-    print(X_train.columns)
+#     # 2. Test-Set mit der im Training gelernten Abbildung kodieren
+#     # Unbekannte Werte werden standardmäßig zu -1 (oder NaN/spez. Code)
+#     X_test["account_partner_id"] = pd.Categorical(
+#         X_test["account_partner_id"], categories=uniques
+#     ).codes
+#     print(X_train.columns)
+    # Spalten, die du one-hot encoden willst
+    ohe_cols = ["bank_account_uuid"]   # ggf. weitere Kategorien ergänzen
 
-    y_train = y_train.values
-    y_test = y_test.values
+    X_train_ohe = pd.get_dummies(X_train, columns=ohe_cols)
+    X_test_ohe = pd.get_dummies(X_test, columns=ohe_cols)
 
-    int_index = [4,5,6,8]
-    bin_index = [9]
-    cat_index = [7]
+    # Train und Test auf dieselben Spalten bringen
+    X_train_aligned, X_test_aligned = X_train_ohe.align(
+        X_test_ohe,
+        join="left",    # alle Spalten aus Train behalten
+        axis=1,
+        fill_value=0    # fehlende Spalten im Test mit 0 auffüllen
+    )
+
+    # Für spätere Index-Bestimmung merken:
+    feature_cols = X_train_aligned.columns.tolist()
+
+    X_train_np = X_train_aligned.values
+    X_test_np = X_test_aligned.values
+    y_train_np = y_train.values
+    y_test_np = y_test.values
+
+        # ...
+    X_train_np = X_train_aligned.to_numpy(dtype=float)
+    X_test_np  = X_test_aligned.to_numpy(dtype=float)
+
+    y_train_np = y_train.to_numpy(dtype=float)
+    y_test_np  = y_test.to_numpy(dtype=float)
+
+
+    # Beispiel: deine ursprünglichen numerischen Spalten
+    int_cols = ["amount", "amount_mean_5", "amount_std_5",
+                "amount_change", "time_since_last_tx",
+                "year", "month", "dayofweek"]
+
+    bin_cols = ["valid_ref"]  # bleibt binär
+
+    #int_index = [feature_cols.index(c) for c in int_cols if c in feature_cols]
+    #bin_index = [feature_cols.index(c) for c in bin_cols if c in feature_cols]
+    int_index = []
+    bin_index = []
+
+    cat_index = []  # GANZ WICHTIG: ForestDiffusion soll NICHT mehr dummify() machen
+
     model = ForestDiffusionModel(
-        X=X_train,
-       # label_y=y_train,
+        X=X_train_np,
+        label_y=y_train_np,
         # Diffusion / Training
         n_t=30,                 # weniger Zeitschritte für schnellere Tests
         duplicate_K=10,          # weniger Duplikate für schnellere Tests
@@ -185,26 +226,26 @@ def main():
 
 
 
-    y_pred = model.predict(X_test, n_t=10, n_z=5)
+    y_pred = model.predict(X_test_np, n_t=10, n_z=5)
 
     print("\nKlassifikationsreport (0=normal, 1=Anomalie):")
-    print(classification_report(y_test, y_pred, zero_division=0))
+    print(classification_report(y_test_np, y_pred, zero_division=0))
 
     print("Konfusionsmatrix:")
-    print(confusion_matrix(y_test, y_pred))
+    print(confusion_matrix(y_test_np, y_pred))
 
-    n_anomalies_trainingsset = (y_train == 1).sum()
-    print(f"\nAnomalien im Trainings-Set: {n_anomalies_trainingsset} von {len(y_train)}")
+    n_anomalies_trainingsset = (y_train_np == 1).sum()
+    print(f"\nAnomalien im Trainings-Set: {n_anomalies_trainingsset} von {len(y_train_np)}")
 
-    n_anomalies_true = (y_test == 1).sum()
+    n_anomalies_true = (y_test_np == 1).sum()
     n_anomalies_pred = (y_pred == 1).sum()
 
-    print(f"\nWahre Anomalien im Test-Set: {n_anomalies_true} von {len(y_test)}")
-    print(f"Vom Modell als Anomalie (1) vorhergesagt: {n_anomalies_pred} von {len(y_test)}")
-    tp = ((y_test == 1) & (y_pred == 1)).sum()
-    print(f"Richtig erkannte Anomalien: {tp} von {(y_test == 1).sum()}")
+    print(f"\nWahre Anomalien im Test-Set: {n_anomalies_true} von {len(y_test_np)}")
+    print(f"Vom Modell als Anomalie (1) vorhergesagt: {n_anomalies_pred} von {len(y_test_np)}")
+    tp = ((y_test_np == 1) & (y_pred == 1)).sum()
+    print(f"Richtig erkannte Anomalien: {tp} von {(y_test_np == 1).sum()}")
 
-    y_probs = model.predict_proba(X_test, n_t=10, n_z=5)
+    y_probs = model.predict_proba(X_test_np, n_t=10, n_z=5)
     y_probs = np.asarray(y_probs)
     print("\nWahrscheinlichkeiten (erste 10):", y_probs[:10])
     print(y_probs)

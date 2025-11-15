@@ -1,0 +1,103 @@
+== Job start ==
+                     bank_account_uuid  ... time_since_last_tx
+1088  152776ABDE2B452C84C6C6926300FD7C  ...               30.0
+1597  152776ABDE2B452C84C6C6926300FD7C  ...               30.0
+5278  152776ABDE2B452C84C6C6926300FD7C  ...               30.0
+2622  152776ABDE2B452C84C6C6926300FD7C  ...               30.0
+1567  152776ABDE2B452C84C6C6926300FD7C  ...               31.0
+
+[5 rows x 21 columns]
+                     bank_account_uuid  ... time_since_last_tx
+6057  DF9C33AE956146CDB8E757F96BCB8C2C  ...               30.0
+5396  D6142995B7764B5C8CF45A7B350BF2EF  ...               30.0
+5872  8869B27127CE4894B9A936E7524A91BA  ...               30.0
+214   8869B27127CE4894B9A936E7524A91BA  ...               30.0
+1707  D5938FE5DB144CAC984BF6A711629DB6  ...               30.0
+
+[5 rows x 20 columns]
+                     bank_account_uuid  ... time_since_last_tx
+6057  DF9C33AE956146CDB8E757F96BCB8C2C  ...               30.0
+5396  D6142995B7764B5C8CF45A7B350BF2EF  ...               30.0
+5872  8869B27127CE4894B9A936E7524A91BA  ...               30.0
+214   8869B27127CE4894B9A936E7524A91BA  ...               30.0
+1707  D5938FE5DB144CAC984BF6A711629DB6  ...               30.0
+
+[5 rows x 20 columns]
+Index(['bank_account_uuid', 'business_partner_name', 'amount', 'currency',
+       'ref_name', 'ref_iban', 'ref_swift', 'ref_bank', 'paym_note',
+       'trns_type', 'pay_method', 'channel', 'anomaly_description',
+       'amount_mean_5', 'amount_std_5', 'amount_change', 'month', 'dayofweek',
+       'year', 'time_since_last_tx'],
+      dtype='object')
+True
+   bank_account_uuid    amount  ...  time_since_last_tx  valid_ref
+0                  0  38348.73  ...                30.0          1
+1                  1  62093.38  ...                30.0          1
+2                  2  27877.95  ...                30.0          1
+3                  2  13270.63  ...                30.0          1
+4                  3  70662.49  ...                30.0          1
+
+[5 rows x 10 columns]
+Index(['bank_account_uuid', 'amount', 'amount_mean_5', 'amount_std_5',
+       'amount_change', 'month', 'dayofweek', 'year', 'time_since_last_tx',
+       'valid_ref'],
+      dtype='object')
+   bank_account_uuid    amount  ...  time_since_last_tx  valid_ref
+0                  9   5315.55  ...                29.0          1
+1                  8   7094.47  ...                32.0          1
+2                 11   2503.82  ...                32.0          1
+3                  1   1215.42  ...                23.0          1
+4                 13  83706.68  ...                58.0          1
+
+[5 rows x 10 columns]
+Index(['bank_account_uuid', 'amount', 'amount_mean_5', 'amount_std_5',
+       'amount_change', 'month', 'dayofweek', 'year', 'time_since_last_tx',
+       'valid_ref'],
+      dtype='object')
+
+Klassifikationsreport (0=normal, 1=Anomalie):
+              precision    recall  f1-score   support
+
+         0.0       1.00      0.07      0.13      1299
+         1.0       0.00      1.00      0.01         4
+
+    accuracy                           0.07      1303
+   macro avg       0.50      0.54      0.07      1303
+weighted avg       1.00      0.07      0.13      1303
+
+Konfusionsmatrix:
+[[  91 1208]
+ [   0    4]]
+
+Anomalien im Trainings-Set: 22 von 5211
+
+Wahre Anomalien im Test-Set: 4 von 1303
+Vom Modell als Anomalie (1) vorhergesagt: 1212 von 1303
+Richtig erkannte Anomalien: 4 von 4
+
+Wahrscheinlichkeiten (erste 10): [[1.59747218e-04 4.88764494e-04 1.47228536e-02 ... 9.38257411e-05
+  9.20154316e-01 8.33004566e-04]
+ [9.99840253e-01 9.99511236e-01 9.85277146e-01 ... 9.99906174e-01
+  7.98456837e-02 9.99166995e-01]]
+[[1.59747218e-04 4.88764494e-04 1.47228536e-02 ... 9.38257411e-05
+  9.20154316e-01 8.33004566e-04]
+ [9.99840253e-01 9.99511236e-01 9.85277146e-01 ... 9.99906174e-01
+  7.98456837e-02 9.99166995e-01]]
+
+Wahrscheinlichkeiten-Array Form: (2, 1303)
+== Job abgeschlossen ==
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n912
+Job ID: 2144313
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 2
+CPU Utilized: 00:20:08
+CPU Efficiency: 96.49% of 00:20:52 core-walltime
+Job Wall-clock time: 00:10:26
+Memory Utilized: 2.22 GB
+Memory Efficiency: 6.95% of 32.00 GB (32.00 GB/node)

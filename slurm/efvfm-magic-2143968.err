@@ -1,0 +1,32 @@
+/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/test_new.py:18: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df['account_partner_id'] = df['bank_account_uuid'].astype(str) + "_" + df['business_partner_name'].astype(str)
+/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/test_new.py:18: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df['account_partner_id'] = df['bank_account_uuid'].astype(str) + "_" + df['business_partner_name'].astype(str)
+Traceback (most recent call last):
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/test_new.py", line 217, in <module>
+    main()
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/test_new.py", line 190, in main
+    y_pred = model.predict(X_test, n_t=10, n_z=5)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/ForestDiffusion/diffusion_with_trees_class.py", line 545, in predict
+    X = self.scaler.transform(X)
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/sklearn/utils/_set_output.py", line 142, in wrapped
+    data_to_wrap = f(self, X, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/sklearn/preprocessing/_data.py", line 508, in transform
+    X = self._validate_data(
+        ^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/sklearn/base.py", line 569, in _validate_data
+    self._check_n_features(X, reset=reset)
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/sklearn/base.py", line 370, in _check_n_features
+    raise ValueError(
+ValueError: X has 24 features, but MinMaxScaler is expecting 31 features as input.

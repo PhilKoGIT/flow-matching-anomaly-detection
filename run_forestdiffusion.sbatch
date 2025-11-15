@@ -4,7 +4,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=32G
-#SBATCH --time=03:00:00
+#SBATCH --time=01:00:00
 #SBATCH -o slurm/%x-%j.out
 #SBATCH -e slurm/%x-%j.err
 
@@ -20,7 +20,7 @@ cd /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests
 echo "== Job start =="
 
 # --- Python Script starten (ForestDiffusion Training) ---
-python test_ts.py
+python test_new.py
 
 # --- Ende ---
 echo "== Job abgeschlossen =="

@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/test_new.py", line 221, in <module>
+    main()
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/test_new.py", line 194, in main
+    y_pred = model.predict(X_test, n_t=10, n_z=5)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/ForestDiffusion/diffusion_with_trees_class.py", line 545, in predict
+    X = self.scaler.transform(X)
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/sklearn/utils/_set_output.py", line 142, in wrapped
+    data_to_wrap = f(self, X, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/sklearn/preprocessing/_data.py", line 508, in transform
+    X = self._validate_data(
+        ^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/sklearn/base.py", line 569, in _validate_data
+    self._check_n_features(X, reset=reset)
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/sklearn/base.py", line 370, in _check_n_features
+    raise ValueError(
+ValueError: X has 10 features, but MinMaxScaler is expecting 12 features as input.
