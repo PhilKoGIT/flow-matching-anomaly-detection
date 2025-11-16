@@ -54,39 +54,44 @@ Index(['bank_account_uuid', 'amount', 'amount_mean_5', 'amount_std_5',
        'amount_change', 'month', 'dayofweek', 'year', 'time_since_last_tx',
        'valid_ref'],
       dtype='object')
+generierte neue Samples...
+          amount  amount_mean_5  ...  bank_account_uuid_13  bank_account_uuid_14
+0   65655.991969   38183.297755  ...              0.000289              0.000000
+1   22985.953469   59162.488494  ...              0.000072              0.000020
+2   55010.395224   53668.861968  ...              0.000000              0.000000
+3    8451.202790   24681.677500  ...              0.000707              0.000000
+4   23355.702971   31985.945409  ...              0.000000              0.000000
+5     237.200000   17415.442314  ...              0.000000              0.000000
+6    4449.743952   32641.841423  ...              0.000000              0.000000
+7   19553.084035    8499.425764  ...              0.002233              0.000000
+8   16545.648236   27670.635033  ...              0.000116              0.000015
+9     237.200000   81109.558960  ...              0.000000              0.000116
+10  99713.999217   84150.108339  ...              0.000000              0.000000
+11   4479.857153   30284.061733  ...              0.000000              0.000000
+12  21001.157213   34871.053972  ...              0.000136              0.000553
+13   3363.896050   30186.330915  ...              0.000000              0.000000
+14  11253.770732   35786.872299  ...              0.000156              0.000000
+15  20090.428600   35315.706111  ...              0.998517              0.000042
+16   2529.319426   47942.938537  ...              0.000337              0.000469
+17  11577.747173    6331.822084  ...              0.000000              0.971061
+18    237.200000   27152.870314  ...              1.000000              0.000000
+19   5375.109640   26228.985200  ...              0.000000              0.000052
 
-Klassifikationsreport (0=normal, 1=Anomalie):
-              precision    recall  f1-score   support
-
-         0.0       1.00      0.07      0.13      1299
-         1.0       0.00      1.00      0.01         4
-
-    accuracy                           0.07      1303
-   macro avg       0.50      0.54      0.07      1303
-weighted avg       1.00      0.07      0.13      1303
-
-Konfusionsmatrix:
-[[  91 1208]
- [   0    4]]
-
-Anomalien im Trainings-Set: 22 von 5211
-
-Wahre Anomalien im Test-Set: 4 von 1303
-Vom Modell als Anomalie (1) vorhergesagt: 1212 von 1303
-Richtig erkannte Anomalien: 4 von 4
+[20 rows x 24 columns]
+(50, 24)
 == Job abgeschlossen ==
 
 ============================= JOB FEEDBACK =============================
 
 NodeName=uc2n904
-Job ID: 2144302
+Job ID: 2144398
 Cluster: uc3
 User/Group: ma_pkonz/ma_ma
 State: COMPLETED (exit code 0)
 Nodes: 1
 Cores per node: 2
-CPU Utilized: 00:20:08
-CPU Efficiency: 92.21% of 00:21:50 core-walltime
-Job Wall-clock time: 00:10:55
-Memory Utilized: 1.64 GB
-Memory Efficiency: 5.13% of 32.00 GB (32.00 GB/node)
+CPU Utilized: 00:04:18
+CPU Efficiency: 88.36% of 00:04:52 core-walltime
+Job Wall-clock time: 00:02:26
+Memory Utilized: 1.08 GB
+Memory Efficiency: 3.36% of 32.00 GB (32.00 GB/node)

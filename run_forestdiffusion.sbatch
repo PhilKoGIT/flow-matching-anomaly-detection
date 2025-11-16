@@ -20,7 +20,7 @@ cd /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests
 echo "== Job start =="
 
 # --- Python Script starten (ForestDiffusion Training) ---
-python test_new.py
+python proxy_classifier.py
 
 # --- Ende ---
 echo "== Job abgeschlossen =="

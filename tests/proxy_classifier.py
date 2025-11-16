@@ -1,5 +1,6 @@
 # test.py
 
+from xml.parsers.expat import model
 from ForestDiffusion import ForestDiffusionModel
 import numpy as np
 import pandas as pd
@@ -109,8 +110,8 @@ def main():
     y = df[target_col]
     X = df.drop(columns=[target_col])
     # # 1. Nur die Features im Training kodieren und die Abbildung speichern
-    codes, uniques = pd.factorize(X["bank_account_uuid"])
-    X["bank_account_uuid"] = codes
+    #codes, uniques = pd.factorize(X["bank_account_uuid"])
+    #X["bank_account_uuid"] = codes
 
 
     X_train, X_test = X[:split_index].copy(), X[split_index:].copy()
@@ -176,9 +177,9 @@ def main():
 
     model = ForestDiffusionModel(
         X=X_train_np,
-        label_y=y_train_np,
+        #label_y=y_train_np,
         # Diffusion / Training
-        n_t=30,                 # weniger Zeitschritte für schnellere Tests
+        n_t=10,                 # weniger Zeitschritte für schnellere Tests
         duplicate_K=10,          # weniger Duplikate für schnellere Tests
         diffusion_type='flow',  # für Zero-Shot-Klassifikation ok
         n_batch=64,
@@ -225,31 +226,48 @@ def main():
     dump(model, "forest_diffusion_model.joblib")
 
 
+    print("generierte neue Samples...")
+# Neue Samples generieren
+    samples = model.generate(batch_size=50, n_t=10)
 
-    y_pred = model.predict(X_test_np, n_t=10, n_z=5)
+    # Als DataFrame zurückwandeln
+    df_generated = pd.DataFrame(samples, columns=feature_cols)
+    df_generated.head(20)
 
-    print("\nKlassifikationsreport (0=normal, 1=Anomalie):")
-    print(classification_report(y_test_np, y_pred, zero_division=0))
+        # -------------------------
+    # bank_account_uuid aus One-Hot zurückholen
+    # -------------------------
 
-    print("Konfusionsmatrix:")
-    print(confusion_matrix(y_test_np, y_pred))
+    # alle Dummy-Spalten für die UUID finden
+    uuid_dummy_cols = [c for c in feature_cols if c.startswith("bank_account_uuid_")]
 
-    n_anomalies_trainingsset = (y_train_np == 1).sum()
-    print(f"\nAnomalien im Trainings-Set: {n_anomalies_trainingsset} von {len(y_train_np)}")
+    # Werte dieser Spalten als NumPy holen
+    uuid_matrix = df_generated[uuid_dummy_cols].to_numpy()
 
-    n_anomalies_true = (y_test_np == 1).sum()
-    n_anomalies_pred = (y_pred == 1).sum()
+    # pro Zeile: Index der Spalte mit dem größten Wert
+    max_idx = uuid_matrix.argmax(axis=1)
 
-    print(f"\nWahre Anomalien im Test-Set: {n_anomalies_true} von {len(y_test_np)}")
-    print(f"Vom Modell als Anomalie (1) vorhergesagt: {n_anomalies_pred} von {len(y_test_np)}")
-    tp = ((y_test_np == 1) & (y_pred == 1)).sum()
-    print(f"Richtig erkannte Anomalien: {tp} von {(y_test_np == 1).sum()}")
+    # zugehörige Spaltennamen
+    chosen_cols = [uuid_dummy_cols[i] for i in max_idx]
 
-    y_probs = model.predict_proba(X_test_np, n_t=10, n_z=5)
-    y_probs = np.asarray(y_probs)
-    print("\nWahrscheinlichkeiten (erste 10):", y_probs[:10])
-    print(y_probs)
-    print("\nWahrscheinlichkeiten-Array Form:", y_probs.shape)
+    # Präfix "bank_account_uuid_" entfernen → originale UUID
+    bank_account_uuid_original = [
+        col.replace("bank_account_uuid_", "") for col in chosen_cols
+    ]
+
+    # neue Spalte mit der „echten“ UUID
+    df_generated["bank_account_uuid_original"] = bank_account_uuid_original
+
+    # Wenn du willst, die Dummy-Spalten wieder wegwerfen:
+    # df_generated = df_generated.drop(columns=uuid_dummy_cols)
+
+    print(df_generated[["bank_account_uuid_original"]].head())
+
+    print(df_generated.head(20))
+    print(df_generated.shape)
+
+
+
 
 
 if __name__ == "__main__":
