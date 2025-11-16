@@ -61,9 +61,6 @@ def create_time_series_features(df):
     df['amount_std_5'] = df.groupby('bank_account_uuid')['amount'].transform(std_rolling).fillna(0)
     df['amount_change'] = df.groupby('bank_account_uuid')['amount'].diff()
     df['amount_change'] = df['amount_change'].fillna(0)
-    df['month'] = df['date_post'].dt.month
-    df['dayofweek'] = df['date_post'].dt.dayofweek
-    df["year"] = df['date_post'].dt.year
     # Time delta since last transaction
     # Abstand berechnen
     df['time_since_last_tx'] = (
@@ -163,15 +160,14 @@ def main():
 
     # Beispiel: deine ursprünglichen numerischen Spalten
     int_cols = ["amount", "amount_mean_5", "amount_std_5",
-                "amount_change", "time_since_last_tx",
-                "year", "month", "dayofweek"]
+                "amount_change", "time_since_last_tx"]
 
     bin_cols = ["valid_ref"]  # bleibt binär
 
-    #int_index = [feature_cols.index(c) for c in int_cols if c in feature_cols]
-    #bin_index = [feature_cols.index(c) for c in bin_cols if c in feature_cols]
-    int_index = []
-    bin_index = []
+    int_index = [feature_cols.index(c) for c in int_cols if c in feature_cols]
+    bin_index = [feature_cols.index(c) for c in bin_cols if c in feature_cols]
+    #int_index = []
+    #bin_index = []
 
     cat_index = []  # GANZ WICHTIG: ForestDiffusion soll NICHT mehr dummify() machen
 
@@ -228,7 +224,7 @@ def main():
 
     print("generierte neue Samples...")
 # Neue Samples generieren
-    samples = model.generate(batch_size=50, n_t=10)
+    samples = model.generate(batch_size=5000, n_t=10)
 
     # Als DataFrame zurückwandeln
     df_generated = pd.DataFrame(samples, columns=feature_cols)
@@ -260,7 +256,14 @@ def main():
 
     # Wenn du willst, die Dummy-Spalten wieder wegwerfen:
     # df_generated = df_generated.drop(columns=uuid_dummy_cols)
+    print("normale daten")
+    print(X_train_aligned.head())
 
+
+
+
+
+    print("Beispiel generierte Daten:")
     print(df_generated[["bank_account_uuid_original"]].head())
 
     print(df_generated.head(20))
