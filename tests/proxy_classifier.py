@@ -15,12 +15,13 @@ import matplotlib
 
 matplotlib.use("Agg")  # falls irgendwo Plots erzeugt werden
 
+
+#edge case: one wrong ref and one correct ref in test set-> both ref_valid = 0
+# was wenn die anomalie 2 mal vorkommt?!
 def uniqueness(df):
     #df['account_partner_id'] = df['bank_account_uuid'].astype(str) + "_" + df['business_partner_name'].astype(str)
     df = df.drop(columns=['business_partner_name'])
-
     combo_cols = ["ref_name", "ref_iban", "ref_swift", "pay_method", "channel", "currency", "trns_type"]
-
     for col in range(len(combo_cols)):
         combo_observed = combo_cols[:col+1]
         combo_counts = (
@@ -32,11 +33,8 @@ def uniqueness(df):
 
     k = len(combo_cols)
     freq_cols = [f'combination_freq_{i}' for i in range(1, k + 1)]
-
     all_equal = (df[freq_cols].nunique(axis=1, dropna=False) == 1)
-
     at_least_one_one = (df[freq_cols] == 1).any(axis=1)
-
     df['valid_ref'] = (
         all_equal |
         (~all_equal & ~at_least_one_one)
@@ -45,8 +43,6 @@ def uniqueness(df):
     #drop combo columns
     df = df.drop(columns=combo_cols + freq_cols)
     df = df.drop(columns = ["ref_bank", "paym_note"])
-    print(df.head())
-    print(df.columns)
     return df
 
 def create_time_series_features(df):
@@ -54,52 +50,59 @@ def create_time_series_features(df):
     df['date_post'] = pd.to_datetime(df['date_post'], format='%Y%m%d')
     df = df.sort_values(["bank_account_uuid", "date_post"])
 
+    #ref name instead of ref_iban -> bc anomalies might have change iban
+    #actually also not 100% stable 
+    group_cols = ['bank_account_uuid', 'ref_name']
+
     # Calculate rolling features
     mean_rolling = lambda x: x.rolling(5, min_periods=1).mean()
     std_rolling = lambda x: x.rolling(5, min_periods=1).std()
-    df['amount_mean_5'] = df.groupby('bank_account_uuid')['amount'].transform(mean_rolling)
-    df['amount_std_5'] = df.groupby('bank_account_uuid')['amount'].transform(std_rolling).fillna(0)
-    df['amount_change'] = df.groupby('bank_account_uuid')['amount'].diff()
+    df['amount_mean_5'] = df.groupby(group_cols)['amount'].transform(mean_rolling)
+    df['amount_std_5']  = df.groupby(group_cols)['amount'].transform(std_rolling)
+    df['amount_change'] = df.groupby(group_cols)['amount'].diff().fillna(0)
     df['amount_change'] = df['amount_change'].fillna(0)
     # Time delta since last transaction
     # Abstand berechnen
     df['time_since_last_tx'] = (
-        df.groupby(['bank_account_uuid', 'ref_iban'])['date_post']
+        df.groupby(group_cols)['date_post']
         .diff().dt.days
     )
-
     # NaN durch den Wert 30 ersetzen
     df['time_since_last_tx'] = df['time_since_last_tx'].fillna(30)
+    df['day_of_month'] = df['date_post'].dt.day
+    df['median_dom_per_series'] = (
+        df.groupby(group_cols)['day_of_month']
+        .transform('median')
+    )
+    df['dom_deviation'] = (df['day_of_month'] - df['median_dom_per_series']).abs()
+
+    #for off-payment identification... no anomaly ! 
+    #just one column needed, could be anything instead of amount
+    df['partner_tx_count'] = (
+    df.groupby(['bank_account_uuid', 'ref_name'])['amount']
+        .transform('size')
+    )
     return df
 
 def load_business_dataset():
     base_dir = Path(__file__).resolve().parent
     file_path = base_dir.parent / "data" / "business_transactions_big.csv"
     df = pd.read_csv(file_path)
-
     return df
 
 def main():
 
     df = load_business_dataset()
     df = create_time_series_features(df)
-    print(df.head())
     #nochmal mischen
     df = df.sample(frac=1, random_state=42).reset_index(drop=True)
     df = df.sort_values(["date_post"])
     df.drop("date_post", axis=1, inplace=True)
-    print(df.head())
 
     # anomaly_description contains 0 or 1
     target_col = "anomaly_description"
     anomaly_mask = df[target_col].notna()
     df[target_col] = anomaly_mask.astype(int)
-
-
-    print(df.head())
-    print(df.columns)
-    print(df.isna().any().any())
-
 
     # Train/Test-Split by time (letzte 20% der Daten als Test-Set)
     split_index = int(0.8 * len(df))
@@ -117,17 +120,6 @@ def main():
     X_train = uniqueness(X_train)
     X_test = uniqueness(X_test)
 
-
-# # 1. Nur die Features im Training kodieren und die Abbildung speichern
-#     codes, uniques = pd.factorize(X_train["account_partner_id"])
-#     X_train["account_partner_id"] = codes
-
-#     # 2. Test-Set mit der im Training gelernten Abbildung kodieren
-#     # Unbekannte Werte werden standardmäßig zu -1 (oder NaN/spez. Code)
-#     X_test["account_partner_id"] = pd.Categorical(
-#         X_test["account_partner_id"], categories=uniques
-#     ).codes
-#     print(X_train.columns)
     # Spalten, die du one-hot encoden willst
     ohe_cols = ["bank_account_uuid"]   # ggf. weitere Kategorien ergänzen
 
@@ -187,7 +179,6 @@ def main():
         cat_indexes= cat_index,
         int_indexes=int_index,
 
-   
         max_depth=8,
         n_estimators=150,
         gpu_hist=True,          # nur aktiv lassen, wenn du wirklich eine GPU+CUDA hast
@@ -197,32 +188,10 @@ def main():
         p_in_one=True,
     )
 
-    # model = ForestDiffusionModel(
-    #     X=X_train,
-    #     label_y=y_train,
-    #     n_t=10,
-    #     duplicate_K=5,
-    #     diffusion_type='flow',
-    #     n_batch=32,
-    #     seed=666,
-    #     n_jobs=4,
-    #     bin_indexes= bin_index,
-    #     cat_indexes= cat_index,
-    #     int_indexes=int_index,
-    #     max_depth=4,
-    #     n_estimators=20,
-    #     gpu_hist=True,
-    #     remove_miss=False,
-    #     p_in_one=True,
-    # )
-
-    
-
     # Modell speichern
     dump(model, "forest_diffusion_model.joblib")
 
 
-    print("generierte neue Samples...")
 # Neue Samples generieren
     samples = model.generate(batch_size=5000, n_t=10)
 
@@ -253,22 +222,11 @@ def main():
 
     # neue Spalte mit der „echten“ UUID
     df_generated["bank_account_uuid_original"] = bank_account_uuid_original
-
+    df_generated.drop(columns=uuid_dummy_cols, inplace=True)
     # Wenn du willst, die Dummy-Spalten wieder wegwerfen:
     # df_generated = df_generated.drop(columns=uuid_dummy_cols)
-    print("normale daten")
-    print(X_train_aligned.head())
-
-
-
-
-
-    print("Beispiel generierte Daten:")
-    print(df_generated[["bank_account_uuid_original"]].head())
-
     print(df_generated.head(20))
-    print(df_generated.shape)
-
+    print(df_generated.columns)
 
 
 
