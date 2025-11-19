@@ -15,19 +15,24 @@ def uniqueness(df):
     Creates a 'valid_ref' column indicating reference data anomalies.
     Assumption: correct references appear more frequently than anomalies.
     Preserves 'original_index' column if present.
+
+
+    Impotant assumption: correct references appear more frequently than anomalies. 
+    And that the exact same mistake (e.g. exact typo) is only done once 
     """
     df = df.copy()
     
-    # Original-Index merken falls vorhanden
+    # safe original index column if exists
     has_original_index = 'original_index' in df.columns
     if has_original_index:
         original_index_col = df['original_index'].copy()
     
     df = df.drop(columns=['business_partner_name'], errors='ignore')
     
+    #relevant cols for analyzing reference validity
     combo_cols = ["ref_name", "ref_iban", "ref_swift", "pay_method", 
                   "channel", "currency", "trns_type"]
-    
+    #calculate frequencies for combinations of the relevant columns
     for col in range(len(combo_cols)):
         combo_observed = combo_cols[:col+1]
         combo_counts = (
@@ -39,7 +44,9 @@ def uniqueness(df):
 
     k = len(combo_cols)
     freq_cols = [f'combination_freq_{i}' for i in range(1, k + 1)]
+    #count how many different frequencies exist per row
     all_equal = (df[freq_cols].nunique(axis=1, dropna=False) == 1)
+
     at_least_one_one = (df[freq_cols] == 1).any(axis=1)
     
     df['valid_ref'] = (
@@ -230,3 +237,16 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
+
+# from test import prepare_data
+
+# # Daten laden
+# X_train, X_test, y_train, y_test, train_mapping, test_mapping, feature_columns = prepare_data()
+
+# # Jetzt arbeiten...
+# print(X_train.head())
