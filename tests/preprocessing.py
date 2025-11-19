@@ -86,7 +86,7 @@ def create_time_series_features(df):
         lambda x: x.fillna(x.median()).fillna(30)
     )
     
-    # Day of month features
+    # Day of month featuresd
     df['day_of_month'] = df['date_post'].dt.day
     df['median_day_of_month_per_series'] = (
         df.groupby(group_cols)['day_of_month'].transform('median')
