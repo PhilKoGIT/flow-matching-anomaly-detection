@@ -19,6 +19,19 @@ matplotlib.use("Agg")  # falls irgendwo Plots erzeugt werden
 #edge case: one wrong ref and one correct ref in test set-> both ref_valid = 0
 # was wenn die anomalie 2 mal vorkommt?!
 def uniqueness(df):
+    # we create a column "valid_ref"that indicates directly error (anomaly) in reference data
+
+    #logic:
+    # - counts for each combination iteratively how often they occur in the training/test set seperately
+    # - entries where one columns is wrong will have different counts for each combination
+    # - if all counts are equal -> valid (1)
+    # - if not all equal and at least one count is 1 -> not valid -> zero
+    # - ....
+    # assumption: the correct reference appears way more often than anomalies!
+    # aber mal noch einrichten wenn anomaly 2 mal vorkommt! 
+
+    # gleiche anzahl an ... 
+    # das nochmal anschauen:!!
     #df['account_partner_id'] = df['bank_account_uuid'].astype(str) + "_" + df['business_partner_name'].astype(str)
     df = df.drop(columns=['business_partner_name'])
     combo_cols = ["ref_name", "ref_iban", "ref_swift", "pay_method", "channel", "currency", "trns_type"]
@@ -39,7 +52,6 @@ def uniqueness(df):
         all_equal |
         (~all_equal & ~at_least_one_one)
     ).astype(int)
-
     #drop combo columns
     df = df.drop(columns=combo_cols + freq_cols)
     df = df.drop(columns = ["ref_bank", "paym_note"])
@@ -69,17 +81,18 @@ def create_time_series_features(df):
     )
     # NaN durch den Wert 30 ersetzen
     df['time_since_last_tx'] = df['time_since_last_tx'].fillna(30)
+    
+    #macht das sinn?
     df['day_of_month'] = df['date_post'].dt.day
-    df['median_dom_per_series'] = (
+    df['median_day_of_month_per_series'] = (
         df.groupby(group_cols)['day_of_month']
         .transform('median')
     )
-    df['dom_deviation'] = (df['day_of_month'] - df['median_dom_per_series']).abs()
-
+    df['dom_deviation'] = (df['day_of_month'] - df['median_day_of_month_per_series']).abs()
     #for off-payment identification... no anomaly ! 
     #just one column needed, could be anything instead of amount
     df['partner_tx_count'] = (
-    df.groupby(['bank_account_uuid', 'ref_name'])['amount']
+    df.groupby(group_cols)['amount']
         .transform('size')
     )
     return df
@@ -148,14 +161,10 @@ def main():
 
     y_train_np = y_train.to_numpy(dtype=float)
     y_test_np  = y_test.to_numpy(dtype=float)
-
-
     # Beispiel: deine ursprünglichen numerischen Spalten
     int_cols = ["amount", "amount_mean_5", "amount_std_5",
-                "amount_change", "time_since_last_tx"]
-
+                "amount_change", "time_since_last_tx", "partner_tx_count",]
     bin_cols = ["valid_ref"]  # bleibt binär
-
     int_index = [feature_cols.index(c) for c in int_cols if c in feature_cols]
     bin_index = [feature_cols.index(c) for c in bin_cols if c in feature_cols]
     #int_index = []
@@ -166,7 +175,6 @@ def main():
     model = ForestDiffusionModel(
         X=X_train_np,
         #label_y=y_train_np,
-        # Diffusion / Training
         n_t=10,                 # weniger Zeitschritte für schnellere Tests
         duplicate_K=10,          # weniger Duplikate für schnellere Tests
         diffusion_type='flow',  # für Zero-Shot-Klassifikation ok
@@ -227,8 +235,6 @@ def main():
     # df_generated = df_generated.drop(columns=uuid_dummy_cols)
     print(df_generated.head(20))
     print(df_generated.columns)
-
-
 
 
 if __name__ == "__main__":
