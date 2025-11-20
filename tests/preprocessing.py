@@ -78,7 +78,7 @@ def create_time_series_features(df):
     df['amount_mean_5'] = df.groupby(group_cols)['amount'].transform(mean_rolling)
     df['amount_std_5'] = df.groupby(group_cols)['amount'].transform(std_rolling)
     
-    # Imputation für amount_std_5: Gruppen-Median → globaler Median → 0
+    # Imputation für amount_std_5: group-Median → global Median → 0
     df['amount_std_5'] = df.groupby(group_cols)['amount_std_5'].transform(
         lambda x: x.fillna(x.median()).fillna(df['amount_std_5'].median())
     )
