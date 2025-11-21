@@ -9,6 +9,9 @@ import matplotlib
 
 matplotlib.use("Agg")
 
+#anomalies can't be identfied if they are the first?!!!
+
+
 
 def uniqueness(df):
     """
@@ -106,7 +109,7 @@ def create_time_series_features(df):
     # Additional features
     df['is_first_tx'] = (df['partner_tx_count'] == 1).astype(int)
     df['day_of_week'] = df['date_post'].dt.dayofweek
-    
+
     return df
 
 

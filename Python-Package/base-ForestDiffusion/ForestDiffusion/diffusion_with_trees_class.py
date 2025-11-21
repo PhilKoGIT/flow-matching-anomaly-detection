@@ -406,6 +406,46 @@ class ForestDiffusionModel():
     out = out.reshape(-1) # [-1]
     return out
 
+  #!!!!!!!!!!!!!!!!!!
+
+
+  #create between the testsample and random noise sample samples in the latent space
+ 
+
+
+  #!!!!!!!!!!!!!!!!!!!
+
+
+  def compute_deviation_score(self, test_sample, n_t = None):
+    #label_y noch abdecken
+    # gibts n_t = None oder ist das einfach 1
+    #alle steps auch bei 0 und bei 1?
+    if n_t is None:
+      n_t = self.n_t
+    distr_sample = np.random.normal(size=(self.c,))
+    list_noisy_samples = []
+
+
+    for noise_step in range(n_t+1):
+      t = (noise_step)/n_t
+      x_t = (1-t)*distr_sample + t*test_sample
+      list_noisy_samples.append(x_t)
+    dev_sum = 0.0
+    for noise_step in range(n_t):
+      v_true = test_sample - distr_sample
+      timestep = (noise_step+1)/n_t
+      v_pred = self.my_model(t=timestep, y=list_noisy_samples[noise_step], unflatten=True) 
+      deviation = np.sum((v_true - v_pred) ** 2)
+      dev_sum += deviation
+    anomaly_score = dev_sum / n_t
+    return anomaly_score
+
+
+
+
+
+
+
   # Generate new data by solving the reverse ODE/SDE
   def generate(self, batch_size=None, n_t=None, X_covs=None):
 
