@@ -9,7 +9,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 
-#anomalies can't be identfied if they are the first?!!!
+#anomalies can't be identfied if they are the first?!!! -> solved by is_first_tx feature
 
 
 
@@ -81,21 +81,18 @@ def create_time_series_features(df):
     df['amount_mean_5'] = df.groupby(group_cols)['amount'].transform(mean_rolling)
     df['amount_std_5'] = df.groupby(group_cols)['amount'].transform(std_rolling)
     
-    # Imputation für amount_std_5: group-Median → global Median → 0
-    df['amount_std_5'] = df.groupby(group_cols)['amount_std_5'].transform(
-        lambda x: x.fillna(x.median()).fillna(df['amount_std_5'].median())
-    )
+    # Imputation für amount_std_5: group-Median → 0
     df['amount_std_5'] = df['amount_std_5'].fillna(0)
     
     df['amount_change'] = df.groupby(group_cols)['amount'].diff()
     df['amount_change'] = df['amount_change'].fillna(0)
     
     # Time since last transaction
+    ts_median = df.groupby(group_cols)['date_post'].diff().dt.days.median()
+
     df['time_since_last_tx'] = df.groupby(group_cols)['date_post'].diff().dt.days
-    df['time_since_last_tx'] = df.groupby(group_cols)['time_since_last_tx'].transform(
-        lambda x: x.fillna(x.median()).fillna(30)
-    )
-    
+    df['time_since_last_tx'] = df['time_since_last_tx'].fillna(ts_median)
+
     # Day of month featuresd
     df['day_of_month'] = df['date_post'].dt.day
     df['median_day_of_month_per_series'] = (
@@ -116,7 +113,7 @@ def create_time_series_features(df):
 def load_business_dataset():
     """Load the business transactions dataset."""
     base_dir = Path(__file__).resolve().parent
-    file_path = base_dir.parent / "data" / "business_transactions_big.csv"
+    file_path = base_dir.parent / "data" / "business40k.csv"
     df = pd.read_csv(file_path)
     return df
 

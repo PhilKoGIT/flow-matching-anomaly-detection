@@ -1,0 +1,30 @@
+{
+  "model_config": {
+    "n_t": 30,
+    "duplicate_K": 10,
+    "diffusion_type": "flow",
+    "max_depth": 8,
+    "n_estimators": 150,
+    "eta": 0.3
+  },
+  "data": {
+    "n_train": 5211,
+    "n_test": 1303,
+    "n_features": 12,
+    "n_anomalies_train": 22,
+    "n_anomalies_test": 4,
+    "anomaly_ratio_test": 0.0030698388334612432
+  },
+  "performance": {
+    "roc_auc": 0.9632409545804466,
+    "best_f1_score": 0.11111111111111112,
+    "best_threshold": 16.854791376956594,
+    "best_percentile": 99
+  },
+  "scores": {
+    "min": 3.0618677029917545,
+    "max": 338.2250762066576,
+    "mean": 6.212959409828902,
+    "std": 9.568337731061915
+  }
+}
