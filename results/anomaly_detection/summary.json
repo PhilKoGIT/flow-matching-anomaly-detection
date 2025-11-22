@@ -1,0 +1,51 @@
+{
+  "model_config": {
+    "n_t": 30,
+    "duplicate_K": 10,
+    "diffusion_type": "flow",
+    "max_depth": 8,
+    "n_estimators": 150
+  },
+  "data": {
+    "n_train": 11520,
+    "n_test": 3230,
+    "n_features": 14,
+    "n_anomalies_test": 30,
+    "anomaly_ratio": 0.009287925696594427,
+    "fault_distribution": {
+      "0": 3200,
+      "1": 10,
+      "2": 10,
+      "3": 10
+    }
+  },
+  "performance": {
+    "roc_auc": 0.9176041666666668,
+    "best_f1_score": 0.3492063492063492,
+    "best_threshold": 15.295045249212244,
+    "best_percentile": 99
+  },
+  "scores": {
+    "min": 1.0454700607012757,
+    "max": 68.22120358740472,
+    "mean": 5.415449015216749,
+    "std": 3.638850387099343
+  },
+  "detection_by_fault": {
+    "1": {
+      "detected": 4,
+      "total": 10,
+      "rate": 40.0
+    },
+    "2": {
+      "detected": 3,
+      "total": 10,
+      "rate": 30.0
+    },
+    "3": {
+      "detected": 4,
+      "total": 10,
+      "rate": 40.0
+    }
+  }
+}
