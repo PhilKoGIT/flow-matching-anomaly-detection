@@ -133,7 +133,6 @@ class ForestDiffusionModel():
       X0 = np.random.normal(size=X1.shape) # Noise data
 
       # Make Datasets of interpolation
-      #ja einfach was wir predicten wollen; nämlich velocity field;  und xt
       X_train, y_train = build_data_xt(X0, X1, X_covs, n_t=self.n_t, diffusion_type=self.diffusion_type, eps=self.eps, sde=self.sde)
 
     if self.label_y is not None:
@@ -410,41 +409,86 @@ class ForestDiffusionModel():
 
 
   #create between the testsample and random noise sample samples in the latent space
- 
+  #categorical features must have the same value space in test and training
 
 
   #!!!!!!!!!!!!!!!!!!!
 
-
-  def compute_deviation_score(self, test_sample, n_t = None):
-    #label_y noch abdecken
+  def compute_deviation_score(self, test_samples, n_t=None):
+    
+        #label_y noch abdecken
     # gibts n_t = None oder ist das einfach 1
     #alle steps auch bei 0 und bei 1?
+    #noch sicherstellen, dass test_samples gleich sind wie training
+    #clip extremes und so
+    #mode muss noch rein assert diffusion type == "flow"
+    #test_datensatz muss vollständig sein
+    #ich kann das doch relativ stark auf meinen datensatz anwenden oder?
+    #schauen dass training und test gleich ist oder bekomme ich automatisch fehler dann?
+    #kategorische einfach ausschließen?
+    
+    # Validierungen
+    assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
+    assert self.p_in_one == True, "Deviation score only for p_in_one=True"
+    if self.label_y is not None:
+        raise Exception("Anomaly score only for unsupervised learning")
+    
     if n_t is None:
-      n_t = self.n_t
-    distr_sample = np.random.normal(size=(self.c,))
-    list_noisy_samples = []
+        n_t = self.n_t
+    
+    # Daten transformieren
+    test_samples, column_names_before, column_names_after = self.dummify(test_samples)
+    test_samples = self.scaler.transform(test_samples)
+    
+    n_samples = test_samples.shape[0]
+    n_features = test_samples.shape[1]
+    
+    # WICHTIG: Richtige mask erstellen!
+    mask_y = {0: np.ones(n_samples, dtype=bool)}
+    
+    # Partial mit RICHTIGEN Parametern
+    model = partial(
+        self.my_model,
+        mask_y=mask_y,         # ← NICHT None!
+        dmat=self.n_batch > 0,
+        unflatten=False,       # ← False für 2D Daten!
+        X_covs=None
+    )
+    X0 = np.random.normal(size=test_samples.shape)
 
+    #returns x_t_samples: [n_t * n_samples, n_features], v_true: [n_samples, n_features]; bc n_features gives the direction
+    x_t_samples, v_true = build_data_xt(
+        X0, 
+        test_samples, 
+        n_t=n_t, 
+        diffusion_type="flow", 
+        eps=self.eps, 
+        sde=None
+    )
+    # x_t_samples: [n_t * n_samples, n_features]
+    # v_true: [n_samples, n_features] 
+    # Scores initialisieren (pro Sample!)
+    anomaly_scores = np.zeros(n_samples)
+    #creates a vector of different time steps, eps is starting point (very small to zero)
+    t_levels = np.linspace(self.eps, 1, n_t)  
+    # Für JEDEN Zeit-Schritt einzeln
+    for i, t in enumerate(t_levels):
+        # WICHTIG: Nur die Samples für DIESEN Zeit-Schritt nehmen!
+        start_idx = i * n_samples
+        end_idx = (i + 1) * n_samples
 
-    for noise_step in range(n_t+1):
-      t = (noise_step)/n_t
-      x_t = (1-t)*distr_sample + t*test_sample
-      list_noisy_samples.append(x_t)
-    dev_sum = 0.0
-    for noise_step in range(n_t):
-      v_true = test_sample - distr_sample
-      timestep = (noise_step+1)/n_t
-      v_pred = self.my_model(t=timestep, y=list_noisy_samples[noise_step], unflatten=True) 
-      deviation = np.sum((v_true - v_pred) ** 2)
-      dev_sum += deviation
-    anomaly_score = dev_sum / n_t
-    return anomaly_score
+        #x_t_samples: [n_t * n_samples, n_features]; for every test_sample we have n_t samples in the latent space; ordered by time step
+        X_t = x_t_samples[start_idx:end_idx, :]
+       
+        v_pred_t = model(t=t, y=X_t)  # t ist FLOAT zwischen eps und 1
+        # v_pred_t: [n_samples, n_features]
+        squared_error = np.sum((v_true - v_pred_t) ** 2, axis=1)
+        anomaly_scores += squared_error
+    
+    anomaly_scores = anomaly_scores / n_t
+    return anomaly_scores  # [n_samples] - ein Score pro Sample!
 
-
-
-
-
-
+  
 
   # Generate new data by solving the reverse ODE/SDE
   def generate(self, batch_size=None, n_t=None, X_covs=None):
