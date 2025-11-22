@@ -405,48 +405,29 @@ class ForestDiffusionModel():
     out = out.reshape(-1) # [-1]
     return out
 
-  #!!!!!!!!!!!!!!!!!!
 
-
+#-----------------------------------------------------------------------------------
   #create between the testsample and random noise sample samples in the latent space
   #categorical features must have the same value space in test and training
 
-
-  #!!!!!!!!!!!!!!!!!!!
-
   def compute_deviation_score(self, test_samples, n_t=None):
-    
-        #label_y noch abdecken
-    # gibts n_t = None oder ist das einfach 1
-    #alle steps auch bei 0 und bei 1?
-    #noch sicherstellen, dass test_samples gleich sind wie training
-    #clip extremes und so
-    #mode muss noch rein assert diffusion type == "flow"
-    #test_datensatz muss vollständig sein
-    #ich kann das doch relativ stark auf meinen datensatz anwenden oder?
-    #schauen dass training und test gleich ist oder bekomme ich automatisch fehler dann?
-    #kategorische einfach ausschließen?
-    
-    # Validierungen
     assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
     assert self.p_in_one == True, "Deviation score only for p_in_one=True"
+    assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
+
     if self.label_y is not None:
         raise Exception("Anomaly score only for unsupervised learning")
     
     if n_t is None:
         n_t = self.n_t
-    
-    # Daten transformieren
-    test_samples, column_names_before, column_names_after = self.dummify(test_samples)
+    if len(self.cat_indexes) > 0:
+      test_samples, column_names_before, column_names_after = self.dummify(test_samples)
     test_samples = self.scaler.transform(test_samples)
     
     n_samples = test_samples.shape[0]
     n_features = test_samples.shape[1]
-    
-    # WICHTIG: Richtige mask erstellen!
     mask_y = {0: np.ones(n_samples, dtype=bool)}
-    
-    # Partial mit RICHTIGEN Parametern
+
     model = partial(
         self.my_model,
         mask_y=mask_y,         # ← NICHT None!
@@ -465,15 +446,10 @@ class ForestDiffusionModel():
         eps=self.eps, 
         sde=None
     )
-    # x_t_samples: [n_t * n_samples, n_features]
-    # v_true: [n_samples, n_features] 
-    # Scores initialisieren (pro Sample!)
     anomaly_scores = np.zeros(n_samples)
-    #creates a vector of different time steps, eps is starting point (very small to zero)
-    t_levels = np.linspace(self.eps, 1, n_t)  
-    # Für JEDEN Zeit-Schritt einzeln
+    t_levels = [i / (n_t - 1) for i in range(n_t)]
     for i, t in enumerate(t_levels):
-        # WICHTIG: Nur die Samples für DIESEN Zeit-Schritt nehmen!
+        # only use samples for this time step
         start_idx = i * n_samples
         end_idx = (i + 1) * n_samples
 
@@ -484,7 +460,6 @@ class ForestDiffusionModel():
         # v_pred_t: [n_samples, n_features]
         squared_error = np.sum((v_true - v_pred_t) ** 2, axis=1)
         anomaly_scores += squared_error
-    
     anomaly_scores = anomaly_scores / n_t
     return anomaly_scores  # [n_samples] - ein Score pro Sample!
 
