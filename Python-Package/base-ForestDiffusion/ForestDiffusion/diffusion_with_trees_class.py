@@ -409,12 +409,11 @@ class ForestDiffusionModel():
     out = out.reshape(-1) # [-1]
     return out
 
-
-#-----------------------------------------------------------------------------------
+  #-----------------------------------------------------------------------------------
   #create between the testsample and random noise sample samples in the latent space
   #categorical features must have the same value space in test and training
 
-  def compute_deviation_score(self, test_samples, n_t=None):
+  def compute_deviation_score(self, test_samples, n_t=None, duplicate_K_test=50):
     assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
     assert self.p_in_one == True, "Deviation score only for p_in_one=True"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
@@ -430,7 +429,12 @@ class ForestDiffusionModel():
     
     n_samples = test_samples.shape[0]
     n_features = test_samples.shape[1]
-    mask_y = {0: np.ones(n_samples, dtype=bool)}
+
+    #duplicate test samples
+    test_samples_rep = np.tile(test_samples, (duplicate_K_test, 1))
+    n_samples_rep = test_samples_rep.shape[0]  # = n_samples * duplicate_K_test
+
+    mask_y = {0: np.ones(n_samples_rep, dtype=bool)}
 
     model = partial(
         self.my_model,
@@ -439,35 +443,33 @@ class ForestDiffusionModel():
         unflatten=False,       # ← False für 2D Daten!
         X_covs=None
     )
-    X0 = np.random.normal(size=test_samples.shape)
+    X0 = np.random.normal(size=test_samples_rep.shape)
 
     #returns x_t_samples: [n_t * n_samples, n_features], v_true: [n_samples, n_features]; bc n_features gives the direction
     x_t_samples, v_true = build_data_xt(
         X0, 
-        test_samples, 
+        test_samples_rep, 
         n_t=n_t, 
         diffusion_type="flow", 
         eps=self.eps, 
         sde=None
     )
-    anomaly_scores = np.zeros(n_samples)
+    anomaly_scores_rep = np.zeros(n_samples_rep)
     t_levels = [i / (n_t - 1) for i in range(n_t)]
+
     for i, t in enumerate(t_levels):
-        # only use samples for this time step
-        start_idx = i * n_samples
-        end_idx = (i + 1) * n_samples
+        start_idx = i * n_samples_rep
+        end_idx = (i + 1) * n_samples_rep
 
-        #x_t_samples: [n_t * n_samples, n_features]; for every test_sample we have n_t samples in the latent space; ordered by time step
         X_t = x_t_samples[start_idx:end_idx, :]
-       
-        v_pred_t = model(t=t, y=X_t)  # t ist FLOAT zwischen eps und 1
-        # v_pred_t: [n_samples, n_features]
-        squared_error = np.sum((v_true - v_pred_t) ** 2, axis=1)
-        anomaly_scores += squared_error
-    anomaly_scores = anomaly_scores / n_t
-    return anomaly_scores  # [n_samples] - ein Score pro Sample!
+        v_pred_t = model(t=t, y=X_t)
 
-  
+        squared_error = np.sum((v_true - v_pred_t) ** 2, axis=1)
+        anomaly_scores_rep += squared_error
+    anomaly_scores_rep = anomaly_scores_rep / n_t  # [n_samples_rep]
+    anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K_test, n_samples)
+    anomaly_scores = anomaly_scores_rep.mean(axis=0)  # mitteln über Noise-Samples
+    return anomaly_scores  # [n_samples]
 
   # Generate new data by solving the reverse ODE/SDE
   def generate(self, batch_size=None, n_t=None, X_covs=None):

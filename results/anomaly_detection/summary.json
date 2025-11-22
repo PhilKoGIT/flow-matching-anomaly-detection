@@ -20,32 +20,32 @@
     }
   },
   "performance": {
-    "roc_auc": 0.9176041666666668,
-    "best_f1_score": 0.3492063492063492,
-    "best_threshold": 15.295045249212244,
+    "roc_auc": 0.9941041666666667,
+    "best_f1_score": 0.8571428571428572,
+    "best_threshold": 8.31023461819068,
     "best_percentile": 99
   },
   "scores": {
-    "min": 1.0454700607012757,
-    "max": 68.22120358740472,
-    "mean": 5.415449015216749,
-    "std": 3.638850387099343
+    "min": 2.7217685113779106,
+    "max": 63.124609117622555,
+    "mean": 5.434543520246052,
+    "std": 2.6797807111204137
   },
   "detection_by_fault": {
     "1": {
-      "detected": 4,
+      "detected": 7,
       "total": 10,
-      "rate": 40.0
+      "rate": 70.0
     },
     "2": {
-      "detected": 3,
+      "detected": 10,
       "total": 10,
-      "rate": 30.0
+      "rate": 100.0
     },
     "3": {
-      "detected": 4,
+      "detected": 10,
       "total": 10,
-      "rate": 40.0
+      "rate": 100.0
     }
   }
 }
