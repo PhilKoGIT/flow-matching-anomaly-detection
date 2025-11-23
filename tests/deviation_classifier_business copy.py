@@ -44,12 +44,15 @@ print(f"  y_test : {y_test.shape}, Anomalien = {y_test.sum()} ({y_test.mean():.2
 # FEATURE-MATRIX FÜR MODELL
 # ============================================================================
 
-
-#delete bank_account_uuid for model training
+# bank_account_uuid ist für das Modell eher ein ID-Feature → fürs Training droppen
+# (Gruppierung ist bereits im Feature Engineering passiert)
 cols_to_drop_for_model = ["bank_account_uuid"]
 
 X_train_df_model = X_train_df.drop(columns=cols_to_drop_for_model)
 X_test_df_model = X_test_df.drop(columns=cols_to_drop_for_model)
+
+print("\nFeatures, die ins Modell gehen:")
+print(list(X_train_df_model.columns))
 
 X_train = X_train_df_model.to_numpy(dtype=float)
 X_test = X_test_df_model.to_numpy(dtype=float)
@@ -61,7 +64,6 @@ print("\nFeature matrix shapes (nach Drop von bank_account_uuid):")
 print(f"  X_train: {X_train.shape}")
 print(f"  X_test : {X_test.shape}")
 
-#label distribution
 print("\nTest-Label-Verteilung (0=normal, 1=anomaly):")
 print(f"  Normal : {np.sum(y_test == 0)} ({np.mean(y_test == 0) * 100:.2f}%)")
 print(f"  Anomaly: {np.sum(y_test == 1)} ({np.mean(y_test == 1) * 100:.2f}%)")
@@ -71,7 +73,7 @@ print(f"  Anomaly: {np.sum(y_test == 1)} ({np.mean(y_test == 1) * 100:.2f}%)")
 # ============================================================================
 
 print("\n" + "=" * 80)
-print("TRAIN of FORESTDIFFUSION MODEL ON FULL TRAINING DATA")
+print("TRAINING FORESTDIFFUSION MODEL AUF GESAMTEN TRAININGSDATEN")
 print("=" * 80)
 
 model = ForestDiffusionModel(
@@ -91,7 +93,7 @@ model = ForestDiffusionModel(
     gpu_hist=False,   # auf True setzen, wenn GPU verfügbar
 
     # Data settings
-    n_batch=0,        # Important: 0 for compute_deviation_score
+    n_batch=0,        # WICHTIG: 0 für compute_deviation_score
     seed=666,
     n_jobs=-1,
 
@@ -118,8 +120,9 @@ print("=" * 80)
 
 anomaly_scores = model.compute_deviation_score(
     test_samples=X_test,
-    n_t=100   # same amount of noise steps as training
+    n_t=100   # gleich wie oben
 )
+
 print(f"✓ Anomaly scores computed: {len(anomaly_scores)}")
 print(f"  Score range: [{anomaly_scores.min():.4f}, {anomaly_scores.max():.4f}]")
 print(f"  Score mean : {anomaly_scores.mean():.4f}")
@@ -142,7 +145,7 @@ except Exception as e:
     auc_score = None
 
 # Threshold-Suche über Percentiles
-thresholds_percentiles = [90, 95, 97.5, 99, 99.5, 99.9]
+thresholds_percentiles = [90, 95, 97.5, 99]
 print("\nPerformance at different threshold percentiles:")
 print("-" * 80)
 

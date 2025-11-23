@@ -124,45 +124,44 @@ def prepare_data():
     Returns:
         tuple: (X_train, X_test, y_train, y_test, train_mapping, test_mapping, feature_columns)
     """
-    # Load original data
     df_original = load_business_dataset()
     
-    # Save complete original data for later reference
     output_dir = Path("data")
     output_dir.mkdir(exist_ok=True)
     df_original.to_csv(output_dir / "original_data.csv", index=True)
-    print("✓ Original data saved to data/original_data.csv")
     
-    # Start processing
     df = df_original.copy()
     df['original_index'] = df.index
     
-    # Feature engineering
     df = create_time_series_features(df)
     
-    # Shuffle and sort
     df = df.sample(frac=1, random_state=42).reset_index(drop=True)
     df = df.sort_values(["date_post"])
     df = df.drop("date_post", axis=1)
 
-    # Create target
     target_col = "anomaly_description"
-    anomaly_mask = df[target_col].notna()
-    df[target_col] = anomaly_mask.astype(int)
+    df[target_col] = df[target_col].notna().astype(int)
 
-    # Time-based split (80/20)
-    split_index = int(0.8 * len(df))
-    
     y = df[target_col]
     X = df.drop(columns=[target_col])
-    
-    # Split data
-    X_train = X[:split_index].copy()
-    X_test = X[split_index:].copy()
-    y_train = y[:split_index].copy()
-    y_test = y[split_index:].copy()
 
-    # Create index mappings BEFORE uniqueness transformation
+    normal_mask = (y == 0)
+    anom_mask = (y == 1)
+
+    X_normal = X[normal_mask]
+    y_normal = y[normal_mask]
+
+    X_anom = X[anom_mask]
+    y_anom = y[anom_mask]
+
+    split_index = int(0.8 * len(X_normal))
+
+    X_train = X_normal.iloc[:split_index].copy()
+    y_train = y_normal.iloc[:split_index].copy()
+
+    X_test = pd.concat([X_normal.iloc[split_index:], X_anom], axis=0).copy()
+    y_test = pd.concat([y_normal.iloc[split_index:], y_anom], axis=0).copy()
+
     train_mapping = pd.DataFrame({
         'transformed_index': range(len(X_train)),
         'original_index': X_train['original_index'].values
@@ -173,24 +172,18 @@ def prepare_data():
         'original_index': X_test['original_index'].values
     })
     
-    # Save mappings
     train_mapping.to_csv(output_dir / "train_mapping.csv", index=False)
     test_mapping.to_csv(output_dir / "test_mapping.csv", index=False)
-    print("✓ Index mappings saved to data/train_mapping.csv and data/test_mapping.csv")
     
-    # Apply uniqueness transformation
     X_train = uniqueness(X_train)
     X_test = uniqueness(X_test)
     
-    # Remove original_index column (not a feature for modeling)
     X_train = X_train.drop(columns=['original_index'])
     X_test = X_test.drop(columns=['original_index'])
     
-    # Save feature column names (nur für NumPy → DataFrame Konvertierung)
     feature_columns = X_train.columns.tolist()
     with open(output_dir / "feature_columns.json", 'w') as f:
         json.dump(feature_columns, f, indent=2)
-    print("✓ Feature columns saved to data/feature_columns.json")
     
     # ================================
     # DELETE : JUST FOR TESTING PURPOSES
