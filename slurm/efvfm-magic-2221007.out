@@ -1,0 +1,43 @@
+== Job start ==
+================================================================================
+LOADING & PREPARING BUSINESS TRANSACTION DATA
+================================================================================
+✓ Original data saved to data/original_data.csv
+✓ Index mappings saved to data/train_mapping.csv and data/test_mapping.csv
+✓ Feature columns saved to data/feature_columns.json
+
+Shapes nach Preprocessing:
+  X_train: (30940, 13)
+  X_test : (7736, 13)
+  y_train: (30940,), Anomalien = 34 (0.11%)
+  y_test : (7736,), Anomalien = 6 (0.08%)
+
+Features, die ins Modell gehen:
+['amount', 'amount_mean_5', 'amount_std_5', 'amount_change', 'time_since_last_tx', 'day_of_month', 'median_day_of_month_per_series', 'dom_deviation', 'partner_tx_count', 'is_first_tx', 'day_of_week', 'valid_ref']
+
+Feature matrix shapes (nach Drop von bank_account_uuid):
+  X_train: (30940, 12)
+  X_test : (7736, 12)
+
+Test-Label-Verteilung (0=normal, 1=anomaly):
+  Normal : 7730 (99.92%)
+  Anomaly: 6 (0.08%)
+
+================================================================================
+TRAINING FORESTDIFFUSION MODEL AUF GESAMTEN TRAININGSDATEN
+================================================================================
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n903
+Job ID: 2221007
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: TIMEOUT (exit code 0)
+Nodes: 1
+Cores per node: 2
+CPU Utilized: 00:00:02
+CPU Efficiency: 0.03% of 02:00:10 core-walltime
+Job Wall-clock time: 01:00:05
+Memory Utilized: 6.16 GB
+Memory Efficiency: 19.24% of 32.00 GB (32.00 GB/node)

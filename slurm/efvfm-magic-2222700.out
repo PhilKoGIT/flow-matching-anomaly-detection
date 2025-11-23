@@ -1,0 +1,131 @@
+== Job start ==
+================================================================================
+LOADING & PREPARING BUSINESS TRANSACTION DATA
+================================================================================
+✓ Original data saved to data/original_data.csv
+✓ Index mappings saved to data/train_mapping.csv and data/test_mapping.csv
+✓ Feature columns saved to data/feature_columns.json
+
+Shapes nach Preprocessing:
+  X_train: (30940, 13)
+  X_test : (7736, 13)
+  y_train: (30940,), Anomalien = 34 (0.11%)
+  y_test : (7736,), Anomalien = 6 (0.08%)
+
+Features, die ins Modell gehen:
+['amount', 'amount_mean_5', 'amount_std_5', 'amount_change', 'time_since_last_tx', 'day_of_month', 'median_day_of_month_per_series', 'dom_deviation', 'partner_tx_count', 'is_first_tx', 'day_of_week', 'valid_ref']
+
+Feature matrix shapes (nach Drop von bank_account_uuid):
+  X_train: (30940, 12)
+  X_test : (7736, 12)
+
+Test-Label-Verteilung (0=normal, 1=anomaly):
+  Normal : 7730 (99.92%)
+  Anomaly: 6 (0.08%)
+
+================================================================================
+TRAINING FORESTDIFFUSION MODEL AUF GESAMTEN TRAININGSDATEN
+================================================================================
+✓ Model trained successfully on full training data!
+
+================================================================================
+COMPUTING ANOMALY SCORES AUF TESTSET
+================================================================================
+✓ Anomaly scores computed: 7736
+  Score range: [2.2743, 45.6989]
+  Score mean : 5.2805
+  Score std  : 2.5806
+
+================================================================================
+EVALUATION METRICS
+================================================================================
+
+✓ ROC-AUC Score: 0.9780
+
+Performance at different threshold percentiles:
+--------------------------------------------------------------------------------
+
+90th Percentile (threshold=7.8905):
+  Precision: 0.0078 | Recall: 1.0000 | F1: 0.0154 | Acc: 0.9007
+  Confusion Matrix: TP=6, FP=768, TN=6962, FN=0
+
+95th Percentile (threshold=9.1651):
+  Precision: 0.0155 | Recall: 1.0000 | F1: 0.0305 | Acc: 0.9507
+  Confusion Matrix: TP=6, FP=381, TN=7349, FN=0
+
+97.5th Percentile (threshold=11.3369):
+  Precision: 0.0206 | Recall: 0.6667 | F1: 0.0400 | Acc: 0.9752
+  Confusion Matrix: TP=4, FP=190, TN=7540, FN=2
+
+99th Percentile (threshold=15.8454):
+  Precision: 0.0256 | Recall: 0.3333 | F1: 0.0476 | Acc: 0.9897
+  Confusion Matrix: TP=2, FP=76, TN=7654, FN=4
+
+✓ Best F1-Score: 0.0476 at 99th percentile (threshold=15.8454)
+
+Final confusion matrix at best F1 threshold:
+[[7654   76]
+ [   4    2]]
+  Normal correctly classified: 7654/7730
+  Anomalies detected          : 2/6
+
+================================================================================
+CREATING VISUALIZATIONS
+================================================================================
+✓ Saved plot to: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/results/business_anomaly_detection/business_anomaly_detection_results.png
+
+================================================================================
+SAVING RESULTS
+================================================================================
+
+Top 20 highest anomaly scores:
+      test_index  original_index  ...  predicted_anomaly  anomaly_description
+7541        7541           25240  ...                  1                  NaN
+7322        7322           31447  ...                  1                  NaN
+7071        7071           16913  ...                  1                  NaN
+6562        6562           26125  ...                  1                  NaN
+6807        6807           18072  ...                  1                  NaN
+4358        4358           16211  ...                  1                  NaN
+3572        3572             428  ...                  1                  NaN
+5684        5684           14489  ...                  1                  NaN
+3309        3309            5405  ...                  1                  NaN
+3025        3025           28182  ...                  1                  NaN
+3841        3841           15967  ...                  1                  NaN
+5685        5685           15164  ...                  1                  NaN
+5882        5882           29409  ...                  1                  NaN
+4653        4653           21155  ...                  1                  NaN
+4103        4103           28394  ...                  1                  NaN
+5170        5170            6662  ...                  1                  NaN
+2485        2485           27143  ...                  1                  NaN
+1967        1967           23412  ...                  1                  NaN
+6013        6013           23473  ...                  1                  NaN
+4339        4339           28102  ...                  1                  NaN
+
+[20 rows x 6 columns]
+
+✓ Results saved to: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/results/business_anomaly_detection/business_anomaly_scores.csv
+✓ Summary saved to: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/results/business_anomaly_detection/business_anomaly_summary.json
+
+================================================================================
+BUSINESS ANOMALY DETECTION EXPERIMENT COMPLETED!
+================================================================================
+ROC-AUC: 0.9780
+Best F1: 0.0476
+Normal correctly classified: 7654/7730
+Anomalies detected         : 2/6
+== Job abgeschlossen ==
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n902
+Job ID: 2222700
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 2
+CPU Utilized: 02:54:19
+CPU Efficiency: 85.00% of 03:25:04 core-walltime
+Job Wall-clock time: 01:42:32
+Memory Utilized: 7.64 GB
+Memory Efficiency: 23.88% of 32.00 GB (32.00 GB/node)
