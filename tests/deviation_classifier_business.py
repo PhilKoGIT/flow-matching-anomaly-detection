@@ -11,6 +11,11 @@ from sklearn.metrics import roc_auc_score, precision_recall_curve, roc_curve, co
 import seaborn as sns
 import json
 
+
+pd.set_option("display.max_rows", None)      # Alle Zeilen anzeigen
+pd.set_option("display.max_columns", None)   # Alle Spalten anzeigen
+pd.set_option("display.max_colwidth", None)  # Full content in each cell
+
 # WICHTIG: prepare_data aus deinem test.py importieren
 from preprocessing import prepare_data
 
@@ -281,8 +286,8 @@ for col in ['bank_account_uuid', 'date_post', 'amount', 'ref_name']:
         results_df[col] = df_test_original[col].values
 
 # Top-Anomalien ausgeben
-print("\nTop 20 highest anomaly scores:")
-print(results_df.sort_values('anomaly_score', ascending=False).head(20)[
+print("\nTop highest anomaly scores:")
+print(results_df.sort_values('anomaly_score', ascending=False).head(400)[
     ['test_index', 'original_index', 'is_anomaly', 'anomaly_score', 'predicted_anomaly', 'anomaly_description']
 ])
 
@@ -336,14 +341,3 @@ if auc_score is not None:
 print(f"Best F1: {best_f1:.4f}")
 print(f"Normal correctly classified: {np.sum((y_test == 0) & (final_preds == 0))}/{np.sum(y_test == 0)}")
 print(f"Anomalies detected         : {np.sum((y_test == 1) & (final_preds == 1))}/{np.sum(y_test == 1)}")
-
-#hyperparameter printen
-print("\nUsed Hyperparameters:")
-print(f"n_t: 100")
-print(f"duplicate_K: 20")
-print(f"diffusion_type: 'flow'")
-print(f"max_depth: 8")
-print(f"n_estimators: 150")
-print(f"eta: 0.3")
-print(f"dataset: Business Transaction Data")
-print(f"datset size (train/test): {X_train.shape[0]}/{X_test.shape[0]}")

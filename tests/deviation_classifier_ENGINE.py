@@ -16,6 +16,11 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score, precision_recall_curve, roc_curve, confusion_matrix
 import seaborn as sns
+import time
+
+pd.set_option("display.max_rows", None)     
+pd.set_option("display.max_columns", None)   
+pd.set_option("display.max_colwidth", None)
 
 # ============================================================================
 # SETUP
@@ -128,8 +133,10 @@ model = ForestDiffusionModel(
     X=X_train,
     
     # Diffusion settings
+   # n_t=100,
     n_t=30,
-    duplicate_K=10,
+    #duplicate_K=10,
+    duplicate_K=50,
     diffusion_type='flow',  # WICHTIG für compute_deviation_score
     eps=1e-3,
     
@@ -204,7 +211,7 @@ except Exception as e:
     auc_score = None
 
 # Performance bei verschiedenen Thresholds
-thresholds_percentiles = [90, 95, 99]
+thresholds_percentiles = [90, 95, 97.5, 99, 99.5, 99.9]
 print("\nPerformance at different threshold percentiles:")
 print("-" * 70)
 

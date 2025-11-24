@@ -10,21 +10,21 @@
   "data": {
     "n_train": 24755,
     "n_test": 6189,
-    "n_features": 7,
+    "n_features": 8,
     "n_anomalies_train": 43,
     "n_anomalies_test": 11,
     "anomaly_ratio_test": 0.001777346905800614
   },
   "performance": {
-    "roc_auc": 0.8304541040054152,
-    "best_f1_score": 0.1643835616438356,
-    "best_threshold": 11.578876820282595,
+    "roc_auc": 0.8839724535742665,
+    "best_f1_score": 0.136986301369863,
+    "best_threshold": 14.261889160414025,
     "best_percentile": 99
   },
   "scores": {
-    "min": 1.7588362947336125,
-    "max": 29.5459363104323,
-    "mean": 4.206898135114922,
-    "std": 1.7840913181512723
+    "min": 1.7582490690585735,
+    "max": 32.96776884984685,
+    "mean": 4.358973533024045,
+    "std": 2.219152222929795
   }
 }

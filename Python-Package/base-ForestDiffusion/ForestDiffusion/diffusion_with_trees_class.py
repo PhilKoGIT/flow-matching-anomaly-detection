@@ -438,9 +438,9 @@ class ForestDiffusionModel():
 
     model = partial(
         self.my_model,
-        mask_y=mask_y,         # ← NICHT None!
+        mask_y=mask_y,         
         dmat=self.n_batch > 0,
-        unflatten=False,       # ← False für 2D Daten!
+        unflatten=False,       
         X_covs=None
     )
     X0 = np.random.normal(size=test_samples_rep.shape)

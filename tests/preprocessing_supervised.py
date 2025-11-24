@@ -82,11 +82,11 @@ def create_time_series_features(df):
     
     df['amount_mean_5'] = df.groupby(group_cols)['amount'].transform(mean_rolling)
 
-    #std_rolling = lambda x: x.rolling(5, min_periods=1).std()
-    # df['amount_std_5'] = df.groupby(group_cols)['amount'].transform(std_rolling)
+    std_rolling = lambda x: x.rolling(5, min_periods=1).std()
+    df['amount_std_5'] = df.groupby(group_cols)['amount'].transform(std_rolling)
     
-    # # Imputation für amount_std_5: group-Median → 0
-    # df['amount_std_5'] = df['amount_std_5'].fillna(0)
+    # Imputation für amount_std_5: group-Median → 0
+    df['amount_std_5'] = df['amount_std_5'].fillna(0)
     
     df['amount_change'] = df.groupby(group_cols)['amount'].diff()
     df['amount_change'] = df['amount_change'].fillna(0)
