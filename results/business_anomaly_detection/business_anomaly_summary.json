@@ -8,23 +8,23 @@
     "eta": 0.3
   },
   "data": {
-    "n_train": 24755,
-    "n_test": 6189,
-    "n_features": 8,
-    "n_anomalies_train": 43,
-    "n_anomalies_test": 11,
-    "anomaly_ratio_test": 0.001777346905800614
+    "n_train": 24712,
+    "n_test": 6232,
+    "n_features": 11,
+    "n_anomalies_train": 0,
+    "n_anomalies_test": 54,
+    "anomaly_ratio_test": 0.008664955070603338
   },
   "performance": {
-    "roc_auc": 0.8839724535742665,
-    "best_f1_score": 0.136986301369863,
-    "best_threshold": 14.261889160414025,
+    "roc_auc": 0.8508626788005228,
+    "best_f1_score": 0.2222222222222222,
+    "best_threshold": 16.450081819861865,
     "best_percentile": 99
   },
   "scores": {
-    "min": 1.7582490690585735,
-    "max": 32.96776884984685,
-    "mean": 4.358973533024045,
-    "std": 2.219152222929795
+    "min": 2.5885251584093734,
+    "max": 34.59281420931631,
+    "mean": 5.929906144246606,
+    "std": 2.4666292010598356
   }
 }

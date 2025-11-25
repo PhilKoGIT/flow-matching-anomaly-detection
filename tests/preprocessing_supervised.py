@@ -97,9 +97,14 @@ def create_time_series_features(df):
     df['time_since_last_tx'] = df.groupby(group_cols)['date_post'].diff().dt.days
     df['time_since_last_tx'] = df['time_since_last_tx'].fillna(ts_median)
 
-    #cap for off payments that happen more than once 
-    df.loc[df['time_since_last_tx'] > 55, 'time_since_last_tx'] = ts_median
+    # #cap for off payments that happen more than once 
+    # df.loc[df['time_since_last_tx'] > 55, 'time_since_last_tx'] = ts_median
 
+    df['day_of_month'] = df['date_post'].dt.day
+    df['median_day_of_month_per_series'] = (
+        df.groupby(group_cols)['day_of_month'].transform('median')
+    )
+    df['dom_deviation'] = (df['day_of_month'] - df['median_day_of_month_per_series']).abs()
     # Transaction count per partner (cumulative)
     df['partner_tx_count'] = df.groupby(group_cols).cumcount() + 1
     

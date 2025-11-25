@@ -17,6 +17,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score, precision_recall_curve, roc_curve, confusion_matrix
 import seaborn as sns
 import time
+import joblib
+
 
 pd.set_option("display.max_rows", None)     
 pd.set_option("display.max_columns", None)   
@@ -96,6 +98,42 @@ df_combined = df_combined.sample(frac=1, random_state=42).reset_index(drop=True)
 
 test_df = df_combined.copy()
 
+
+
+# ============================================================================
+# ADD ANOMALIES TO TRAIN SET
+# ============================================================================
+
+# Fault 1 Samples
+df_fault1 = df_original[df_original["Fault"] == 1].sample(
+    n=min(30, len(df_original[df_original["Fault"] == 1])), 
+    random_state=42
+)
+
+# Fault 2 Samples
+df_fault2 = df_original[df_original["Fault"] == 2].sample(
+    n=min(30, len(df_original[df_original["Fault"] == 2])), 
+    random_state=42
+)
+
+# Fault 3 Samples
+df_fault3 = df_original[df_original["Fault"] == 3].sample(
+    n=min(30, len(df_original[df_original["Fault"] == 3])), 
+    random_state=42
+)
+
+# Kombiniere Test-Set mit Anomalien
+df_combined = pd.concat([train_df, df_fault1, df_fault2, df_fault3], ignore_index=True)
+
+# Shuffle
+df_combined = df_combined.sample(frac=1, random_state=42).reset_index(drop=True)
+
+train_df = df_combined.copy()
+
+
+
+
+
 print(f"\nFinal test set composition:")
 print(test_df["Fault"].value_counts().sort_index())
 print(f"Total test samples: {len(test_df)}")
@@ -131,19 +169,19 @@ print("Training on NORMAL data only (Fault=0)...")
 
 model = ForestDiffusionModel(
     X=X_train,
-    
+    label_y=None,  # Unsupervised
     # Diffusion settings
    # n_t=100,
-    n_t=30,
+    n_t=50,
     #duplicate_K=10,
-    duplicate_K=50,
+    duplicate_K=10,
     diffusion_type='flow',  # WICHTIG für compute_deviation_score
     eps=1e-3,
     
     # Model settings
     model='xgboost',
-    max_depth=8,
-    n_estimators=150,
+    max_depth=7,
+    n_estimators=100,
     eta=0.3,
     gpu_hist=False,  # Setze auf True wenn GPU verfügbar
     
@@ -159,8 +197,8 @@ model = ForestDiffusionModel(
     
     # Other settings
     remove_miss=False,
-    p_in_one=True,  # WICHTIG für compute_deviation_score
-    label_y=None,  # Unsupervised
+    p_in_one=True,  
+
 )
 
 print("✓ Model trained successfully on normal data!")
@@ -168,6 +206,7 @@ print("✓ Model trained successfully on normal data!")
 # ============================================================================
 # ANOMALY DETECTION
 # ============================================================================
+joblib.dump(model, "engine_model.joblib")
 
 print("\n" + "="*60)
 print("COMPUTING ANOMALY SCORES")

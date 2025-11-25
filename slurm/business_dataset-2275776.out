@@ -1,0 +1,15 @@
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n903
+Job ID: 2275776
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 2
+CPU Utilized: 04:24:34
+CPU Efficiency: 94.50% of 04:39:58 core-walltime
+Job Wall-clock time: 02:19:59
+Memory Utilized: 20.56 GB
+Memory Efficiency: 64.25% of 32.00 GB (32.00 GB/node)

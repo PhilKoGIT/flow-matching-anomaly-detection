@@ -7,7 +7,7 @@
     "n_estimators": 150
   },
   "data": {
-    "n_train": 11520,
+    "n_train": 11610,
     "n_test": 3230,
     "n_features": 14,
     "n_anomalies_test": 30,
@@ -20,32 +20,32 @@
     }
   },
   "performance": {
-    "roc_auc": 0.9993749999999999,
-    "best_f1_score": 0.888888888888889,
-    "best_threshold": 7.988468902544504,
+    "roc_auc": 0.8394895833333333,
+    "best_f1_score": 0.5531914893617021,
+    "best_threshold": 6.778293985774926,
     "best_percentile": 99
   },
   "scores": {
-    "min": 2.5671305347153917,
-    "max": 70.44138747428674,
-    "mean": 5.042905049034457,
-    "std": 2.9038191277154706
+    "min": 2.1473464190483806,
+    "max": 15.235483790193356,
+    "mean": 3.9959122447628714,
+    "std": 1.0306182079613482
   },
   "detection_by_fault": {
     "1": {
-      "detected": 8,
+      "detected": 4,
       "total": 10,
-      "rate": 80.0
+      "rate": 40.0
     },
     "2": {
-      "detected": 10,
+      "detected": 4,
       "total": 10,
-      "rate": 100.0
+      "rate": 40.0
     },
     "3": {
-      "detected": 10,
+      "detected": 5,
       "total": 10,
-      "rate": 100.0
+      "rate": 50.0
     }
   }
 }

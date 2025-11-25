@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J efvfm-magic
+#SBATCH -J engineFault
 #SBATCH -p gpu_a100_il
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=2

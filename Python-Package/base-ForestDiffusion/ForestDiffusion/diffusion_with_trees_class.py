@@ -415,7 +415,7 @@ class ForestDiffusionModel():
 
   def compute_deviation_score(self, test_samples, n_t=None, duplicate_K_test=50):
     assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
-    assert self.p_in_one == True, "Deviation score only for p_in_one=True"
+    #assert self.p_in_one == True, "Deviation score only for p_in_one=True"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
 
     if self.label_y is not None:

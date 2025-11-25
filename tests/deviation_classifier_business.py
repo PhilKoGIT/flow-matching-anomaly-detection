@@ -10,14 +10,15 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import roc_auc_score, precision_recall_curve, roc_curve, confusion_matrix
 import seaborn as sns
 import json
+import joblib
 
 
 pd.set_option("display.max_rows", None)      # Alle Zeilen anzeigen
 pd.set_option("display.max_columns", None)   # Alle Spalten anzeigen
 pd.set_option("display.max_colwidth", None)  # Full content in each cell
 
-# WICHTIG: prepare_data aus deinem test.py importieren
-from preprocessing import prepare_data
+# RICHTIGE DATEI HIER
+from preprocessing_supervised import prepare_data
 
 # ============================================================================
 # SETUP
@@ -81,17 +82,17 @@ print("=" * 80)
 
 model = ForestDiffusionModel(
     X=X_train,
-
+    label_y=None,     # unsupervised; wir geben Labels nur für Evaluation
     # Diffusion settings
-    n_t=100,
-    duplicate_K=20,
+    n_t=50,
+    duplicate_K=100,
     diffusion_type='flow',  # wichtig für compute_deviation_score
     eps=1e-3,
 
     # Model settings
     model='xgboost',
-    max_depth=8,
-    n_estimators=150,
+    max_depth=7,
+    n_estimators=100,
     eta=0.3,
     gpu_hist=False,   # auf True setzen, wenn GPU verfügbar
 
@@ -108,10 +109,11 @@ model = ForestDiffusionModel(
     # Other settings
     remove_miss=False,
     p_in_one=True,    # WICHTIG für compute_deviation_score
-    label_y=None,     # unsupervised; wir geben Labels nur für Evaluation
+
 )
 
 print("✓ Model trained successfully on full training data!")
+joblib.dump(model, "business_model.joblib")
 
 # ============================================================================
 # ANOMALY SCORES BERECHNEN

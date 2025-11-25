@@ -1,0 +1,154 @@
+== Job start ==
+Loading data...
+Total samples: 55999
+Fault distribution:
+Fault
+0    16000
+1    10998
+2    15000
+3    14001
+Name: count, dtype: int64
+
+Normal samples: 16000
+Train samples (normal): 11520
+Val samples (normal): 1280
+Test samples (normal): 3200
+
+Final test set composition:
+Fault
+0    3200
+1      10
+2      10
+3      10
+Name: count, dtype: int64
+Total test samples: 3230
+
+Test set anomaly distribution:
+Normal (Fault=0): 3200 (99.1%)
+Anomalous (Fault>0): 30 (0.9%)
+
+Feature matrix shapes:
+X_train: (11610, 14)
+X_test: (3230, 14)
+
+============================================================
+TRAINING FORESTDIFFUSION MODEL
+============================================================
+Training on NORMAL data only (Fault=0)...
+✓ Model trained successfully on normal data!
+
+============================================================
+COMPUTING ANOMALY SCORES
+============================================================
+Computing deviation scores for test samples...
+✓ Anomaly scores computed: 3230
+  Score range: [2.1473, 15.2355]
+  Score mean: 3.9959
+  Score std: 1.0306
+
+Score statistics by fault type:
+  Normal      : mean=3.9618, std=0.8946, min=2.1473, max=8.5371
+  Fault 1     : mean=7.0538, std=3.4471, min=4.1325, max=13.9954
+  Fault 2     : mean=7.9005, std=4.5139, min=4.0730, max=15.2355
+  Fault 3     : mean=7.9600, std=3.7467, min=4.1975, max=14.2678
+
+============================================================
+EVALUATION METRICS
+============================================================
+
+✓ ROC-AUC Score: 0.8395
+
+Performance at different threshold percentiles:
+----------------------------------------------------------------------
+
+90th Percentile (threshold=5.1741):
+  Precision: 0.0464 | Recall: 0.5000 | F1: 0.0850 | Acc: 0.9000
+  Confusion Matrix: TP=15, FP=308, TN=2892, FN=15
+
+95th Percentile (threshold=5.4703):
+  Precision: 0.0864 | Recall: 0.4667 | F1: 0.1458 | Acc: 0.9492
+  Confusion Matrix: TP=14, FP=148, TN=3052, FN=16
+
+97.5th Percentile (threshold=5.7472):
+  Precision: 0.1728 | Recall: 0.4667 | F1: 0.2523 | Acc: 0.9743
+  Confusion Matrix: TP=14, FP=67, TN=3133, FN=16
+
+99th Percentile (threshold=6.1754):
+  Precision: 0.3939 | Recall: 0.4333 | F1: 0.4127 | Acc: 0.9885
+  Confusion Matrix: TP=13, FP=20, TN=3180, FN=17
+
+99.5th Percentile (threshold=6.7783):
+  Precision: 0.7647 | Recall: 0.4333 | F1: 0.5532 | Acc: 0.9935
+  Confusion Matrix: TP=13, FP=4, TN=3196, FN=17
+
+99.9th Percentile (threshold=14.1075):
+  Precision: 1.0000 | Recall: 0.1333 | F1: 0.2353 | Acc: 0.9920
+  Confusion Matrix: TP=4, FP=0, TN=3200, FN=26
+
+✓ Best F1-Score: 0.5532 at 99.5th percentile (threshold=6.7783)
+
+============================================================
+DETECTION RATE BY FAULT TYPE
+============================================================
+Fault 1: 4/10 detected (40.0%)
+Fault 2: 4/10 detected (40.0%)
+Fault 3: 5/10 detected (50.0%)
+
+============================================================
+CREATING VISUALIZATIONS
+============================================================
+✓ Saved plot to: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/results/anomaly_detection/anomaly_detection_results.png
+
+============================================================
+SAVING RESULTS
+============================================================
+
+Top 20 highest anomaly scores:
+      sample_index  fault_type  anomaly_score  predicted_anomaly
+1572          1572           2      15.235484                  1
+1321          1321           2      14.510394                  1
+2644          2644           3      14.267796                  1
+1039          1039           2      14.140841                  1
+255            255           1      13.995379                  1
+2347          2347           1      12.619977                  1
+1782          1782           3      12.091409                  1
+345            345           3      11.591066                  1
+1033          1033           3      11.394890                  1
+1189          1189           0       8.537135                  1
+2187          2187           1       8.251978                  1
+2861          2861           1       8.081753                  1
+924            924           3       7.479131                  1
+1676          1676           2       7.310519                  1
+1097          1097           0       7.211846                  1
+906            906           0       7.062369                  1
+534            534           0       6.791692                  1
+1677          1677           0       6.699290                  0
+81              81           0       6.696632                  0
+1949          1949           0       6.649591                  0
+
+✓ Results saved to: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/results/anomaly_detection/anomaly_scores.csv
+✓ Summary saved to: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/results/anomaly_detection/summary.json
+
+============================================================
+ANOMALY DETECTION TEST COMPLETED!
+============================================================
+ROC-AUC: 0.8395
+Best F1: 0.5532
+Normal samples correctly classified: 3196/3200
+Anomalies detected: 13/30
+== Job abgeschlossen ==
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n903
+Job ID: 2284448
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 2
+CPU Utilized: 00:30:45
+CPU Efficiency: 88.02% of 00:34:56 core-walltime
+Job Wall-clock time: 00:17:28
+Memory Utilized: 3.09 GB
+Memory Efficiency: 9.66% of 32.00 GB (32.00 GB/node)
