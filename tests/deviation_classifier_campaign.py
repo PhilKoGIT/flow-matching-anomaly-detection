@@ -15,14 +15,15 @@ from sklearn.metrics import roc_auc_score, precision_recall_curve, roc_curve, co
 import seaborn as sns
 import json
 import joblib
-
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import average_precision_score
 
 pd.set_option("display.max_rows", None)      # Alle Zeilen anzeigen
 pd.set_option("display.max_columns", None)   # Alle Spalten anzeigen
 pd.set_option("display.max_colwidth", None)  # Full content in each cell
 
 
-#inspired by utils.py from https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
+#copied partly from by utils.py of https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
 
 base_dir = Path(__file__).resolve().parent
 file_path = base_dir.parent / "data" / "5_campaign.npz"
@@ -49,8 +50,8 @@ print(f"Dataset loaded successfully!")
 print(f"Training data: {X_train.shape}, Normal: {len(y_train)}")
 print(f"Test data: {X_test.shape}, Normal: {sum(y_test == 0)}, Anomalies: {sum(y_test == 1)}")
 
-n_t = 50
-duplicate_K = 100
+n_t = 25
+duplicate_K = 10
 
 model = ForestDiffusionModel(
     X=X_train,
@@ -315,3 +316,43 @@ if auc_score is not None:
 print(f"Best F1: {best_f1:.4f}")
 print(f"Normal correctly classified: {np.sum((y_test == 0) & (final_preds == 0))}/{np.sum(y_test == 0)}")
 print(f"Anomalies detected         : {np.sum((y_test == 1) & (final_preds == 1))}/{np.sum(y_test == 1)}")
+
+# ============================================================================
+# AUROC / AUPRC + ROC- & PR-Kurven
+# ============================================================================
+
+# Kennzahlen berechnen
+auroc = roc_auc_score(y_test, anomaly_scores)
+auprc = average_precision_score(y_test, anomaly_scores)
+
+print(f"\nAUROC: {auroc:.4f}")
+print(f"AUPRC (Average Precision): {auprc:.4f}")
+
+# Kurven berechnen
+fpr, tpr, _ = roc_curve(y_test, anomaly_scores)
+precision, recall, _ = precision_recall_curve(y_test, anomaly_scores)
+
+# Plots
+plt.figure(figsize=(12, 5))
+
+# ROC-Kurve
+plt.subplot(1, 2, 1)
+plt.plot(fpr, tpr, label=f"ROC (AUC = {auroc:.3f})")
+plt.plot([0, 1], [0, 1], "--", label="Random")
+plt.xlabel("False Positive Rate")
+plt.ylabel("True Positive Rate")
+plt.title("ROC Curve")
+plt.legend()
+plt.grid(alpha=0.3)
+
+# Precision-Recall-Kurve
+plt.subplot(1, 2, 2)
+plt.plot(recall, precision, label=f"PR (AUPRC = {auprc:.3f})")
+plt.xlabel("Recall")
+plt.ylabel("Precision")
+plt.title("Precision-Recall Curve")
+plt.legend()
+plt.grid(alpha=0.3)
+
+plt.tight_layout()
+plt.savefig("roc_pr_curves.png", dpi=300, bbox_inches="tight")

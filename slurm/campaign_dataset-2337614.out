@@ -1,0 +1,19 @@
+== Job start ==
+Dataset loaded successfully!
+Training data: (18274, 62), Normal: 18274
+Test data: (22914, 62), Normal: 18274, Anomalies: 4640
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n902
+Job ID: 2337614
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: TIMEOUT (exit code 0)
+Nodes: 1
+Cores per node: 2
+CPU Utilized: 00:00:02
+CPU Efficiency: 0.03% of 02:00:00 core-walltime
+Job Wall-clock time: 01:00:00
+Memory Utilized: 5.46 GB
+Memory Efficiency: 17.08% of 32.00 GB (32.00 GB/node)
