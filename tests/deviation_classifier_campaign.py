@@ -1,7 +1,11 @@
-# experiment_forestdiffusion_business.py
-
-from ForestDiffusion import ForestDiffusionModel
+import random
+import os
+import torch
 import numpy as np
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from pathlib import Path
+from ForestDiffusion import ForestDiffusionModel
 import pandas as pd
 from pathlib import Path
 import matplotlib
@@ -17,75 +21,43 @@ pd.set_option("display.max_rows", None)      # Alle Zeilen anzeigen
 pd.set_option("display.max_columns", None)   # Alle Spalten anzeigen
 pd.set_option("display.max_colwidth", None)  # Full content in each cell
 
-# RICHTIGE DATEI HIER
-from ForestDiffusion.tests.preprocessing_bd_supervised import prepare_data
 
-# ============================================================================
-# SETUP
-# ============================================================================
+#inspired by utils.py from https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
 
-CURRENT_FILE = Path(__file__).resolve()
-PROJECT_ROOT = CURRENT_FILE.parents[1]
+base_dir = Path(__file__).resolve().parent
+file_path = base_dir.parent / "data" / "5_campaign.npz"
+data = np.load(file_path, allow_pickle=True)
+X, y = data['X'], data['y'].astype(int)
+x_normal, X_anomalous = X[y == 0], X[y == 1]
+y_normal, y_anomalous = y[y == 0], y[y == 1]
 
-results_dir = PROJECT_ROOT / "results" / "business_anomaly_detection"
-results_dir.mkdir(parents=True, exist_ok=True)
+X_train, X_test_normal, y_train, y_test_normal = train_test_split(
+    x_normal, y_normal, test_size = 0.5, random_state = 42
+)
 
-print("=" * 80)
-print("LOADING & PREPARING BUSINESS TRANSACTION DATA")
-print("=" * 80)
+# Test set contains both normal and abnormal data
+X_test = np.vstack((X_test_normal, X_anomalous))
+y_test = np.concatenate((y_test_normal, y_anomalous))
 
-# prepare_data macht:
-# - Feature Engineering (Time Series + valid_ref)
-# - Zeitbasierten 80/20-Split
-# - Speichert original_data.csv + train/test_mapping + feature_columns
-X_train_df, X_test_df, y_train, y_test, train_mapping, test_mapping, feature_columns = prepare_data()
+# Data standardization
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
 
-print("\nShapes nach Preprocessing:")
-print(f"  X_train: {X_train_df.shape}")
-print(f"  X_test : {X_test_df.shape}")
-print(f"  y_train: {y_train.shape}, Anomalien = {y_train.sum()} ({y_train.mean():.2%})")
-print(f"  y_test : {y_test.shape}, Anomalien = {y_test.sum()} ({y_test.mean():.2%})")
+# Print dataset information
+print(f"Dataset loaded successfully!")
+print(f"Training data: {X_train.shape}, Normal: {len(y_train)}")
+print(f"Test data: {X_test.shape}, Normal: {sum(y_test == 0)}, Anomalies: {sum(y_test == 1)}")
 
-# ============================================================================
-# FEATURE-MATRIX FÜR MODELL
-# ============================================================================
-
-
-#delete bank_account_uuid for model training
-cols_to_drop_for_model = ["bank_account_uuid"]
-
-X_train_df_model = X_train_df.drop(columns=cols_to_drop_for_model)
-X_test_df_model = X_test_df.drop(columns=cols_to_drop_for_model)
-
-X_train = X_train_df_model.to_numpy(dtype=float)
-X_test = X_test_df_model.to_numpy(dtype=float)
-
-y_train = y_train.to_numpy().astype(int)
-y_test = y_test.to_numpy().astype(int)
-
-print("\nFeature matrix shapes (nach Drop von bank_account_uuid):")
-print(f"  X_train: {X_train.shape}")
-print(f"  X_test : {X_test.shape}")
-
-#label distribution
-print("\nTest-Label-Verteilung (0=normal, 1=anomaly):")
-print(f"  Normal : {np.sum(y_test == 0)} ({np.mean(y_test == 0) * 100:.2f}%)")
-print(f"  Anomaly: {np.sum(y_test == 1)} ({np.mean(y_test == 1) * 100:.2f}%)")
-
-# ============================================================================
-# MODEL TRAINING (AUF ALLEN TRAIN-DATEN, NICHT NUR NORMAL)
-# ============================================================================
-
-print("\n" + "=" * 80)
-print("TRAIN of FORESTDIFFUSION MODEL ON FULL TRAINING DATA")
-print("=" * 80)
+n_t = 50
+duplicate_K = 100
 
 model = ForestDiffusionModel(
     X=X_train,
     label_y=None,     # unsupervised; wir geben Labels nur für Evaluation
     # Diffusion settings
-    n_t=50,
-    duplicate_K=100,
+    n_t=n_t,
+    duplicate_K=duplicate_K,
     diffusion_type='flow',  # wichtig für compute_deviation_score
     eps=1e-3,
 
@@ -125,7 +97,7 @@ print("=" * 80)
 
 anomaly_scores = model.compute_deviation_score(
     test_samples=X_test,
-    n_t=100   # same amount of noise steps as training
+    n_t=n_t   # same amount of noise steps as training
 )
 print(f"✓ Anomaly scores computed: {len(anomaly_scores)}")
 print(f"  Score range: [{anomaly_scores.min():.4f}, {anomaly_scores.max():.4f}]")

@@ -1,0 +1,17 @@
+== Job start ==
+== Job abgeschlossen ==
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n905
+Job ID: 2317140
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 2
+CPU Utilized: 00:00:03
+CPU Efficiency: 5.36% of 00:00:56 core-walltime
+Job Wall-clock time: 00:00:28
+Memory Utilized: 41.95 MB
+Memory Efficiency: 0.13% of 32.00 GB (32.00 GB/node)
