@@ -13,7 +13,7 @@ from lightgbm import LGBMRegressor
 from catboost import CatBoostRegressor
 from sklearn.preprocessing import MinMaxScaler
 import pandas as pd
-from ForestDiffusion.utils.utils_diffusion import build_data_xt, euler_solve, IterForDMatrix, get_xt
+from ForestDiffusion.utils.utils_diffusion import build_data_xt, euler_solve, IterForDMatrix, euler_solve_from_x_t, get_xt
 from joblib import delayed, Parallel
 from scipy.special import softmax
 
@@ -409,9 +409,13 @@ class ForestDiffusionModel():
     out = out.reshape(-1) # [-1]
     return out
 
+# ============================================================================
+# compute_deviation_score
+# ============================================================================
   #-----------------------------------------------------------------------------------
   #create between the testsample and random noise sample samples in the latent space
   #categorical features must have the same value space in test and training
+
 
   def compute_deviation_score(self, test_samples, n_t=None, duplicate_K_test=50):
     assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
@@ -432,10 +436,12 @@ class ForestDiffusionModel():
 
     #duplicate test samples
     test_samples_rep = np.tile(test_samples, (duplicate_K_test, 1))
-    n_samples_rep = test_samples_rep.shape[0]  # = n_samples * duplicate_K_test
+    n_samples_rep = test_samples_rep.shape[0] 
 
+  #create mask, for class because unsupervised (label_y = None)
     mask_y = {0: np.ones(n_samples_rep, dtype=bool)}
 
+  #take partial model bc of constraints
     model = partial(
         self.my_model,
         mask_y=mask_y,         
@@ -443,9 +449,11 @@ class ForestDiffusionModel():
         unflatten=False,       
         X_covs=None
     )
+    #for each test_samples copy sample a random noise
     X0 = np.random.normal(size=test_samples_rep.shape)
 
-    #returns x_t_samples: [n_t * n_samples, n_features], v_true: [n_samples, n_features]; bc n_features gives the direction
+    #returns x_t_samples: [n_t * n_samples*dim_k(?), n_features], v_true: [n_samples, n_features]; bc n_features gives the direction
+    #for every replicated testsample there is a new noise sample. (every combination gehts a own interpolation sample for each noise_level)
     x_t_samples, v_true = build_data_xt(
         X0, 
         test_samples_rep, 
@@ -455,21 +463,127 @@ class ForestDiffusionModel():
         sde=None
     )
     anomaly_scores_rep = np.zeros(n_samples_rep)
-    t_levels = [i / (n_t - 1) for i in range(n_t)]
+    t_levels = np.linspace(self.eps, 1, n_t)
 
+    #staked copies
+
+  
+
+
+  #unsicher ob das so sinn macht oder nicht t_levels[:-1] nehmen
     for i, t in enumerate(t_levels):
+        #get interpolation at the same noise step for the same sample (just from different noise samples)
         start_idx = i * n_samples_rep
         end_idx = (i + 1) * n_samples_rep
-
         X_t = x_t_samples[start_idx:end_idx, :]
         v_pred_t = model(t=t, y=X_t)
-
         squared_error = np.sum((v_true - v_pred_t) ** 2, axis=1)
+        #calculate for one noise level 
         anomaly_scores_rep += squared_error
     anomaly_scores_rep = anomaly_scores_rep / n_t  # [n_samples_rep]
     anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K_test, n_samples)
-    anomaly_scores = anomaly_scores_rep.mean(axis=0)  # mitteln über Noise-Samples
+    #over all noise levels for one testsample (lines)
+    anomaly_scores = anomaly_scores_rep.mean(axis=0)  
     return anomaly_scores  # [n_samples]
+
+# ============================================================================
+# compute_reconstruction_score
+# ============================================================================
+
+#iwas mit dmat noch
+
+
+#!!!!!!!!!!!!!!!!!!!!!
+#Code logik
+#!!!!!!!!!!!!!!!!!!!!
+
+  def compute_reconstruction_score(self, test_samples, n_t=None, duplicate_K_test=50):
+    assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
+    #assert self.p_in_one == True, "Deviation score only for p_in_one=True"
+    assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
+
+    if self.label_y is not None:
+        raise Exception("Anomaly score only for unsupervised learning")
+    
+    if n_t is None:
+        n_t = self.n_t
+    if len(self.cat_indexes) > 0:
+      test_samples, column_names_before, column_names_after = self.dummify(test_samples)
+    test_samples = self.scaler.transform(test_samples)
+    
+    n_samples = test_samples.shape[0]
+    n_features = test_samples.shape[1]
+
+    #duplicate test samples
+    test_samples_rep = np.tile(test_samples, (duplicate_K_test, 1))
+    n_samples_rep = test_samples_rep.shape[0] 
+
+    #convert into data space to compare with reconstruction
+    test_samples_rep_scaled = test_samples_rep  # wie bisher
+    test_samples_rep_unscaled = self.unscale(test_samples_rep_scaled.copy())
+    test_samples_rep_unscaled = self.clean_onehot_data(test_samples_rep_unscaled)
+    test_samples_rep_unscaled = self.clip_extremes(test_samples_rep_unscaled)
+
+  #create mask, for class because unsupervised (label_y = None)
+    mask_y = {0: np.ones(n_samples_rep, dtype=bool)}
+
+  #take partial model bc of constraints
+    model = partial(
+        self.my_model,
+        mask_y=mask_y,         
+        dmat=self.n_batch > 0,
+        unflatten=True,       
+        X_covs=None
+    )
+    #for each test_samples copy sample a random noise
+    X0 = np.random.normal(size=test_samples_rep.shape)
+
+    #returns x_t_samples: [n_t * n_samples*dim_k(?), n_features], v_true: [n_samples, n_features]; bc n_features gives the direction
+    #for every replicated testsample there is a new noise sample. (every combination gehts a own interpolation sample for each noise_level)
+    x_t_samples, _ = build_data_xt(
+        X0, 
+        test_samples_rep, 
+        n_t=n_t, 
+        diffusion_type="flow", 
+        eps=self.eps, 
+        sde=None
+    )
+    anomaly_scores_rep = np.zeros(n_samples_rep)
+    t_levels = np.linspace(self.eps, 1, n_t)
+
+    ######################################
+
+    #wichtig das kann man optimieren... wie viele n_t will ich durchgehen, was macht sinn?
+
+    ######################################
+
+
+    #for i, t in enumerate(t_levels[:-1]):
+    #skip the last level, bc at t=1 is noise and no reconstruction makes sense
+    for i, t in enumerate(t_levels[:-1]):
+        #get interpolation at the same noise step for the same sample (just from different noise samples)
+        start_idx = i * n_samples_rep
+        end_idx = (i + 1) * n_samples_rep
+        X_t = x_t_samples[start_idx:end_idx, :]
+        steps = n_t - i -1 
+        ode_solved = euler_solve_from_x_t(x_t=X_t.reshape(-1),t0=t,my_model=model,steps_left=steps,)
+        solution = ode_solved.reshape(X_t.shape[0], self.c) # [b, c]
+        solution = self.unscale(solution)
+        solution = self.clean_onehot_data(solution)
+        solution = self.clip_extremes(solution)
+        squared_error = np.sum((test_samples_rep_unscaled - solution) ** 2, axis=1)
+        #calculate for one noise level 
+        anomaly_scores_rep += squared_error
+    anomaly_scores_rep = anomaly_scores_rep / (n_t - 1)  # [n_samples_rep]
+    anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K_test, n_samples)
+    #over all noise levels for one testsample (lines)
+    anomaly_scores = anomaly_scores_rep.mean(axis=0)  
+    return anomaly_scores  # [n_samples]
+
+
+
+
+
 
   # Generate new data by solving the reverse ODE/SDE
   def generate(self, batch_size=None, n_t=None, X_covs=None):

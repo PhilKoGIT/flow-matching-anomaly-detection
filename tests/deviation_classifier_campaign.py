@@ -46,51 +46,52 @@ X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
 # Print dataset information
+print(" ")
 print(f"Dataset loaded successfully!")
 print(f"Training data: {X_train.shape}, Normal: {len(y_train)}")
 print(f"Test data: {X_test.shape}, Normal: {sum(y_test == 0)}, Anomalies: {sum(y_test == 1)}")
 
-n_t = 5
-duplicate_K = 3
+n_t = 50
+duplicate_K = 100
 
-# model = ForestDiffusionModel(
-#     X=X_train,
-#     label_y=None,     # unsupervised; wir geben Labels nur für Evaluation
-#     # Diffusion settings
-#     n_t=n_t,
-#     duplicate_K=duplicate_K,
-#     diffusion_type='flow',  # wichtig für compute_deviation_score
-#     eps=1e-3,
+model = ForestDiffusionModel(
+    X=X_train,
+    label_y=None,     # unsupervised; wir geben Labels nur für Evaluation
+    # Diffusion settings
+    n_t=n_t,
+    duplicate_K=duplicate_K,
+    diffusion_type='flow',  # wichtig für compute_deviation_score
+    eps=1e-3,
 
-#     # Model settings
-#     model='xgboost',
-#     max_depth=7,
+    # Model settings
+    model='xgboost',
+    max_depth=7,
 
-#     n_estimators=100,
-#     eta=0.3,
-#     gpu_hist=True,   # auf True setzen, wenn GPU verfügbar
+    n_estimators=100,
+    eta=0.3,
+    gpu_hist=True,   # auf True setzen, wenn GPU verfügbar
 
-#     # Data settings
-#     n_batch=0,        # Important: 0 for compute_deviation_score
-#     seed=666,
-#     n_jobs=-1,
+    # Data settings
+    n_batch=0,        # Important: 0 for compute_deviation_score
+    seed=666,
+    n_jobs=-1,
 
-#     # Feature types: alles numerisch behandelt
-#     bin_indexes=[],
-#     cat_indexes=[],
-#     int_indexes=[],
+    # Feature types: alles numerisch behandelt
+    bin_indexes=[],
+    cat_indexes=[],
+    int_indexes=[],
 
-#     # Other settings
-#     remove_miss=False,
-#     p_in_one=True,    # WICHTIG für compute_deviation_score
+    # Other settings
+    remove_miss=False,
+    p_in_one=True,    # WICHTIG für compute_deviation_score
 
-# )
+)
 
-# print("✓ Model trained successfully on full training data!")
-# joblib.dump(model, "campaign_model.joblib")
-# model = joblib.load("campaign_model.joblib")
+print("✓ Model trained successfully on full training data!")
+joblib.dump(model, "campaign_model.joblib")
 
-model = joblib.load("business_model.joblib")
+
+#model = joblib.load("campaign_model.joblib")
 # ============================================================================
 # ANOMALY SCORES BERECHNEN
 # ============================================================================
@@ -99,21 +100,33 @@ print("\n" + "=" * 80)
 print("COMPUTING ANOMALY SCORES AUF TESTSET")
 print("=" * 80)
 
-anomaly_scores = model.compute_reconstruction_score(
+anomaly_scores_deviation = model.compute_deviation_score(
     test_samples=X_test,
-    n_t=3   # same amount of noise as training
+    n_t=n_t   # same amount of noise as training
+)
+
+anomaly_scores_reconstruction = model.compute_reconstruction_score(
+    test_samples=X_test,
+    n_t=n_t
 )
 
 # Kennzahlen berechnen
-auroc = roc_auc_score(y_test, anomaly_scores)
-auprc = average_precision_score(y_test, anomaly_scores)
-print(f"\nAUROC: {auroc:.4f}")
-print(f"AUPRC (Average Precision): {auprc:.4f}")
+auroc = roc_auc_score(y_test, anomaly_scores_deviation)
+auprc = average_precision_score(y_test, anomaly_scores_deviation)
+print(f"\nAUROC deviation: {auroc:.4f}")
+print(f"AUPRC deviation (Average Precision): {auprc:.4f}")
 
-print(f"✓ Anomaly scores computed: {len(anomaly_scores)}")
-print(f"  Score range: [{anomaly_scores.min():.4f}, {anomaly_scores.max():.4f}]")
-print(f"  Score mean : {anomaly_scores.mean():.4f}")
-print(f"  Score std  : {anomaly_scores.std():.4f}")
+auroc = roc_auc_score(y_test, anomaly_scores_reconstruction)
+auprc = average_precision_score(y_test, anomaly_scores_reconstruction)
+print(f"\nAUROC reconstruction: {auroc:.4f}")
+print(f"AUPRC reconstruction (Average Precision): {auprc:.4f}")
+
+
+
+print(f"✓ Anomaly scores computed: {len(anomaly_scores_deviation)}")
+print(f"  Score range: [{anomaly_scores_deviation.min():.4f}, {anomaly_scores_deviation.max():.4f}]")
+print(f"  Score mean : {anomaly_scores_deviation.mean():.4f}")
+print(f"  Score std  : {anomaly_scores_deviation.std():.4f}")
 
 # ============================================================================
 # EVALUATION
@@ -125,7 +138,7 @@ print("=" * 80)
 
 # ROC-AUC
 try:
-    auc_score = roc_auc_score(y_test, anomaly_scores)
+    auc_score = roc_auc_score(y_test, anomaly_scores_deviation)
     print(f"\n✓ ROC-AUC Score: {auc_score:.4f}")
 except Exception as e:
     print(f"✗ Could not compute ROC-AUC: {e}")
@@ -137,12 +150,12 @@ print("\nPerformance at different threshold percentiles:")
 print("-" * 80)
 
 best_f1 = 0
-best_threshold = anomaly_scores.max()
+best_threshold = anomaly_scores_deviation.max()
 best_percentile = 100
 
 for percentile in thresholds_percentiles:
-    threshold = np.percentile(anomaly_scores, percentile)
-    preds = (anomaly_scores > threshold).astype(int)
+    threshold = np.percentile(anomaly_scores_deviation, percentile)
+    preds = (anomaly_scores_deviation > threshold).astype(int)
 
     tp = np.sum((preds == 1) & (y_test == 1))
     fp = np.sum((preds == 1) & (y_test == 0))
@@ -166,13 +179,15 @@ for percentile in thresholds_percentiles:
 print(f"\n✓ Best F1-Score: {best_f1:.4f} at {best_percentile}th percentile (threshold={best_threshold:.4f})")
 
 # Finale Vorhersagen beim besten Threshold
-final_preds = (anomaly_scores > best_threshold).astype(int)
+final_preds = (anomaly_scores_deviation > best_threshold).astype(int)
 cm = confusion_matrix(y_test, final_preds)
 
 print("\nFinal confusion matrix at best F1 threshold:")
 print(cm)
 print(f"  Normal correctly classified: {np.sum((y_test == 0) & (final_preds == 0))}/{np.sum(y_test == 0)}")
 print(f"  Anomalies detected          : {np.sum((y_test == 1) & (final_preds == 1))}/{np.sum(y_test == 1)}")
+
+
 
 # ============================================================================
 # VISUALISIERUNGEN

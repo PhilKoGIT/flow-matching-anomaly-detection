@@ -2,6 +2,10 @@ import numpy as np
 from ForestDiffusion.utils.diffusion import VPSDE
 import xgboost as xgb
 
+#for every sample in the testdataset we create for every noise level a interpolation point 
+#with a new noise sample?! And then 
+
+
 # Build the dataset of x(t) at multiple values of t 
 def build_data_xt(x0, x1, x_covs=None, n_t=101, diffusion_type='flow', eps=1e-3, sde=None):
   b, c = x1.shape
@@ -130,3 +134,20 @@ def euler_solve(y0, my_model, N=101):
     y = y + h*my_model(t=t, y=y)
     t = t + h
   return y
+
+# ============================================================================
+# compute_reconstruction_score
+# ============================================================================
+#this method makes points follow an ode from a certain noise level to the data distribution
+
+# x_t contains interpolation points at a certain noise_step/time level
+# t is the starting time stept
+
+def euler_solve_from_x_t(x_t, t0, my_model, steps_left):
+    h = (1.0 - t0) / steps_left
+    y = x_t
+    t = t0
+    for i in range(steps_left):
+        y = y + h * my_model(t=t, y=y)
+        t = t + h
+    return y
