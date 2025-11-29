@@ -11,6 +11,9 @@ from sklearn.metrics import roc_auc_score, precision_recall_curve, roc_curve, co
 import seaborn as sns
 import json
 import joblib
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import average_precision_score
+
 
 
 pd.set_option("display.max_rows", None)      # Alle Zeilen anzeigen
@@ -80,12 +83,15 @@ print("\n" + "=" * 80)
 print("TRAIN of FORESTDIFFUSION MODEL ON FULL TRAINING DATA")
 print("=" * 80)
 
+n_t = 4
+duplicate_k = 3
+
 model = ForestDiffusionModel(
     X=X_train,
     label_y=None,     # unsupervised; wir geben Labels nur für Evaluation
     # Diffusion settings
-    n_t=50,
-    duplicate_K=100,
+    n_t= n_t,
+    duplicate_K=duplicate_k,
     diffusion_type='flow',  # wichtig für compute_deviation_score
     eps=1e-3,
 
@@ -97,7 +103,7 @@ model = ForestDiffusionModel(
     gpu_hist=False,   # auf True setzen, wenn GPU verfügbar
 
     # Data settings
-    n_batch=0,        # Important: 0 for compute_deviation_score
+    n_batch=25,        # Important: 0 for compute_deviation_score
     seed=666,
     n_jobs=-1,
 
@@ -123,10 +129,28 @@ print("\n" + "=" * 80)
 print("COMPUTING ANOMALY SCORES AUF TESTSET")
 print("=" * 80)
 
-anomaly_scores = model.compute_deviation_score(
+
+anomaly_scores_deviation = model.compute_deviation_score(
     test_samples=X_test,
-    n_t=100   # same amount of noise steps as training
+    n_t=n_t   # same amount of noise as training
 )
+
+anomaly_scores_reconstruction = model.compute_reconstruction_score(
+    test_samples=X_test,
+    n_t=n_t
+)
+
+# Kennzahlen berechnen
+auroc = roc_auc_score(y_test, anomaly_scores_deviation)
+auprc = average_precision_score(y_test, anomaly_scores_deviation)
+print(f"\nAUROC deviation: {auroc:.4f}")
+print(f"AUPRC deviation (Average Precision): {auprc:.4f}")
+
+auroc = roc_auc_score(y_test, anomaly_scores_reconstruction)
+auprc = average_precision_score(y_test, anomaly_scores_reconstruction)
+print(f"\nAUROC reconstruction: {auroc:.4f}")
+print(f"AUPRC reconstruction (Average Precision): {auprc:.4f}")
+
 print(f"✓ Anomaly scores computed: {len(anomaly_scores)}")
 print(f"  Score range: [{anomaly_scores.min():.4f}, {anomaly_scores.max():.4f}]")
 print(f"  Score mean : {anomaly_scores.mean():.4f}")

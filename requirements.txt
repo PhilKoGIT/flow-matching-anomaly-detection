@@ -1,5 +1,5 @@
+ForestDiffusion
 tqdm
-numpy==1.23.5
 scipy
 torch
 lightgbm
@@ -12,7 +12,6 @@ miceforest
 ml_collections
 sdv
 tensorflow
-scikit-learn==1.2.1
 xlrd
 openpyxl
 libzero
@@ -20,4 +19,6 @@ icecream
 category_encoders
 rtdl
 statsmodels
-ForestDiffusion
+matplotlib
+seaborn
+joblib

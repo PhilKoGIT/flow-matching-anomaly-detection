@@ -51,8 +51,10 @@ print(f"Dataset loaded successfully!")
 print(f"Training data: {X_train.shape}, Normal: {len(y_train)}")
 print(f"Test data: {X_test.shape}, Normal: {sum(y_test == 0)}, Anomalies: {sum(y_test == 1)}")
 
-n_t = 50
-duplicate_K = 100
+#n_t = 50
+#duplicate_K = 10
+n_t = 5
+duplicate_K = 4
 
 model = ForestDiffusionModel(
     X=X_train,
@@ -67,12 +69,13 @@ model = ForestDiffusionModel(
     model='xgboost',
     max_depth=7,
 
-    n_estimators=100,
+   n_estimators=100,
+   # n_estimators=2,
     eta=0.3,
-    gpu_hist=True,   # auf True setzen, wenn GPU verfügbar
+    gpu_hist=False,   # auf True setzen, wenn GPU verfügbar
 
     # Data settings
-    n_batch=0,        # Important: 0 for compute_deviation_score
+    n_batch=25,        # Important: 0 for compute_deviation_score
     seed=666,
     n_jobs=-1,
 
