@@ -25,6 +25,7 @@ import time
 
 
 n_t = 10  #not 1!
+#duplicate_K = 10
 duplicate_K = 10
 number_of_runs = 5
 
@@ -102,52 +103,27 @@ def create_trained_model(n_t, duplicate_K, seed, X_train, dataset_name):
     return model, time_train
 
 
-def calculate_scores_deviation(X_test, y_test, trained_model):
-    times = []
-    model, time_train = trained_model
-    times.append(time_train)
+def calculate_scores_deviation(X_test, y_test, trained_model, duplicate_K, n_t):
 
-    # ---Computation deviation Score ---
-    start_time_dev = time.time()
+    model, _ = trained_model
     anomaly_scores_deviation = model.compute_deviation_score(
         test_samples=X_test,
         n_t=n_t, 
         duplicate_K=duplicate_K   # same amount of noise as training
     )
-    end_time_dev = time.time()
-    time_dev = end_time_dev - start_time_dev
-    times.append(time_dev)
 
-    return anomaly_scores_deviation, times
+    return anomaly_scores_deviation
 
 
-def calculate_scores_reconstruction(X_test, y_test, trained_model):
-    # train time, dev time, rec time
-    times = []
-    model, time_train = trained_model
-    times.append(time_train)
-
+def calculate_scores_reconstruction(X_test, y_test, trained_model, duplicate_K, n_t):
+    model, _ = trained_model
     # ---Computation reconstruction Score ---
-    start_time_rec = time.time()
-    anomaly_scores_reconstruction = model.compute_reconstruction_score(
-        test_samples=X_test,
-        n_t=n_t   # same amount of noise as training
-    )
-    end_time_rec = time.time()
-    time_rec = end_time_rec - start_time_rec
-    times.append(time_rec)
-
-    # ---Computation reconstruction Score ---
-    start_time_rec = time.time()
     anomaly_scores_reconstruction = model.compute_reconstruction_score(
         test_samples=X_test,
         n_t=n_t, 
         duplicate_K=duplicate_K 
     )
-    end_time_rec = time.time()
-    time_reconstruction = end_time_rec - start_time_rec
-    times.append(time_reconstruction)
-    return anomaly_scores_reconstruction, times
+    return anomaly_scores_reconstruction
 
 
 
@@ -163,19 +139,21 @@ def calculate_scores_reconstruction(X_test, y_test, trained_model):
 
 
 seed_list = [0, 1, 2, 3, 4]
+
+#!!!!!!!!
 #seed_list = [0,1]
 def run_training_contamination_ablation_dynamic_fixed_split():
     all_results = {}
     all_contam_levels = {}
     dataset_names = [
-        "17_InternetAds.npz",
+        #"17_InternetAds.npz",
         "18_Ionosphere.npz",
-        "22_magic.gamma.npz",
-        "23_mammography.npz",
-        "25_musk.npz",
-        "29_Pima.npz",
-        "31_satimage-2.npz",
-        "44_Wilt.npz"
+       # "22_magic.gamma.npz",
+       # "23_mammography.npz",
+       # "25_musk.npz",
+       # "29_Pima.npz",
+       # "31_satimage-2.npz",
+       # "44_Wilt.npz"
     ]
     for dataset_name in dataset_names:       
         print(f"\n Dataset: {dataset_name}")
@@ -204,8 +182,12 @@ def run_training_contamination_ablation_dynamic_fixed_split():
         n_train_abnormal_max = len(X_train_abnormal_full)
         max_abnormal_ratio = n_train_abnormal_max / (n_train_abnormal_max + n_train_normal)
 
+        #contamination_levels = np.linspace(0.001, max_abnormal_ratio, 10)
+
+        #!!!!!!!!!!!!!!!!!!!
+
+
         contamination_levels = np.linspace(0.001, max_abnormal_ratio, 10)
-        #contamination_levels = np.linspace(0.001, max_abnormal_ratio, 2)
 
         all_contam_levels[dataset_name] = contamination_levels
 
@@ -224,7 +206,7 @@ def run_training_contamination_ablation_dynamic_fixed_split():
                 y_train = np.zeros(len(X_train))  # label unused
 
                 model = create_trained_model(n_t, duplicate_K, seed, X_train, dataset_name)
-                scores, _ = calculate_scores_deviation(X_test, y_test, model)
+                scores = calculate_scores_reconstruction(X_test, y_test, model, n_t=n_t, duplicate_K=duplicate_K)
 
                 auc = roc_auc_score(y_test, scores)
                 pr = average_precision_score(y_test, scores)

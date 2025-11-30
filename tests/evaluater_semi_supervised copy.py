@@ -18,8 +18,8 @@ import joblib
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import average_precision_score
 import time
-from preprocessing_bd_unsupervised import prepare_data_unsupervised
-from preprocessing_bd_supervised import prepare_data_supervised
+
+
 
 
 #copied partly from by utils.py of https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
@@ -31,17 +31,10 @@ number_of_runs = 5
 
 def load_dataset(dataset_name, semi_supervised):
     if "business_dataset" in dataset_name:
-        cols_to_drop_for_model = ["bank_account_uuid"]
         if semi_supervised:
-            X_train_df, X_test_df, y_train, y_test, train_mapping, test_mapping, feature_columns = prepare_data_supervised()
+            
         else: 
-            X_train_df, X_test_df, y_train, y_test, train_mapping, test_mapping, feature_columns = prepare_data_unsupervised()
-        X_train_df_model = X_train_df.drop(columns=cols_to_drop_for_model)
-        X_test_df_model = X_test_df.drop(columns=cols_to_drop_for_model)
-        X_train = X_train_df_model.to_numpy(dtype=float)
-        X_test = X_test_df_model.to_numpy(dtype=float)
-        y_train = y_train.to_numpy().astype(int)
-        y_test = y_test.to_numpy().astype(int)
+            pass
     else: 
         if semi_supervised:
             #copied partly from by utils.py of https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
@@ -154,8 +147,7 @@ def calculate_scores(X_test, y_test, trained_model):
 
 
 if __name__ == "__main__":
-    dataset_names = [#"5_campaign.npz",
-                      "business_dataset_3011.csv"]
+    dataset_names = ["5_campaign.npz"]
     #schleife bauen
     supervised = [True]
 

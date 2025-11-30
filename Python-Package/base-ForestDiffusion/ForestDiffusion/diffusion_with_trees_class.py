@@ -418,7 +418,7 @@ class ForestDiffusionModel():
   #categorical features must have the same value space in test and training
 
 
-  def compute_deviation_score(self, test_samples, n_t=None, duplicate_K=50):
+  def compute_deviation_score(self, test_samples, n_t=None, duplicate_K=None):
     assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
     #assert self.p_in_one == True, "Deviation score only for p_in_one=True"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
@@ -498,7 +498,7 @@ class ForestDiffusionModel():
 #Code logik
 #!!!!!!!!!!!!!!!!!!!!
 
-  def compute_reconstruction_score(self, test_samples, n_t=None, duplicate_K=50):
+  def compute_reconstruction_score(self, test_samples, n_t=None, duplicate_K = None):
     assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
     #assert self.p_in_one == True, "Deviation score only for p_in_one=True"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"

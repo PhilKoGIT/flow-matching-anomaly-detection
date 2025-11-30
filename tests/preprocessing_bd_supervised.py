@@ -117,12 +117,12 @@ def create_time_series_features(df):
 def load_business_dataset():
     """Load the business transactions dataset."""
     base_dir = Path(__file__).resolve().parent
-    file_path = base_dir.parent / "data" / "bd_30k.csv"
+    file_path = base_dir.parent / "data" / "business_dataset.csv"
     df = pd.read_csv(file_path)
     return df
 
 
-def prepare_data():
+def prepare_data_supervised():
     """
     Main data preparation pipeline with index mapping.
     
