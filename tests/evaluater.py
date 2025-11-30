@@ -21,7 +21,7 @@ import time
 #copied partly from by utils.py of https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
 
 
-n_t = 5
+n_t = 3  #not 1!
 duplicate_K = 3
 number_of_runs = 5
 
@@ -62,39 +62,45 @@ def load_dataset(dataset_name, semi_supervised):
     return X_train, X_test, y_test
 
 
-def train_test_model(seed, X_train, X_test, y_test, n_t, duplicate_K):
-    # train time, dev time, rec time
-    times = []
-
+def create_trained_model(n_t, duplicate_K, seed, X_train, dataset_name):
     start_time = time.time()
     model = ForestDiffusionModel(
-        X=X_train,
-        label_y=None,     # unsupervised; wir geben Labels nur für Evaluation
-        # Diffusion settings
-        n_t=n_t,
-        duplicate_K=duplicate_K,
-        diffusion_type='flow',  # wichtig für compute_deviation_score
-        eps=1e-3,
-        model='xgboost',
-        max_depth=7,
-        n_estimators=100,
-        eta=0.3,
-        gpu_hist=False,   # auf True setzen, wenn GPU verfügbar
-        n_batch=25,        # Important: 0 for compute_deviation_score
-        seed=seed,
-        n_jobs=-1,
-        bin_indexes=[],
-        cat_indexes=[],
-        int_indexes=[],
-        remove_miss=False,
-        p_in_one=True,    # WICHTIG für compute_deviation_score
-
+    X=X_train,
+    label_y=None,     # unsupervised; wir geben Labels nur für Evaluation
+    # Diffusion settings
+    n_t=n_t,
+    duplicate_K=duplicate_K,
+    diffusion_type='flow',  # wichtig für compute_deviation_score
+    eps=1e-3,
+    model='xgboost',
+    #max_depth=7,
+    max_depth=2,
+    #n_estimators=100,
+    n_estimators = 10,
+    eta=0.3,
+    gpu_hist=False,   # auf True setzen, wenn GPU verfügbar
+    n_batch=25,        # Important: 0 for compute_deviation_score
+    seed=seed,
+    n_jobs=-1,
+    bin_indexes=[],
+    cat_indexes=[],
+    int_indexes=[],
+    remove_miss=False,
+    p_in_one=True,    # WICHTIG für compute_deviation_score
     )
     end_time_train = time.time()
     time_train = end_time_train - start_time
-    times.append(time_train)
     print("✓ Model trained successfully on full training data!")
-    joblib.dump(model, "campaign_model.joblib")
+    joblib.dump(model, f"{dataset_name}_model.joblib")
+
+    return model, time_train
+
+
+def calculate_scores(X_test, y_test, trained_model):
+    # train time, dev time, rec time
+    times = []
+    model, time_train = trained_model
+    times.append(time_train)
 
     # ---Computation deviation Score ---
     start_time_dev = time.time()
@@ -129,20 +135,17 @@ def train_test_model(seed, X_train, X_test, y_test, n_t, duplicate_K):
 
     return auroc_deviation, auprc_deviation, auroc_reconstruction, auprc_reconstruction, times
 
-
-##TIME !!!! 
 #noch mit binary, float etc. machen, als parameter übergeben!!!
 
-if __name__ == "__main__":
-    
-    dataset_name = ["5_campaign.npz"]
 
+if __name__ == "__main__":
+    dataset_names = ["5_campaign.npz"]
     #schleife bauen
     supervised = [True]
 
-    for dataset in dataset_name:
+    for dataset_name in dataset_names:
         print("\n" + "=" * 80)
-        print(f"DATASET: {dataset}")
+        print(f"DATASET: {dataset_name}")
         print("=" * 80)
 
         dev_auroc_list = []
@@ -157,22 +160,20 @@ if __name__ == "__main__":
         time_dev_total_list = [] 
         time_rec_total_list = []
 
-        #always the same split for comparability!!!
-        X_train, X_test, y_test = load_dataset(dataset, semi_supervised=True)
+        #always the same split for comparability, no seed change
+        X_train, X_test, y_test = load_dataset(dataset_name, semi_supervised=True)
 
-
+        # ---runs ---
         for i in range(number_of_runs):
             print(f"\n--- Iteration {i+1}/{number_of_runs} (Seed: {i}) ---")
-
-            a_dev, ap_dev, a_rec, ap_rec, times = train_test_model(
-                seed=i, 
-                X_train=X_train,
-                X_test=X_test,
-                y_test=y_test,
+            trained_model = create_trained_model(
                 n_t=n_t,
-                duplicate_K=duplicate_K
+                duplicate_K=duplicate_K,
+                seed=i,
+                X_train=X_train, 
+                dataset_name=dataset_name
             )
-
+            a_dev, ap_dev, a_rec, ap_rec, times = calculate_scores(X_test, y_test, trained_model)
             print(f"Iteration {i+1} results: AUROC Deviation: {a_dev:.4f}, AUPRC Deviation: {ap_dev:.4f}, AUROC Reconstruction: {a_rec:.4f}, AUPRC Reconstruction: {ap_rec:.4f}")
             dev_auroc_list.append(a_dev)
             dev_auprc_list.append(ap_dev)
@@ -188,6 +189,7 @@ if __name__ == "__main__":
             time_dev_total_list.append(times[0] + times[1])  
             time_rec_total_list.append(times[0] + times[2])  
 
+        # ---merge results over different runs ---
         dev_auroc_mean = np.mean(dev_auroc_list)
         dev_auroc_std = np.std(dev_auroc_list)
         dev_auprc_mean = np.mean(dev_auprc_list)
@@ -213,7 +215,7 @@ if __name__ == "__main__":
 
 
         print("\n" + "=" * 40 + " FINAL RESULTS " + "=" * 40)
-        print(f"Dataset: {dataset}")
+        print(f"Dataset: {dataset_name}")
         print("dev_auroc_list: "+str(dev_auroc_list))
         print("dev_auprc_list: "+str(dev_auprc_list))
         print("rec_auroc_list: "+str(rec_auroc_list))
@@ -226,7 +228,7 @@ if __name__ == "__main__":
         print("=" * 87)
 
         print("\n" + "=" * 40 + " TIME RESULTS " + "=" * 40)
-        print(f"Dataset: {dataset}")
+        print(f"Dataset: {dataset_name}")
         print("-" * 87)
         print(f"Time Metric | Training Time (Mean ± Std) | Dev Inference Time (Mean ± Std) | Rec Inference Time (Mean ± Std)")
         print("-" * 87)
