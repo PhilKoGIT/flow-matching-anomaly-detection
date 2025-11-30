@@ -418,7 +418,7 @@ class ForestDiffusionModel():
   #categorical features must have the same value space in test and training
 
 
-  def compute_deviation_score(self, test_samples, n_t=None, duplicate_K_test=50):
+  def compute_deviation_score(self, test_samples, n_t=None, duplicate_K=50):
     assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
     #assert self.p_in_one == True, "Deviation score only for p_in_one=True"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
@@ -436,7 +436,7 @@ class ForestDiffusionModel():
     n_features = test_samples.shape[1]
 
     #duplicate test samples
-    test_samples_rep = np.tile(test_samples, (duplicate_K_test, 1))
+    test_samples_rep = np.tile(test_samples, (duplicate_K, 1))
     n_samples_rep = test_samples_rep.shape[0] 
 
   #create mask, for class because unsupervised (label_y = None)
@@ -482,7 +482,7 @@ class ForestDiffusionModel():
         #calculate for one noise level 
         anomaly_scores_rep += squared_error
     anomaly_scores_rep = anomaly_scores_rep / n_t  # [n_samples_rep]
-    anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K_test, n_samples)
+    anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K, n_samples)
     #over all noise levels for one testsample (lines)
     anomaly_scores = anomaly_scores_rep.mean(axis=0)  
     return anomaly_scores  # [n_samples]
@@ -498,7 +498,7 @@ class ForestDiffusionModel():
 #Code logik
 #!!!!!!!!!!!!!!!!!!!!
 
-  def compute_reconstruction_score(self, test_samples, n_t=None, duplicate_K_test=50):
+  def compute_reconstruction_score(self, test_samples, n_t=None, duplicate_K=50):
     assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
     #assert self.p_in_one == True, "Deviation score only for p_in_one=True"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
@@ -516,7 +516,7 @@ class ForestDiffusionModel():
     n_features = test_samples.shape[1]
 
     #duplicate test samples
-    test_samples_rep = np.tile(test_samples, (duplicate_K_test, 1))
+    test_samples_rep = np.tile(test_samples, (duplicate_K, 1))
     n_samples_rep = test_samples_rep.shape[0] 
 
     #convert into data space to compare with reconstruction
@@ -576,7 +576,7 @@ class ForestDiffusionModel():
         #calculate for one noise level 
         anomaly_scores_rep += squared_error
     anomaly_scores_rep = anomaly_scores_rep / (n_t - 1)  # [n_samples_rep]
-    anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K_test, n_samples)
+    anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K, n_samples)
     #over all noise levels for one testsample (lines)
     anomaly_scores = anomaly_scores_rep.mean(axis=0)  
     return anomaly_scores  # [n_samples]
