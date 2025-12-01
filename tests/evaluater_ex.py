@@ -84,10 +84,10 @@ def create_trained_model(n_t, duplicate_K, seed, X_train, dataset_name):
     diffusion_type='flow',  # wichtig für compute_deviation_score
     eps=1e-3,
     model='xgboost',
-    max_depth=7,
-    #max_depth=2,
-    n_estimators=100,
-    #n_estimators = 10,
+    #max_depth=7,
+    max_depth=2,
+    #n_estimators=100,
+    n_estimators = 10,
     eta=0.3,
     gpu_hist=False,   # auf True setzen, wenn GPU verfügbar
     n_batch=1,        # Important: 0 for compute_deviation_score
@@ -152,9 +152,8 @@ def calculate_scores(X_test, y_test, trained_model, n_t, duplicate_K):
 
 
 if __name__ == "__main__":
-    dataset_names = ["5_campaign.npz"]
-                      #"13_fraud.npz"]
-                     # "business_dataset_3011.csv"]
+    dataset_names = [
+"business_dataset_3011.csv"]
     #schleife bauen
     supervised = [True]
     n_t = 15  #not 1!

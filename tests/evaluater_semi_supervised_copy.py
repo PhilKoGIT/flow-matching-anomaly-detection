@@ -18,45 +18,61 @@ import joblib
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import average_precision_score
 import time
-
-
+from preprocessing_bd_unsupervised import prepare_data_unsupervised
+from preprocessing_bd_supervised import prepare_data_supervised
 
 
 #copied partly from by utils.py of https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
 
 
-n_t = 3  #not 1!
-duplicate_K = 3
-number_of_runs = 5
+
+
+# HINWEIS: Wir benötigen die preprocess-Funktion und die EFVFMDataset-Klasse NICHT mehr direkt,
+# da wir die fertigen, vom Preprocessing erstellten .npy-Dateien laden.
+# Es genügt, die .npy und .json Dateien zu laden, die du im letzten Schritt erstellt hast.
 
 def load_dataset(dataset_name, semi_supervised):
-    if "business_dataset" in dataset_name:
-        if semi_supervised:
-            
-        else: 
-            pass
-    else: 
-        if semi_supervised:
-            #copied partly from by utils.py of https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
+    
+    # Pfad zur Basisdatenbank
+    base_dir = Path(__file__).resolve().parent
+    data_dir = base_dir.parent / "data"
 
-            base_dir = Path(__file__).resolve().parent
-            #file_path = base_dir.parent / "data" / "5_campaign.npz"
-            file_path = base_dir.parent / "data" / dataset_name
+    if "business_dataset" in dataset_name:
+        # Dein bestehender Code für Business Dataset...
+        cols_to_drop_for_model = ["bank_account_uuid"]
+        if semi_supervised:
+            X_train_df, X_test_df, y_train, y_test, train_mapping, test_mapping, feature_columns = prepare_data_supervised()
+        else: 
+            X_train_df, X_test_df, y_train, y_test, train_mapping, test_mapping, feature_columns = prepare_data_unsupervised()
+        
+        X_train_df_model = X_train_df.drop(columns=cols_to_drop_for_model)
+        X_test_df_model = X_test_df.drop(columns=cols_to_drop_for_model)
+        X_train = X_train_df_model.to_numpy(dtype=float)
+        X_test = X_test_df_model.to_numpy(dtype=float)
+        y_train = y_train.to_numpy().astype(int)
+        y_test = y_test.to_numpy().astype(int)
+        
+    elif dataset_name.endswith(".npz"):
+
+        #------ copied!!!!!!! --------
+        
+        if semi_supervised:
+            file_path = data_dir / dataset_name
             data = np.load(file_path, allow_pickle=True)
             X, y = data['X'], data['y'].astype(int)
             x_normal, X_anomalous = X[y == 0], X[y == 1]
             y_normal, y_anomalous = y[y == 0], y[y == 1]
 
-            X_train, X_test_normal, y_train, y_test_normal = train_test_split(
+            X_train_raw, X_test_normal_raw, y_train, y_test_normal = train_test_split(
                 x_normal, y_normal, test_size = 0.5, random_state = 42
             )
-            # Test set contains both normal and abnormal data
-            X_test = np.vstack((X_test_normal, X_anomalous))
+            X_test_raw = np.vstack((X_test_normal_raw, X_anomalous))
             y_test = np.concatenate((y_test_normal, y_anomalous))
+            
             # Data standardization
             scaler = StandardScaler()
-            X_train = scaler.fit_transform(X_train)
-            X_test = scaler.transform(X_test)
+            X_train = scaler.fit_transform(X_train_raw)
+            X_test = scaler.transform(X_test_raw)
 
             # Print dataset information
             print(" ")
@@ -64,9 +80,56 @@ def load_dataset(dataset_name, semi_supervised):
             print(f"Training data: {X_train.shape}, Normal: {len(y_train)}")
             print(f"Test data: {X_test.shape}, Normal: {sum(y_test == 0)}, Anomalies: {sum(y_test == 1)}")
         else:
+            # Falls unsupervised, nur die Rohdaten laden (nicht hier implementiert)
             pass
+        #-----------------------------------
+            
+    # NEUE SEKTION: Lade die EF-VFM-vorverarbeiteten Daten
+    elif dataset_name.endswith("_efvfm"):
+        # Wir erwarten, dass der Ordner (z.B. "campaign_efvfm") existiert
+        ef_dir = data_dir / dataset_name
+        print(f"\nLade EF-VFM Daten aus Ordner: {ef_dir}")
+
+        # Lade die von ForestDiffusion benötigten Daten
+        # HINWEIS: ForestDiffusion benötigt skalierten X_train/X_test
+        # Die EF-VFM-Vorverarbeitung liefert X_num und X_cat.
+        # Da du im vorherigen Schritt KEINE kategorialen Daten hattest, 
+        # laden wir nur X_num.
+        
+        # X_train
+        X_train_num = np.load(ef_dir / "X_num_train.npy")
+        X_train_cat = np.load(ef_dir / "X_cat_train.npy") if (ef_dir / "X_cat_train.npy").exists() else np.empty((X_train_num.shape[0], 0))
+        # Concatenate X_num und X_cat, da das Modell einen einzigen Feature-Block erwartet
+        X_train = np.hstack((X_train_num, X_train_cat))
+        
+        # X_test
+        X_test_num = np.load(ef_dir / "X_num_test.npy")
+        X_test_cat = np.load(ef_dir / "X_cat_test.npy") if (ef_dir / "X_cat_test.npy").exists() else np.empty((X_test_num.shape[0], 0))
+        X_test = np.hstack((X_test_num, X_test_cat))
+
+        # y_test (y_train wird hier nicht benötigt, da semi_supervised/unsupervised)
+        y_test = np.load(ef_dir / "y_test.npy").astype(int)
+        
+        # Lade info.json, um int_indexes und cat_indexes für ForestDiffusion zu bekommen
+        with open(ef_dir / "info.json", "r") as f:
+            info = json.load(f)
+
+        # HINWEIS: In diesem Setup werden die kategorialen/integer Indizes dem ForestDiffusionModel
+        # im nächsten Schritt (create_trained_model) übergeben, was wichtig ist.
+        
+        # Print dataset information
+        print(f"EF-VFM Dataset geladen: X_train {X_train.shape}, X_test {X_test.shape}")
+        print(f"Test Normal: {sum(y_test == 0)}, Test Anomalies: {sum(y_test == 1)}")
+        
+        # Da die EF-VFM-Daten *bereits* transformiert/skaliert sind,
+        # geben wir sie direkt zurück.
+        
+    else:
+        raise ValueError(f"Unbekanntes Dataset-Format: {dataset_name}")
+        
     return X_train, X_test, y_test
 
+# ... REST DES SKRIPTS (create_trained_model, calculate_scores, __main__) ...
 
 def create_trained_model(n_t, duplicate_K, seed, X_train, dataset_name):
     start_time = time.time()
@@ -79,13 +142,13 @@ def create_trained_model(n_t, duplicate_K, seed, X_train, dataset_name):
     diffusion_type='flow',  # wichtig für compute_deviation_score
     eps=1e-3,
     model='xgboost',
-    #max_depth=7,
-    max_depth=2,
-    #n_estimators=100,
-    n_estimators = 10,
+    max_depth=7,
+    #max_depth=2,
+    n_estimators=100,
+    #n_estimators = 10,
     eta=0.3,
     gpu_hist=False,   # auf True setzen, wenn GPU verfügbar
-    n_batch=25,        # Important: 0 for compute_deviation_score
+    n_batch=1,        # Important: 0 for compute_deviation_score
     seed=seed,
     n_jobs=-1,
     bin_indexes=[],
@@ -102,7 +165,7 @@ def create_trained_model(n_t, duplicate_K, seed, X_train, dataset_name):
     return model, time_train
 
 
-def calculate_scores(X_test, y_test, trained_model):
+def calculate_scores(X_test, y_test, trained_model, n_t, duplicate_K):
     # train time, dev time, rec time
     times = []
     model, time_train = trained_model
@@ -147,9 +210,16 @@ def calculate_scores(X_test, y_test, trained_model):
 
 
 if __name__ == "__main__":
-    dataset_names = ["5_campaign.npz"]
+    dataset_names = [#"5_campaign.npz",
+                     # "13_fraud.npz"]
+                      "campaign_efvfm"]
+                     # "business_dataset_3011.csv"]
     #schleife bauen
     supervised = [True]
+    n_t = 15  #not 1!
+    duplicate_K = 10
+    duplicate_K_scoring = 3
+    number_of_runs = 5
 
     for dataset_name in dataset_names:
         print("\n" + "=" * 80)
@@ -181,7 +251,7 @@ if __name__ == "__main__":
                 X_train=X_train, 
                 dataset_name=dataset_name
             )
-            a_dev, ap_dev, a_rec, ap_rec, times = calculate_scores(X_test, y_test, trained_model)
+            a_dev, ap_dev, a_rec, ap_rec, times = calculate_scores(X_test, y_test, trained_model, n_t, duplicate_K_scoring)
             print(f"Iteration {i+1} results: AUROC Deviation: {a_dev:.4f}, AUPRC Deviation: {ap_dev:.4f}, AUROC Reconstruction: {a_rec:.4f}, AUPRC Reconstruction: {ap_rec:.4f}")
             dev_auroc_list.append(a_dev)
             dev_auprc_list.append(ap_dev)
