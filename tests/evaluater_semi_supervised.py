@@ -25,8 +25,8 @@ from preprocessing_bd_supervised import prepare_data_supervised
 #copied partly from by utils.py of https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
 
 
-n_t = 3  #not 1!
-duplicate_K = 3
+n_t = 15  #not 1!
+duplicate_K = 10
 number_of_runs = 5
 
 def load_dataset(dataset_name, semi_supervised):
@@ -154,8 +154,8 @@ def calculate_scores(X_test, y_test, trained_model):
 
 
 if __name__ == "__main__":
-    dataset_names = [#"5_campaign.npz",
-                      "business_dataset_3011.csv"]
+    dataset_names = ["5_campaign.npz", "13_fraud.npz"]
+                     # "business_dataset_3011.csv"]
     #schleife bauen
     supervised = [True]
 

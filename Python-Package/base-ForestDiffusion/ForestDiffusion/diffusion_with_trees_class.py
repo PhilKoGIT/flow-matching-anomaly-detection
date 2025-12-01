@@ -414,13 +414,18 @@ class ForestDiffusionModel():
 # compute_deviation_score
 # ============================================================================
   #-----------------------------------------------------------------------------------
-  #create between the testsample and random noise sample samples in the latent space
-  #categorical features must have the same value space in test and training
+
+    # - copy test sample duplicate_K times -> n_samples_rep 
+    # - for each copy sample a random noise -> build interpolation samples at each noise level -> x_t_samples_rep and calculate the true velocity v_true (rectified flow)
+    # - let the model predict the velocity of every interpolation sample at every noise level for every rep_sample
+    # - compute the squared error between true velocity and predicted velocity for every reconstructed sample at every noise level
+    # - average over the error of all noise levels for every rep_sample -> anomaly score per rep_sample
+    # - average over all rep_samples -> final anomaly score per test sample
+  #-----------------------------------------------------------------------------------
 
 
   def compute_deviation_score(self, test_samples, n_t=None, duplicate_K=None):
     assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
-    #assert self.p_in_one == True, "Deviation score only for p_in_one=True"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
 
     if self.label_y is not None:
@@ -450,12 +455,11 @@ class ForestDiffusionModel():
         unflatten=False,       
         X_covs=None
     )
-    #for each test_samples copy sample a random noise
+    #for each test_sample_rep copy sample a random noise
     X0 = np.random.normal(size=test_samples_rep.shape)
 
-    #returns x_t_samples: [n_t * n_samples*dim_k(?), n_features], v_true: [n_samples, n_features]; bc n_features gives the direction
-    #for every replicated testsample there is a new noise sample. (every combination gehts a own interpolation sample for each noise_level)
-    x_t_samples, v_true = build_data_xt(
+    #returns for every test_rep_sample a new interpolation sample at every noise level and the true velocity v_true
+    x_t_samples_rep, v_true = build_data_xt(
         X0, 
         test_samples_rep, 
         n_t=n_t, 
@@ -465,42 +469,44 @@ class ForestDiffusionModel():
     )
     anomaly_scores_rep = np.zeros(n_samples_rep)
     t_levels = np.linspace(self.eps, 1, n_t)
-
-    #staked copies
-
-  
-
-
+#!!!!!!!!!!
   #unsicher ob das so sinn macht oder nicht t_levels[:-1] nehmen
+  #!!!!!
     for i, t in enumerate(t_levels):
-        #get interpolation at the same noise step for the same sample (just from different noise samples)
+        #for all test_samples_rep get the samples at the same noise level t
         start_idx = i * n_samples_rep
         end_idx = (i + 1) * n_samples_rep
-        X_t = x_t_samples[start_idx:end_idx, :]
+        X_t = x_t_samples_rep[start_idx:end_idx, :]
+        #predict velocity with the model for all test_samples_rep at noise level t
         v_pred_t = model(t=t, y=X_t)
+        #calculate squared error between true velocity and predicted velocity
         squared_error = np.sum((v_true - v_pred_t) ** 2, axis=1)
-        #calculate for one noise level 
+        #sum the squared error for every noise level of one rep_sample
         anomaly_scores_rep += squared_error
-    anomaly_scores_rep = anomaly_scores_rep / n_t  # [n_samples_rep]
+    # average over all noise levels
+    anomaly_scores_rep = anomaly_scores_rep / n_t  
+    #group again for each test sample
     anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K, n_samples)
-    #over all noise levels for one testsample (lines)
+    #average over all test_samples_rep for one test sample
     anomaly_scores = anomaly_scores_rep.mean(axis=0)  
-    return anomaly_scores  # [n_samples]
+    return anomaly_scores  
 
 # ============================================================================
 # compute_reconstruction_score
 # ============================================================================
 
-#iwas mit dmat noch
+    ######################################
+    # - copy test sample duplicate_K times -> n_samples_rep 
+    # - for each copy sample a random noise -> build interpolation samples at each noise level -> x_t_samples_rep 
+    # - solve ode for every noise level t except last
+    # - compute with actual test sample the reconstruction error (mse) for every reconstructed sample at every noise level
+    # - average over the error of all noise levels for every rep_sample -> anomaly score per rep_sample
+    # - average over all rep_samples -> final anomaly score per test sample
 
-
-#!!!!!!!!!!!!!!!!!!!!!
-#Code logik
-#!!!!!!!!!!!!!!!!!!!!
+    ######################################
 
   def compute_reconstruction_score(self, test_samples, n_t=None, duplicate_K = None):
     assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
-    #assert self.p_in_one == True, "Deviation score only for p_in_one=True"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
 
     if self.label_y is not None:
@@ -515,9 +521,9 @@ class ForestDiffusionModel():
     n_samples = test_samples.shape[0]
     n_features = test_samples.shape[1]
 
-    #duplicate test samples
+    #duplicate test sample lines duplikate_K times (columns stay the same)
     test_samples_rep = np.tile(test_samples, (duplicate_K, 1))
-    n_samples_rep = test_samples_rep.shape[0] 
+    n_samples_rep = test_samples_rep.shape[0]
 
     #convert into data space to compare with reconstruction
     test_samples_rep_scaled = test_samples_rep  # wie bisher
@@ -536,12 +542,11 @@ class ForestDiffusionModel():
         unflatten=True,       
         X_covs=None
     )
-    #for each test_samples copy sample a random noise
+    #for each test_samples copy, sample a random noise -> gives a better coverage of the latent space
     X0 = np.random.normal(size=test_samples_rep.shape)
 
-    #returns x_t_samples: [n_t * n_samples*dim_k(?), n_features], v_true: [n_samples, n_features]; bc n_features gives the direction
-    #for every replicated testsample there is a new noise sample. (every combination gehts a own interpolation sample for each noise_level)
-    x_t_samples, _ = build_data_xt(
+    #returns for every test_rep_sample a new interpolation sample at every noise level
+    x_t_samples_rep, _ = build_data_xt(
         X0, 
         test_samples_rep, 
         n_t=n_t, 
@@ -549,36 +554,37 @@ class ForestDiffusionModel():
         eps=self.eps, 
         sde=None
     )
+    #initialise anomaly scores for every replicated test sample
     anomaly_scores_rep = np.zeros(n_samples_rep)
+    #get noise levels
     t_levels = np.linspace(self.eps, 1, n_t)
 
-    ######################################
-
-    #wichtig das kann man optimieren... wie viele n_t will ich durchgehen, was macht sinn?
-
-    ######################################
-
-
-    #for i, t in enumerate(t_levels[:-1]):
     #skip the last level, bc at t=1 is noise and no reconstruction makes sense
     for i, t in enumerate(t_levels[:-1]):
-        #get interpolation at the same noise step for the same sample (just from different noise samples)
+        
+        #get rep_samples at the same noise level t
         start_idx = i * n_samples_rep
         end_idx = (i + 1) * n_samples_rep
-        X_t = x_t_samples[start_idx:end_idx, :]
+        X_t = x_t_samples_rep[start_idx:end_idx, :]
         steps = n_t - i -1 
+        #solve ode from noise level t to t=1
         ode_solved = euler_solve_from_x_t(x_t=X_t.reshape(-1),t0=t,my_model=model,steps_left=steps,)
+        #convert to data space in order to make comparable with test sample
         solution = ode_solved.reshape(X_t.shape[0], self.c) # [b, c]
         solution = self.unscale(solution)
         solution = self.clean_onehot_data(solution)
         solution = self.clip_extremes(solution)
+
+        #calculate the squared error on every reconstructed sample to the actual test sample
         squared_error = np.sum((test_samples_rep_unscaled - solution) ** 2, axis=1)
-        #calculate for one noise level 
+
+        #sum the squared error for every noise level of one rep_sample
         anomaly_scores_rep += squared_error
-    anomaly_scores_rep = anomaly_scores_rep / (n_t - 1)  # [n_samples_rep]
-    anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K, n_samples)
+
+    anomaly_scores_rep = anomaly_scores_rep / (n_t - 1)  #  average over all noise levels, actually not necessary 
+    anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K, n_samples) #group again for each test sample
     #over all noise levels for one testsample (lines)
-    anomaly_scores = anomaly_scores_rep.mean(axis=0)  
+    anomaly_scores = anomaly_scores_rep.mean(axis=0)  #calculate mean over all duplicate_K copies
     return anomaly_scores  # [n_samples]
 
 

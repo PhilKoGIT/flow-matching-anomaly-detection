@@ -136,7 +136,7 @@ def euler_solve(y0, my_model, N=101):
   return y
 
 # ============================================================================
-# compute_reconstruction_score
+# follow v field from x_t at time t0 to time t=1
 # ============================================================================
 #this method makes points follow an ode from a certain noise level to the data distribution
 

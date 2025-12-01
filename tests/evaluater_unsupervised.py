@@ -24,7 +24,7 @@ import time
 #copied partly from by utils.py of https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
 
 
-n_t = 10  #not 1!
+n_t = 15  #not 1!
 #duplicate_K = 10
 duplicate_K = 10
 number_of_runs = 5
@@ -86,7 +86,7 @@ def create_trained_model(n_t, duplicate_K, seed, X_train, dataset_name):
     #n_estimators = 10,
     eta=0.3,
     gpu_hist=False,   # auf True setzen, wenn GPU verfügbar
-    n_batch=25,        # Important: 0 for compute_deviation_score
+    n_batch=1,        # Important: 0 for compute_deviation_score
     seed=seed,
     n_jobs=-1,
     bin_indexes=[],
@@ -130,7 +130,7 @@ def calculate_scores_reconstruction(X_test, y_test, trained_model, duplicate_K, 
 #noch mit binary, float etc. machen, als parameter übergeben!!!
 
 # # ============================================================================
-# # adapted/copied from https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/AblationStudies.py
+# # adapted from https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/AblationStudies.py
 # # ============================================================================
 
 
@@ -142,17 +142,19 @@ seed_list = [0, 1, 2, 3, 4]
 
 #!!!!!!!!
 #seed_list = [0,1]
-def run_training_contamination_ablation_dynamic_fixed_split():
+def run_training_contamination_ablation_dynamic_fixed_split(score):
     all_results = {}
     all_contam_levels = {}
     dataset_names = [
         #"17_InternetAds.npz",
-        "18_Ionosphere.npz",
+        #"18_Ionosphere.npz",
+        #"5_campaign.npz",
+        #"13_fraud.npz",
        # "22_magic.gamma.npz",
        # "23_mammography.npz",
        # "25_musk.npz",
-       # "29_Pima.npz",
-       # "31_satimage-2.npz",
+        "29_Pima.npz",
+       # "31_satimage-2.npz"
        # "44_Wilt.npz"
     ]
     for dataset_name in dataset_names:       
@@ -181,12 +183,6 @@ def run_training_contamination_ablation_dynamic_fixed_split():
         n_train_normal = len(X_train_normal)
         n_train_abnormal_max = len(X_train_abnormal_full)
         max_abnormal_ratio = n_train_abnormal_max / (n_train_abnormal_max + n_train_normal)
-
-        #contamination_levels = np.linspace(0.001, max_abnormal_ratio, 10)
-
-        #!!!!!!!!!!!!!!!!!!!
-
-
         contamination_levels = np.linspace(0.001, max_abnormal_ratio, 10)
 
         all_contam_levels[dataset_name] = contamination_levels
@@ -206,7 +202,10 @@ def run_training_contamination_ablation_dynamic_fixed_split():
                 y_train = np.zeros(len(X_train))  # label unused
 
                 model = create_trained_model(n_t, duplicate_K, seed, X_train, dataset_name)
-                scores = calculate_scores_reconstruction(X_test, y_test, model, n_t=n_t, duplicate_K=duplicate_K)
+                if score == "deviation":
+                    scores = calculate_scores_deviation(X_test, y_test, model, n_t=n_t, duplicate_K=duplicate_K)
+                else:
+                    scores = calculate_scores_reconstruction(X_test, y_test, model, n_t=n_t, duplicate_K=duplicate_K)
 
                 auc = roc_auc_score(y_test, scores)
                 pr = average_precision_score(y_test, scores)
@@ -220,12 +219,13 @@ def run_training_contamination_ablation_dynamic_fixed_split():
             "auroc": auroc_all,
             "auprc": auprc_all,
         }
+        print(all_results)
 
     return all_results, all_contam_levels
 
 
 # Create the line plots
-def plot_training_contamination_ablation_dynamic(results, contamination_levels_dict):
+def plot_training_contamination_ablation_dynamic(results, contamination_levels_dict, score):
     fig, axs = plt.subplots(2, 4, figsize=(28, 10), sharey=True)
     dataset_list = list(results.keys())
 
@@ -260,7 +260,7 @@ def plot_training_contamination_ablation_dynamic(results, contamination_levels_d
     axs[0][3].legend(loc="upper center", bbox_to_anchor=(1.15, 1.1), fontsize="large")
     plt.tight_layout()
     os.makedirs("./results_ablation/", exist_ok=True)
-    plt.savefig("./results_ablation/Contamination_Figure_TCCM.pdf")
+    plt.savefig(f"./results_ablation/ForestDiffusion_{score}.pdf")
     plt.show()
 
 
@@ -271,9 +271,10 @@ def plot_training_contamination_ablation_dynamic(results, contamination_levels_d
 # # ============================================================================
 
 if __name__ == "__main__":
-    results, contamination_levels = run_training_contamination_ablation_dynamic_fixed_split()
-    plot_training_contamination_ablation_dynamic(results, contamination_levels)
-
+    results, contamination_levels = run_training_contamination_ablation_dynamic_fixed_split(score="deviation")
+    plot_training_contamination_ablation_dynamic(results, contamination_levels, score="deviation")
+    results_reconstruction, contamination_levels_reconstruction = run_training_contamination_ablation_dynamic_fixed_split(score="reconstruction")
+    plot_training_contamination_ablation_dynamic(results_reconstruction, contamination_levels_reconstruction, score="reconstruction")
 
 
 
