@@ -7,7 +7,6 @@ from sklearn.model_selection import train_test_split
 from pathlib import Path
 from ForestDiffusion import ForestDiffusionModel
 import pandas as pd
-from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -15,13 +14,11 @@ from sklearn.metrics import roc_auc_score, precision_recall_curve, roc_curve, co
 import seaborn as sns
 import json
 import joblib
-from sklearn.metrics import roc_auc_score
 from sklearn.metrics import average_precision_score
 import time
 from preprocessing_bd_unsupervised import prepare_data_unsupervised
 from preprocessing_bd_supervised import prepare_data_supervised
 import sys
-from pathlib import Path
 current_file_path = Path(__file__).resolve()
 parent_dir = current_file_path.parent
 project_root_dir = parent_dir.parent
@@ -141,31 +138,31 @@ def load_dataset(dataset_name, semi_supervised):
 
 # ... REST DES SKRIPTS (create_trained_model, calculate_scores, __main__) ...
 
-def create_trained_model(n_t, duplicate_K, seed, X_train, dataset_name, diffusion_type):
+def create_ForestDiffusionModel(n_t, duplicate_K, seed, X_train, dataset_name, diffusion_type):
     start_time = time.time()
     model = ForestDiffusionModel(
-    X=X_train,
-    label_y=None,     # unsupervised; wir geben Labels nur für Evaluation
-    # Diffusion settings
-    n_t=n_t,
-    duplicate_K=duplicate_K,
-    diffusion_type=diffusion_type,  # wichtig für compute_deviation_score
-    eps=1e-3,
-    model='xgboost',
-    max_depth=7,
-    #max_depth=2,
-    n_estimators=100,
-    #n_estimators = 10,
-    eta=0.3,
-    gpu_hist=False,   # auf True setzen, wenn GPU verfügbar
-    n_batch=1,        # Important: 0 for compute_deviation_score
-    seed=seed,
-    n_jobs=-1,
-    bin_indexes=[],
-    cat_indexes=[],
-    int_indexes=[],
-    remove_miss=False,
-    p_in_one=True,    # WICHTIG für compute_deviation_score
+        X=X_train,
+        label_y=None,     # unsupervised; wir geben Labels nur für Evaluation
+        # Diffusion settings
+        n_t=n_t,
+        duplicate_K=duplicate_K,
+        diffusion_type=diffusion_type,  # wichtig für compute_deviation_score
+        eps=1e-3,
+        model='xgboost',
+        max_depth=7,
+        #max_depth=2,
+        n_estimators=100,
+        #n_estimators = 10,
+        eta=0.3,
+        gpu_hist=False,   # auf True setzen, wenn GPU verfügbar
+        n_batch=1,        # Important: 0 for compute_deviation_score
+        seed=seed,
+        n_jobs=-1,
+        bin_indexes=[],
+        cat_indexes=[],
+        int_indexes=[],
+        remove_miss=False,
+        p_in_one=True,    # WICHTIG für compute_deviation_score
     )
     end_time_train = time.time()
     time_train = end_time_train - start_time
@@ -175,167 +172,309 @@ def create_trained_model(n_t, duplicate_K, seed, X_train, dataset_name, diffusio
     return model, time_train
 
 
-def calculate_scores(X_test, y_test, trained_model, n_t, duplicate_K, diffusion_type):
+def calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t, duplicate_K, diffusion_type):
     # train time, dev time, rec time
     times = []
-    model, time_train = trained_model
-    times.append(time_train)
 
     # ---Computation deviation Score ---
-    start_time_dev = time.time()
+    print(f"\n--- Computing Deviation Score (n_t={n_t}) ---")
+    start_time_deviation = time.time()
     anomaly_scores_deviation = model.compute_deviation_score(
         test_samples=X_test,
         diffusion_type=diffusion_type,
         n_t=n_t, 
         duplicate_K=duplicate_K
     )
-    end_time_dev = time.time()
-    time_dev = end_time_dev - start_time_dev
-    times.append(time_dev)
+    end_time_deviation = time.time()
+    time_deviation = end_time_deviation - start_time_deviation
+    times.append(time_deviation)
+    
+    auroc_deviation = roc_auc_score(y_test, anomaly_scores_deviation)
+    auprc_deviation = average_precision_score(y_test, anomaly_scores_deviation)
+    print(f"Deviation Score computed in {time_deviation:.2f} seconds")
+    print(f"  AUROC: {auroc_deviation:.4f}")
+    print(f"  AUPRC: {auprc_deviation:.4f}")
 
     #---Computation reconstruction Score ---
-    start_time_rec = time.time()
+    print("\n--- Computing Reconstruction Score ---")
+    start_time_reconstruction = time.time()
     anomaly_scores_reconstruction = model.compute_reconstruction_score(
         test_samples=X_test,
         diffusion_type=diffusion_type,
         n_t=n_t, 
         duplicate_K=duplicate_K
     )
-    end_time_rec = time.time()
-    time_reconstruction = end_time_rec - start_time_rec
+    end_time_reconstruction = time.time()
+    time_reconstruction = end_time_reconstruction - start_time_reconstruction
     times.append(time_reconstruction)
-
-    # ---calculate the auroc & auprc ---
-    auroc_deviation = roc_auc_score(y_test, anomaly_scores_deviation)
-    auprc_deviation = average_precision_score(y_test, anomaly_scores_deviation)
-    print(f"\nAUROC deviation: {auroc_deviation:.4f}")
-    print(f"AUPRC deviation (Average Precision): {auprc_deviation:.4f}")
-
+    
     auroc_reconstruction = roc_auc_score(y_test, anomaly_scores_reconstruction)
     auprc_reconstruction = average_precision_score(y_test, anomaly_scores_reconstruction)
-    print(f"\nAUROC reconstruction: {auroc_reconstruction:.4f}")
-    print(f"AUPRC reconstruction (Average Precision): {auprc_reconstruction:.4f}")
+    print(f"Reconstruction Score computed in {time_reconstruction:.2f} seconds")
+    print(f"  AUROC: {auroc_reconstruction:.4f}")
+    print(f"  AUPRC: {auprc_reconstruction:.4f}")
 
-    return auroc_deviation, auprc_deviation, auroc_reconstruction, auprc_reconstruction, times
+     #---Computation decision Score ---
+    start_time_decision = time.time()
+    anomaly_scores_decision = model.compute_decision_score(
+        test_samples=X_test,
+        diffusion_type=diffusion_type,
+        n_t=n_t, 
+        duplicate_K=duplicate_K
+    )
+    end_time_decision = time.time()
+    time_decision = end_time_decision - start_time_decision
+    times.append(time_decision)
+    
+    auroc_decision = roc_auc_score(y_test, anomaly_scores_decision)
+    auprc_decision = average_precision_score(y_test, anomaly_scores_decision)
+    print(f"Decision Score computed in {time_decision:.2f} seconds")
+    print(f"  AUROC: {auroc_decision:.4f}")
+    print(f"  AUPRC: {auprc_decision:.4f}")
+    return {
+        'decision': {
+            'auroc': auroc_decision,
+            'auprc': auprc_decision,
+            'time': time_decision,
+            'scores': anomaly_scores_decision
+        },
+        'deviation': {
+            'auroc': auroc_deviation,
+            'auprc': auprc_deviation,
+            'time': time_deviation,
+            'scores': anomaly_scores_deviation
+        },
+        'reconstruction': {
+            'auroc': auroc_reconstruction,
+            'auprc': auprc_reconstruction,
+            'time': time_reconstruction,
+            'scores': anomaly_scores_reconstruction
+        }
+    }
 
 #noch mit binary, float etc. machen, als parameter übergeben!!!
 
+def create_trained_tccm_model(X_train, dataset_name, seed=42):
+    """
+    Erstellt und trainiert ein TCCM-Modell
+    """
+    # Set random seed for reproducibility
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    random.seed(seed)
+    
+    # Hole die optimalen Hyperparameter für das Dataset
+    hyperparams = determine_FMAD_hyperparameters(dataset_name)
+    
+    print(f"\nTraining TCCM with hyperparameters:")
+    print(f"  Epochs: {hyperparams['epochs']}")
+    print(f"  Learning Rate: {hyperparams['learning_rate']}")
+    print(f"  Batch Size: {hyperparams['batch_size']}")
+    
+    start_time = time.time()
+    
+    # Initialisiere TCCM mit den Hyperparametern
+    model = TCCM(
+        n_features=X_train.shape[1],
+        epochs=hyperparams['epochs'],
+        learning_rate=hyperparams['learning_rate'],
+        batch_size=hyperparams['batch_size']
+    )
+    
+    # Trainiere das Modell
+    model.fit(X_train)
+    
+    end_time_train = time.time()
+    time_train = end_time_train - start_time
+    
+    print(f"✓ TCCM Model trained successfully in {time_train:.2f} seconds!")
+    
+    # Speichere das Modell
+    model_path = f"{dataset_name}_tccm_model_seed{seed}.joblib"
+    joblib.dump(model, model_path)
+    print(f"✓ Model saved to {model_path}")
+    
+    return model, time_train
+
+
+
+def calculate_tccm_scores(X_test, y_test, model, n_t):
+    """
+    Berechnet alle drei TCCM Anomaly Scores:
+    1. Decision Function Score (Equation 5)
+    2. Deviation Score (über mehrere Zeitpunkte)
+    3. Reconstruction Score (implizit in decision_function)
+    """
+    times = []
+    
+    # --- Score 1: Decision Function  ---
+    print("\n--- Computing Decision Function Score ---")
+    start_time_decision = time.time()
+    anomaly_scores_decision = model.decision_function(X_test)
+    end_time_decision = time.time()
+    time_decision = end_time_decision - start_time_decision
+    times.append(time_decision)
+    
+    auroc_decision = roc_auc_score(y_test, anomaly_scores_decision)
+    auprc_decision = average_precision_score(y_test, anomaly_scores_decision)
+    print(f"Decision Function Score computed in {time_decision:.2f} seconds")
+    print(f"  AUROC: {auroc_decision:.4f}")
+    print(f"  AUPRC: {auprc_decision:.4f}")
+    
+    # --- Score 2: Deviation Score  ---
+    print(f"\n--- Computing Deviation Score (n_t={n_t}) ---")
+    start_time_deviation = time.time()
+    anomaly_scores_deviation = model.compute_deviation_score(X_test, n_t=n_t)
+    end_time_deviation = time.time()
+    time_deviation = end_time_deviation - start_time_deviation
+    times.append(time_deviation)
+    
+    auroc_deviation = roc_auc_score(y_test, anomaly_scores_deviation)
+    auprc_deviation = average_precision_score(y_test, anomaly_scores_deviation)
+    print(f"Deviation Score computed in {time_deviation:.2f} seconds")
+    print(f"  AUROC: {auroc_deviation:.4f}")
+    print(f"  AUPRC: {auprc_deviation:.4f}")
+    
+    # --- Score 3: Reconstruction Score  ---
+
+    print("\n--- Computing Reconstruction Score ---")
+    start_time_reconstruction = time.time()
+    anomaly_scores_reconstruction = model.compute_reconstruction_score(X_test, n_t = n_t)
+    end_time_reconstruction = time.time()
+    time_reconstruction = end_time_reconstruction - start_time_reconstruction
+    times.append(time_reconstruction)
+    
+    auroc_reconstruction = roc_auc_score(y_test, anomaly_scores_reconstruction)
+    auprc_reconstruction = average_precision_score(y_test, anomaly_scores_reconstruction)
+    print(f"Reconstruction Score computed in {time_reconstruction:.2f} seconds")
+    print(f"  AUROC: {auroc_reconstruction:.4f}")
+    print(f"  AUPRC: {auprc_reconstruction:.4f}")
+    
+    return {
+        'decision': {
+            'auroc': auroc_decision,
+            'auprc': auprc_decision,
+            'time': time_decision,
+            'scores': anomaly_scores_decision
+        },
+        'deviation': {
+            'auroc': auroc_deviation,
+            'auprc': auprc_deviation,
+            'time': time_deviation,
+            'scores': anomaly_scores_deviation
+        },
+        'reconstruction': {
+            'auroc': auroc_reconstruction,
+            'auprc': auprc_reconstruction,
+            'time': time_reconstruction,
+            'scores': anomaly_scores_reconstruction
+        }
+    }
 
 if __name__ == "__main__":
     dataset_names = [#"5_campaign.npz"]
                      # "13_fraud.npz"]
                      #"campaign_efvfm"]
-                    "29_Pima.npz"]
+                    #"29_Pima.npz"]
                     #"44_Wilt.npz"]
-                    #"31_satimage-2.npz"]
+                    "31_satimage-2.npz"]
                      # "business_dataset_3011.csv"]
-    #schleife bauen
-    # supervised = [True]
-    # n_t = 15  #not 1!
-    # duplicate_K = 10
-    # duplicate_K_scoring = 3
-    # number_of_runs = 5
 
-    n_t = 80  #not 1!
-    duplicate_K = 30
-    duplicate_K_scoring = 30
-    number_of_runs = 1
-    diffusion_type = "vp"
+    models_to_run = {
+        "ForestFlow": {
+            "type": "forest",
+            "params": {
+                "n_t": 10,
+                "duplicate_K": 20,
+                "duplicate_K_scoring": 20,
+                "diffusion_type": "flow"
+            }
+        },
+        "ForestDiffusion": {
+            "type": "forest",
+            "params": {
+                "n_t": 10,
+                "duplicate_K": 20,
+                "duplicate_K_scoring": 20,
+                "diffusion_type": "vp"
+            }
+        },
+
+        "TCCM": {
+            "type": "tccm",
+            "params": {
+                "n_t": 100   # only used for scoring functions
+            }
+        }
+    }   
 
     for dataset_name in dataset_names:
-        print("\n" + "=" * 80)
-        print(f"DATASET: {dataset_name}")
-        print("=" * 80)
-
-        dev_auroc_list = []
-        dev_auprc_list = []
-        rec_auroc_list = []
-        rec_auprc_list = []
-
-        time_train_list = []
-        time_dev_inf_list = []
-        time_rec_inf_list = []
-        #compute seperately total times
-        time_dev_total_list = [] 
-        time_rec_total_list = []
-
-        #always the same split for comparability, no seed change
         X_train, X_test, y_test = load_dataset(dataset_name, semi_supervised=True)
 
-        # ---runs ---
-        for i in range(number_of_runs):
-            print(f"\n--- Iteration {i+1}/{number_of_runs} (Seed: {i}) ---")
-            trained_model = create_trained_model(
-                n_t=n_t,
-                duplicate_K=duplicate_K,
-                seed=i,
-                X_train=X_train, 
-                dataset_name=dataset_name,
-                diffusion_type=diffusion_type
-            )
-            a_dev, ap_dev, a_rec, ap_rec, times = calculate_scores(X_test, y_test, trained_model, n_t, duplicate_K_scoring, diffusion_type=diffusion_type)
-            print(f"Iteration {i+1} results: AUROC Deviation: {a_dev:.4f}, AUPRC Deviation: {ap_dev:.4f}, AUROC Reconstruction: {a_rec:.4f}, AUPRC Reconstruction: {ap_rec:.4f}")
-            dev_auroc_list.append(a_dev)
-            dev_auprc_list.append(ap_dev)
-            rec_auroc_list.append(a_rec)
-            rec_auprc_list.append(ap_rec)
+        for model_name, cfg in models_to_run.items():
+            print("\n" + "#" * 80)
+            print(f"Running model: {model_name}")
+            print("#" * 80)
 
-            #add times to time lists
-            time_train_list.append(times[0])
-            time_dev_inf_list.append(times[1])
-            time_rec_inf_list.append(times[2])
+            decision_auroc_list = []
+            decision_auprc_list = []
+            deviation_auroc_list = []
+            deviation_auprc_list = []
+            reconstruction_auroc_list = []
+            reconstruction_auprc_list = []
 
-            #compute seperately total times
-            time_dev_total_list.append(times[0] + times[1])  
-            time_rec_total_list.append(times[0] + times[2])  
+            time_train_list = []
+            time_decision_list = []
+            time_deviation_list = []
+            time_reconstruction_list = []
 
-        # ---merge results over different runs ---
-        dev_auroc_mean = np.mean(dev_auroc_list)
-        dev_auroc_std = np.std(dev_auroc_list)
-        dev_auprc_mean = np.mean(dev_auprc_list)
-        dev_auprc_std = np.std(dev_auprc_list)
+            for i in range(1):
 
-        rec_auroc_mean = np.mean(rec_auroc_list)
-        rec_auroc_std = np.std(rec_auroc_list)
-        rec_auprc_mean = np.mean(rec_auprc_list)
-        rec_auprc_std = np.std(rec_auprc_list)
+                if cfg["type"] == "forest":
+                    # Parameter extrahieren
+                    p = cfg["params"]
+                    model, time_train = create_ForestDiffusionModel(
+                        n_t=p["n_t"],
+                        duplicate_K=p["duplicate_K"],
+                        seed=i,
+                        X_train=X_train,
+                        dataset_name=f"{dataset_name}_{model_name}",
+                        diffusion_type=p["diffusion_type"]
+                    )
 
-        #compute the time means and stds
-        time_train_mean = np.mean(time_train_list)
-        time_train_std = np.std(time_train_list)
-        time_dev_inf_mean = np.mean(time_dev_inf_list)
-        time_dev_inf_std = np.std(time_dev_inf_list)
-        time_rec_inf_mean = np.mean(time_rec_inf_list)
-        time_rec_inf_std = np.std(time_rec_inf_list)
+                    results = calculate_scores_ForestDiffusionModel(
+                        X_test, y_test, model,
+                        p["n_t"],
+                        p["duplicate_K_scoring"],
+                        p["diffusion_type"]
+                    )
 
-        time_dev_total_mean = np.mean(time_dev_total_list)
-        time_dev_total_std = np.std(time_dev_total_list)
-        time_rec_total_mean = np.mean(time_rec_total_list)
-        time_rec_total_std = np.std(time_rec_total_list)
+                elif cfg["type"] == "tccm":
+                    # Parameter extrahieren
+                    p = cfg["params"]
+                    model, time_train = create_trained_tccm_model(
+                        X_train=X_train,
+                        dataset_name=f"{dataset_name}_{model_name}",
+                        seed=i
+                    )
 
+                    results = calculate_tccm_scores(
+                        X_test, y_test, model, n_t=p["n_t"]
+                    )
 
-        print("\n" + "=" * 40 + " FINAL RESULTS " + "=" * 40)
-        print(f"Dataset: {dataset_name}")
-        print("dev_auroc_list: "+str(dev_auroc_list))
-        print("dev_auprc_list: "+str(dev_auprc_list))
-        print("rec_auroc_list: "+str(rec_auroc_list))
-        print("rec_auprc_list: "+str(rec_auprc_list))
-        print("-" * 87)
-        print(f"Metric | Deviation Score (Mean ± Std) | Reconstruction Score (Mean ± Std)")
-        print("-" * 87)
-        print(f"AUROC | {dev_auroc_mean:.3f} ± {dev_auroc_std:.3f} | {rec_auroc_mean:.3f} ± {rec_auroc_std:.3f}")
-        print(f"AUPRC | {dev_auprc_mean:.3f} ± {dev_auprc_std:.3f} | {rec_auprc_mean:.3f} ± {rec_auprc_std:.3f}")
-        print("=" * 87)
+                # Ergebnisse speichern
+                time_train_list.append(time_train)
 
-        print("\n" + "=" * 40 + " TIME RESULTS " + "=" * 40)
-        print(f"Dataset: {dataset_name}")
-        print("-" * 87)
-        print(f"Time Metric | Training Time (Mean ± Std) | Dev Inference Time (Mean ± Std) | Rec Inference Time (Mean ± Std)")
-        print("-" * 87)
-        print(f"Time (s) | {time_train_mean:.3f} ± {time_train_std:.3f} | {time_dev_inf_mean:.3f} ± {time_dev_inf_std:.3f} | {time_rec_inf_mean:.3f} ± {time_rec_inf_std:.3f}")
-        print(f"Total Time Dev (s) | {time_dev_total_mean:.3f} ± {time_dev_total_std:.3f}")
-        print(f"Total Time Rec (s) | {time_rec_total_mean:.3f} ± {time_rec_total_std:.3f}")
-        print("=" * 87) 
+                decision_auroc_list.append(results['decision']['auroc'])
+                decision_auprc_list.append(results['decision']['auprc'])
+                time_decision_list.append(results['decision']['time'])
 
+                deviation_auroc_list.append(results['deviation']['auroc'])
+                deviation_auprc_list.append(results['deviation']['auprc'])
+                time_deviation_list.append(results['deviation']['time'])
 
+                reconstruction_auroc_list.append(results['reconstruction']['auroc'])
+                reconstruction_auprc_list.append(results['reconstruction']['auprc'])
+                time_reconstruction_list.append(results['reconstruction']['time'])
 
+            # Am Ende Summary printen …

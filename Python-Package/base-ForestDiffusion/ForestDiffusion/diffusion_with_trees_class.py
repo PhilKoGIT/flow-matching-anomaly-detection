@@ -418,7 +418,7 @@ class ForestDiffusionModel():
     # - copy test sample duplicate_K times -> n_samples_rep 
     # - for each copy, sample a random noise -> build interpolation samples at each noise level -> x_t_samples_rep and calculate the true velocity v_true (rectified flow)
     # - let the model predict the velocity of every interpolation sample at every noise level for every rep_sample
-    # - compute the squared error between true velocity and predicted velocity for every reconstructed sample at every noise level
+    # - compute the squared error between true velocity and predicted velocity at every noise level
     # - average over the error of all noise levels for every rep_sample -> anomaly score per rep_sample
     # - average over all rep_samples -> final anomaly score per test sample
   #-----------------------------------------------------------------------------------
@@ -471,6 +471,7 @@ class ForestDiffusionModel():
     t_levels = np.linspace(self.eps, 1, n_t)
 
     for i, t in enumerate(t_levels):
+    #for i, t in enumerate(t_levels):
         #for all test_samples_rep get the samples at the same noise level t
         start_idx = i * n_samples_rep
         end_idx = (i + 1) * n_samples_rep
@@ -585,6 +586,80 @@ class ForestDiffusionModel():
     anomaly_scores = anomaly_scores_rep.mean(axis=0)  #calculate mean over all duplicate_K copies
     return anomaly_scores  # [n_samples]
 
+# ============================================================================
+# compute_decision_score
+# ============================================================================
+  #-----------------------------------------------------------------------------------
+  # same as deviation score but use sum of errors instead of sum of squared errors
+  #  and only consider the last noise level t=1
+
+  #-----------------------------------------------------------------------------------
+
+
+  def compute_decision_score(self, test_samples, diffusion_type, n_t=None, duplicate_K=None):
+    assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
+
+    if self.label_y is not None:
+        raise Exception("Anomaly score only for unsupervised learning")
+    
+    if n_t is None:
+        n_t = self.n_t
+    if len(self.cat_indexes) > 0:
+      test_samples, column_names_before, column_names_after = self.dummify(test_samples)
+    test_samples = self.scaler.transform(test_samples)
+    
+    n_samples = test_samples.shape[0]
+    n_features = test_samples.shape[1]
+
+    #duplicate test samples
+    test_samples_rep = np.tile(test_samples, (duplicate_K, 1))
+    n_samples_rep = test_samples_rep.shape[0] 
+
+  #create mask, for class because unsupervised (label_y = None)
+    mask_y = {0: np.ones(n_samples_rep, dtype=bool)}
+
+  #take partial model bc of constraints
+    model = partial(
+        self.my_model,
+        mask_y=mask_y,         
+        dmat=self.n_batch > 0,
+        unflatten=False,       
+        X_covs=None
+    )
+    #for each test_sample_rep copy sample a random noise
+    X0 = np.random.normal(size=test_samples_rep.shape)
+
+    #returns for every test_rep_sample a new interpolation sample at every noise level and the true velocity v_true
+    x_t_samples_rep, v_true = build_data_xt(
+        X0, 
+        test_samples_rep, 
+        n_t=n_t, 
+        diffusion_type=diffusion_type, 
+        eps=self.eps, 
+        sde=self.sde
+    )
+    anomaly_scores_rep = np.zeros(n_samples_rep)
+    t_levels = np.linspace(self.eps, 1, n_t)
+
+    #only the last noise level t=1 is considered
+    for i, t in enumerate([1]):
+        #for all test_samples_rep get the samples at the same noise level t
+        start_idx = i * n_samples_rep
+        end_idx = (i + 1) * n_samples_rep
+        X_t = x_t_samples_rep[start_idx:end_idx, :]
+        #predict velocity with the model for all test_samples_rep at noise level t
+        v_pred_t = model(t=t, y=X_t)
+        #calculate squared error between true velocity and predicted velocity
+        error = np.sum((v_true - v_pred_t), axis=1)
+        #sum the squared error for every noise level of one rep_sample
+        anomaly_scores_rep += error
+    # average over all noise levels
+    anomaly_scores_rep = anomaly_scores_rep / n_t  
+    #group again for each test sample
+    anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K, n_samples)
+    #average over all test_samples_rep for one test sample
+    anomaly_scores = anomaly_scores_rep.mean(axis=0)  
+    return anomaly_scores  
 
 
 
