@@ -415,7 +415,7 @@ class ForestDiffusionModel():
 # ============================================================================
   #-----------------------------------------------------------------------------------
 
-    # - copy test sample duplicate_K times -> n_samples_rep 
+    # - copy test sample    duplicate_K_test times -> n_samples_rep 
     # - for each copy, sample a random noise -> build interpolation samples at each noise level -> x_t_samples_rep and calculate the true velocity v_true (rectified flow)
     # - let the model predict the velocity of every interpolation sample at every noise level for every rep_sample
     # - compute the squared error between true velocity and predicted velocity at every noise level
@@ -424,7 +424,7 @@ class ForestDiffusionModel():
   #-----------------------------------------------------------------------------------
 
 
-  def compute_deviation_score(self, test_samples, diffusion_type, n_t=None, duplicate_K=None):
+  def compute_deviation_score(self, test_samples, diffusion_type, n_t=None, duplicate_K_test=None):
    # assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
 
@@ -441,7 +441,7 @@ class ForestDiffusionModel():
     n_features = test_samples.shape[1]
 
     #duplicate test samples
-    test_samples_rep = np.tile(test_samples, (duplicate_K, 1))
+    test_samples_rep = np.tile(test_samples, (duplicate_K_test, 1))
     n_samples_rep = test_samples_rep.shape[0] 
 
   #create mask, for class because unsupervised (label_y = None)
@@ -485,7 +485,7 @@ class ForestDiffusionModel():
     # average over all noise levels
     anomaly_scores_rep = anomaly_scores_rep / n_t  
     #group again for each test sample
-    anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K, n_samples)
+    anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K_test, n_samples)
     #average over all test_samples_rep for one test sample
     anomaly_scores = anomaly_scores_rep.mean(axis=0)  
     return anomaly_scores  
@@ -495,7 +495,7 @@ class ForestDiffusionModel():
 # ============================================================================
 
     ######################################
-    # - copy test sample duplicate_K times -> n_samples_rep 
+    # - copy test sample duplicate_K_test times -> n_samples_rep 
     # - for each copy sample a random noise -> build interpolation samples at each noise level -> x_t_samples_rep 
     # - solve ode for every noise level t except last
     # - compute with actual test sample the reconstruction error (mse) for every reconstructed sample at every noise level
@@ -504,7 +504,7 @@ class ForestDiffusionModel():
 
     ######################################
 
-  def compute_reconstruction_score(self, test_samples, diffusion_type, n_t=None, duplicate_K = None):
+  def compute_reconstruction_score(self, test_samples, diffusion_type, n_t=None, duplicate_K_test = None):
     #assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
 
@@ -521,7 +521,7 @@ class ForestDiffusionModel():
     n_features = test_samples.shape[1]
 
     #duplicate test sample lines duplikate_K times (columns stay the same)
-    test_samples_rep = np.tile(test_samples, (duplicate_K, 1))
+    test_samples_rep = np.tile(test_samples, (duplicate_K_test, 1))
     n_samples_rep = test_samples_rep.shape[0]
 
     #convert into data space to compare with reconstruction
@@ -581,9 +581,9 @@ class ForestDiffusionModel():
         anomaly_scores_rep += squared_error
 
     anomaly_scores_rep = anomaly_scores_rep / (n_t - 1)  #  average over all noise levels, actually not necessary 
-    anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K, n_samples) #group again for each test sample
+    anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K_test, n_samples) #group again for each test sample
     #over all noise levels for one testsample (lines)
-    anomaly_scores = anomaly_scores_rep.mean(axis=0)  #calculate mean over all duplicate_K copies
+    anomaly_scores = anomaly_scores_rep.mean(axis=0)  #calculate mean over all duplicate_K_test copies
     return anomaly_scores  # [n_samples]
 
 # ============================================================================
@@ -596,7 +596,7 @@ class ForestDiffusionModel():
   #-----------------------------------------------------------------------------------
 
 
-  def compute_decision_score(self, test_samples, diffusion_type, n_t=None, duplicate_K=None):
+  def compute_decision_score(self, test_samples, diffusion_type, n_t=None, duplicate_K_test=None):
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
 
     if self.label_y is not None:
@@ -612,7 +612,7 @@ class ForestDiffusionModel():
     n_features = test_samples.shape[1]
 
     #duplicate test samples
-    test_samples_rep = np.tile(test_samples, (duplicate_K, 1))
+    test_samples_rep = np.tile(test_samples, (duplicate_K_test, 1))
     n_samples_rep = test_samples_rep.shape[0] 
 
   #create mask, for class because unsupervised (label_y = None)
@@ -656,7 +656,7 @@ class ForestDiffusionModel():
     # average over all noise levels
     anomaly_scores_rep = anomaly_scores_rep / n_t  
     #group again for each test sample
-    anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K, n_samples)
+    anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K_test, n_samples)
     #average over all test_samples_rep for one test sample
     anomaly_scores = anomaly_scores_rep.mean(axis=0)  
     return anomaly_scores  
