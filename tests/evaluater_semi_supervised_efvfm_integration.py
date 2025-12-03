@@ -20,6 +20,16 @@ from sklearn.metrics import average_precision_score
 import time
 from preprocessing_bd_unsupervised import prepare_data_unsupervised
 from preprocessing_bd_supervised import prepare_data_supervised
+import sys
+from pathlib import Path
+current_file_path = Path(__file__).resolve()
+parent_dir = current_file_path.parent
+project_root_dir = parent_dir.parent
+if str(project_root_dir) not in sys.path:
+    sys.path.append(str(project_root_dir))
+from TCCM.FlowMatchingAD import TCCM
+from TCCM.functions import determine_FMAD_hyperparameters
+
 
 
 #copied partly from by utils.py of https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
@@ -131,7 +141,7 @@ def load_dataset(dataset_name, semi_supervised):
 
 # ... REST DES SKRIPTS (create_trained_model, calculate_scores, __main__) ...
 
-def create_trained_model(n_t, duplicate_K, seed, X_train, dataset_name):
+def create_trained_model(n_t, duplicate_K, seed, X_train, dataset_name, diffusion_type):
     start_time = time.time()
     model = ForestDiffusionModel(
     X=X_train,
@@ -139,7 +149,7 @@ def create_trained_model(n_t, duplicate_K, seed, X_train, dataset_name):
     # Diffusion settings
     n_t=n_t,
     duplicate_K=duplicate_K,
-    diffusion_type='flow',  # wichtig für compute_deviation_score
+    diffusion_type=diffusion_type,  # wichtig für compute_deviation_score
     eps=1e-3,
     model='xgboost',
     max_depth=7,
@@ -165,7 +175,7 @@ def create_trained_model(n_t, duplicate_K, seed, X_train, dataset_name):
     return model, time_train
 
 
-def calculate_scores(X_test, y_test, trained_model, n_t, duplicate_K):
+def calculate_scores(X_test, y_test, trained_model, n_t, duplicate_K, diffusion_type):
     # train time, dev time, rec time
     times = []
     model, time_train = trained_model
@@ -175,6 +185,7 @@ def calculate_scores(X_test, y_test, trained_model, n_t, duplicate_K):
     start_time_dev = time.time()
     anomaly_scores_deviation = model.compute_deviation_score(
         test_samples=X_test,
+        diffusion_type=diffusion_type,
         n_t=n_t, 
         duplicate_K=duplicate_K
     )
@@ -182,10 +193,11 @@ def calculate_scores(X_test, y_test, trained_model, n_t, duplicate_K):
     time_dev = end_time_dev - start_time_dev
     times.append(time_dev)
 
-    # ---Computation reconstruction Score ---
+    #---Computation reconstruction Score ---
     start_time_rec = time.time()
     anomaly_scores_reconstruction = model.compute_reconstruction_score(
         test_samples=X_test,
+        diffusion_type=diffusion_type,
         n_t=n_t, 
         duplicate_K=duplicate_K
     )
@@ -210,16 +222,25 @@ def calculate_scores(X_test, y_test, trained_model, n_t, duplicate_K):
 
 
 if __name__ == "__main__":
-    dataset_names = [#"5_campaign.npz",
+    dataset_names = [#"5_campaign.npz"]
                      # "13_fraud.npz"]
-                      "campaign_efvfm"]
+                     #"campaign_efvfm"]
+                    "29_Pima.npz"]
+                    #"44_Wilt.npz"]
+                    #"31_satimage-2.npz"]
                      # "business_dataset_3011.csv"]
     #schleife bauen
-    supervised = [True]
-    n_t = 15  #not 1!
-    duplicate_K = 10
-    duplicate_K_scoring = 3
-    number_of_runs = 5
+    # supervised = [True]
+    # n_t = 15  #not 1!
+    # duplicate_K = 10
+    # duplicate_K_scoring = 3
+    # number_of_runs = 5
+
+    n_t = 80  #not 1!
+    duplicate_K = 30
+    duplicate_K_scoring = 30
+    number_of_runs = 1
+    diffusion_type = "vp"
 
     for dataset_name in dataset_names:
         print("\n" + "=" * 80)
@@ -249,9 +270,10 @@ if __name__ == "__main__":
                 duplicate_K=duplicate_K,
                 seed=i,
                 X_train=X_train, 
-                dataset_name=dataset_name
+                dataset_name=dataset_name,
+                diffusion_type=diffusion_type
             )
-            a_dev, ap_dev, a_rec, ap_rec, times = calculate_scores(X_test, y_test, trained_model, n_t, duplicate_K_scoring)
+            a_dev, ap_dev, a_rec, ap_rec, times = calculate_scores(X_test, y_test, trained_model, n_t, duplicate_K_scoring, diffusion_type=diffusion_type)
             print(f"Iteration {i+1} results: AUROC Deviation: {a_dev:.4f}, AUPRC Deviation: {ap_dev:.4f}, AUROC Reconstruction: {a_rec:.4f}, AUPRC Reconstruction: {ap_rec:.4f}")
             dev_auroc_list.append(a_dev)
             dev_auprc_list.append(ap_dev)

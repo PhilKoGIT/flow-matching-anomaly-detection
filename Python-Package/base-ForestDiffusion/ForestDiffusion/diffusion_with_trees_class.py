@@ -416,7 +416,7 @@ class ForestDiffusionModel():
   #-----------------------------------------------------------------------------------
 
     # - copy test sample duplicate_K times -> n_samples_rep 
-    # - for each copy sample a random noise -> build interpolation samples at each noise level -> x_t_samples_rep and calculate the true velocity v_true (rectified flow)
+    # - for each copy, sample a random noise -> build interpolation samples at each noise level -> x_t_samples_rep and calculate the true velocity v_true (rectified flow)
     # - let the model predict the velocity of every interpolation sample at every noise level for every rep_sample
     # - compute the squared error between true velocity and predicted velocity for every reconstructed sample at every noise level
     # - average over the error of all noise levels for every rep_sample -> anomaly score per rep_sample
@@ -424,8 +424,8 @@ class ForestDiffusionModel():
   #-----------------------------------------------------------------------------------
 
 
-  def compute_deviation_score(self, test_samples, n_t=None, duplicate_K=None):
-    assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
+  def compute_deviation_score(self, test_samples, diffusion_type, n_t=None, duplicate_K=None):
+   # assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
 
     if self.label_y is not None:
@@ -463,15 +463,13 @@ class ForestDiffusionModel():
         X0, 
         test_samples_rep, 
         n_t=n_t, 
-        diffusion_type="flow", 
+        diffusion_type=diffusion_type, 
         eps=self.eps, 
-        sde=None
+        sde=self.sde
     )
     anomaly_scores_rep = np.zeros(n_samples_rep)
     t_levels = np.linspace(self.eps, 1, n_t)
-#!!!!!!!!!!
-  #unsicher ob das so sinn macht oder nicht t_levels[:-1] nehmen
-  #!!!!!
+
     for i, t in enumerate(t_levels):
         #for all test_samples_rep get the samples at the same noise level t
         start_idx = i * n_samples_rep
@@ -505,8 +503,8 @@ class ForestDiffusionModel():
 
     ######################################
 
-  def compute_reconstruction_score(self, test_samples, n_t=None, duplicate_K = None):
-    assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
+  def compute_reconstruction_score(self, test_samples, diffusion_type, n_t=None, duplicate_K = None):
+    #assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
 
     if self.label_y is not None:
@@ -550,9 +548,9 @@ class ForestDiffusionModel():
         X0, 
         test_samples_rep, 
         n_t=n_t, 
-        diffusion_type="flow", 
+        diffusion_type=diffusion_type, 
         eps=self.eps, 
-        sde=None
+        sde=self.sde
     )
     #initialise anomaly scores for every replicated test sample
     anomaly_scores_rep = np.zeros(n_samples_rep)
