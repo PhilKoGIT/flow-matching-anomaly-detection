@@ -81,7 +81,7 @@ class TCCM:
 
     #----------------------------------------------------------------------------
 
-    
+    #just let the point from the original follow the flow and measure the distance at the end
     def compute_reconstruction_score(self, X_test, n_t):
         """
         Reconstruction Score 

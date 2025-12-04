@@ -427,6 +427,7 @@ class ForestDiffusionModel():
   def compute_deviation_score(self, test_samples, diffusion_type, n_t=None, duplicate_K_test=None):
    # assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
+    assert self.diffusion_type == diffusion_type, "Diffusion type must be the same as the trained model"
 
     if self.label_y is not None:
         raise Exception("Anomaly score only for unsupervised learning")
@@ -507,6 +508,8 @@ class ForestDiffusionModel():
   def compute_reconstruction_score(self, test_samples, diffusion_type, n_t=None, duplicate_K_test = None):
     #assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
+    assert self.diffusion_type == diffusion_type, "Diffusion type must be the same as the trained model"
+
 
     if self.label_y is not None:
         raise Exception("Anomaly score only for unsupervised learning")
@@ -587,17 +590,17 @@ class ForestDiffusionModel():
     return anomaly_scores  # [n_samples]
 
 # ============================================================================
-# compute_decision_score
+# compute_last_deviation_score
 # ============================================================================
   #-----------------------------------------------------------------------------------
-  # same as deviation score but use sum of errors instead of sum of squared errors
-  #  and only consider the last noise level t=1
+  # same as deviation score but only considers the last noise level t = 1 , and inspired from decision function of tccm
 
   #-----------------------------------------------------------------------------------
 
 
   def compute_decision_score(self, test_samples, diffusion_type, n_t=None, duplicate_K_test=None):
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
+    assert self.diffusion_type == diffusion_type, "Diffusion type must be the same as the trained model"
 
     if self.label_y is not None:
         raise Exception("Anomaly score only for unsupervised learning")
@@ -642,17 +645,18 @@ class ForestDiffusionModel():
     t_levels = np.linspace(self.eps, 1, n_t)
 
     #only the last noise level t=1 is considered
-    for i, t in enumerate([1]):
-        #for all test_samples_rep get the samples at the same noise level t
-        start_idx = i * n_samples_rep
-        end_idx = (i + 1) * n_samples_rep
-        X_t = x_t_samples_rep[start_idx:end_idx, :]
-        #predict velocity with the model for all test_samples_rep at noise level t
-        v_pred_t = model(t=t, y=X_t)
-        #calculate squared error between true velocity and predicted velocity
-        error = np.sum((v_true - v_pred_t), axis=1)
-        #sum the squared error for every noise level of one rep_sample
-        anomaly_scores_rep += error
+        #for all test_samples_rep get the samples at the same noise level t (here its the last one)
+    start_idx = (n_t-1) * n_samples_rep
+    end_idx = n_t * n_samples_rep
+    X_t = x_t_samples_rep[start_idx:end_idx, :]
+    #predict velocity with the model for all test_samples_rep at noise level t
+    v_pred_t = model(t=1, y=X_t)
+    #calculate sum of squared error between true velocity and predicted velocity
+    squared_error = np.sum((v_true - v_pred_t) ** 2, axis=1)
+
+    #sum the squared error for every noise level of one rep_sample
+    anomaly_scores_rep += squared_error
+
     # average over all noise levels
     anomaly_scores_rep = anomaly_scores_rep / n_t  
     #group again for each test sample
@@ -660,8 +664,158 @@ class ForestDiffusionModel():
     #average over all test_samples_rep for one test sample
     anomaly_scores = anomaly_scores_rep.mean(axis=0)  
     return anomaly_scores  
+  
+  # ============================================================================
+# compute_deviation_score_vp
+# ============================================================================
+
+  def compute_deviation_score_vp(self, test_samples, n_t, duplicate_K_test, diffusion_type):
+      """
+      Deviation Score für VP Diffusion.
+      
+      Vergleicht die vorhergesagte Score-Function mit der wahren Score-Function
+      über alle Zeitschritte.
+      """
+      assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
+      assert self.diffusion_type == 'vp', "This function is only for VP diffusion"
+
+      if self.label_y is not None:
+          raise Exception("Anomaly score only for unsupervised learning")
+      
+      if n_t is None:
+          n_t = self.n_t
+      if duplicate_K_test is None:
+          duplicate_K_test = 1
+          
+      if len(self.cat_indexes) > 0:
+          test_samples, column_names_before, column_names_after = self.dummify(test_samples)
+      test_samples = self.scaler.transform(test_samples)
+      
+      n_samples = test_samples.shape[0]
+      n_features = test_samples.shape[1]
+
+      # Duplicate test samples
+      test_samples_rep = np.tile(test_samples, (duplicate_K_test, 1))
+      n_samples_rep = test_samples_rep.shape[0]
+
+      # Create mask for unsupervised (label_y = None)
+      mask_y = {0: np.ones(n_samples_rep, dtype=bool)}
+
+      # Partial model
+      model = partial(
+          self.my_model,
+          mask_y=mask_y,
+          dmat=self.n_batch > 0,
+          unflatten=False,
+          X_covs=None
+      )
+      
+      # Sample random noise for each test_sample_rep
+      X0 = np.random.normal(size=test_samples_rep.shape)
+      
+      anomaly_scores_rep = np.zeros(n_samples_rep)
+      t_levels = np.linspace(self.eps, 1 - self.eps, n_t)  # Avoid t=1 for numerical stability
+
+      for i, t in enumerate(t_levels):
+          # Create x_t using VP forward process: x_t = mean + std * noise
+          mean, std = self.sde.marginal_prob(test_samples_rep, t)
+          X_t = mean + std * X0
+          
+          # Model predicts score function (my_model already does -eps/sigma transformation)
+          score_pred = model(t=t, y=X_t)
+          
+          # True score function: s(x_t, t) = -noise / sigma(t)
+          _, sigma_ = self.sde.marginal_prob_coef(X_t, t)
+          score_true = -X0 / sigma_
+          
+          # Squared error between true and predicted score
+          squared_error = np.sum((score_true - score_pred) ** 2, axis=1)
+          anomaly_scores_rep += squared_error
+
+      # Average over all noise levels
+      anomaly_scores_rep = anomaly_scores_rep / n_t
+      
+      # Group again for each test sample
+      anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K_test, n_samples)
+      
+      # Average over all duplicate_K_test copies
+      anomaly_scores = anomaly_scores_rep.mean(axis=0)
+      
+      return anomaly_scores
 
 
+  # ============================================================================
+  # compute_decision_score_vp
+  # ============================================================================
+
+  def compute_decision_score_vp(self, test_samples, n_t , duplicate_K_test, diffusion_type):
+      """
+      Decision Score für VP Diffusion.
+      
+      Wie Deviation Score, aber nur am letzten Zeitschritt (t nahe 1),
+      inspiriert von TCCM decision function.
+      """
+      assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
+      assert self.diffusion_type == 'vp', "This function is only for VP diffusion"
+
+      if self.label_y is not None:
+          raise Exception("Anomaly score only for unsupervised learning")
+      
+      if n_t is None:
+          n_t = self.n_t
+      if duplicate_K_test is None:
+          duplicate_K_test = 1
+          
+      if len(self.cat_indexes) > 0:
+          test_samples, column_names_before, column_names_after = self.dummify(test_samples)
+      test_samples = self.scaler.transform(test_samples)
+      
+      n_samples = test_samples.shape[0]
+      n_features = test_samples.shape[1]
+
+      # Duplicate test samples
+      test_samples_rep = np.tile(test_samples, (duplicate_K_test, 1))
+      n_samples_rep = test_samples_rep.shape[0]
+
+      # Create mask for unsupervised (label_y = None)
+      mask_y = {0: np.ones(n_samples_rep, dtype=bool)}
+
+      # Partial model
+      model = partial(
+          self.my_model,
+          mask_y=mask_y,
+          dmat=self.n_batch > 0,
+          unflatten=False,
+          X_covs=None
+      )
+      
+      # Sample random noise for each test_sample_rep
+      X0 = np.random.normal(size=test_samples_rep.shape)
+      
+      # Only evaluate at t close to 1 (almost pure data, minimal noise)
+      t = 1.0 - self.eps
+      
+      # Create x_t using VP forward process
+      mean, std = self.sde.marginal_prob(test_samples_rep, t)
+      X_t = mean + std * X0
+      
+      # Model predicts score function
+      score_pred = model(t=t, y=X_t)
+      
+      # True score function
+      _, sigma_ = self.sde.marginal_prob_coef(X_t, t)
+      score_true = -X0 / sigma_
+      
+      # Squared error between true and predicted score
+      anomaly_scores_rep = np.sum((score_true - score_pred) ** 2, axis=1)
+      
+      # Group again for each test sample
+      anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K_test, n_samples)
+      
+      # Average over all duplicate_K_test copies
+      anomaly_scores = anomaly_scores_rep.mean(axis=0)
+      
+      return anomaly_scores
 
 
 

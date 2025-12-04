@@ -170,7 +170,7 @@ def create_ForestDiffusionModel(n_t, duplicate_K, seed, X_train, dataset_name, d
     return model, time_train
 
 
-def calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t, duplicate_K, diffusion_type):
+def calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t, duplicate_K_test, diffusion_type):
     # train time, dev time, rec time
     # ---Computation deviation Score ---
     print(f"\n--- Computing Deviation Score (n_t={n_t}) ---")
@@ -179,7 +179,7 @@ def calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t, duplicate_
         test_samples=X_test,
         diffusion_type=diffusion_type,
         n_t=n_t, 
-        duplicate_K=duplicate_K
+        duplicate_K_test=duplicate_K_test
     )
     end_time_deviation = time.time()
     time_deviation = end_time_deviation - start_time_deviation
@@ -197,7 +197,7 @@ def calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t, duplicate_
         test_samples=X_test,
         diffusion_type=diffusion_type,
         n_t=n_t, 
-        duplicate_K=duplicate_K
+        duplicate_K_test=duplicate_K_test
     )
     end_time_reconstruction = time.time()
     time_reconstruction = end_time_reconstruction - start_time_reconstruction
@@ -214,7 +214,7 @@ def calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t, duplicate_
         test_samples=X_test,
         diffusion_type=diffusion_type,
         n_t=n_t, 
-        duplicate_K=duplicate_K
+        duplicate_K_test=duplicate_K_test
     )
     end_time_decision = time.time()
     time_decision = end_time_decision - start_time_decision

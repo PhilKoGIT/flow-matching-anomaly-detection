@@ -67,6 +67,8 @@ def load_adbench_npz(dataset_name, test_size=0.5, random_state=42):
 # # ============================================================================
 
 
+
+
 def create_ForestDiffusionModel(n_t, duplicate_K, seed, X_train, dataset_name, diffusion_type):
     start_time_train = time.time()
     model = ForestDiffusionModel(
@@ -100,36 +102,55 @@ def create_ForestDiffusionModel(n_t, duplicate_K, seed, X_train, dataset_name, d
     return model, time_train
 
 
-def calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t, duplicate_K_test, diffusion_type, score_type):
+def calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t, duplicate_K_test, diffusion_type, score):
 
-    if score_type == "deviation":
-        anomaly_scores_deviation = model.compute_deviation_score(
-            test_samples=X_test,
-            diffusion_type=diffusion_type,
-            n_t=n_t, 
-            duplicate_K_test=duplicate_K_test
-        )
+    if score == "deviation":
+        if diffusion_type == "flow":
+            anomaly_scores_deviation = model.compute_deviation_score(
+                test_samples=X_test,
+                diffusion_type=diffusion_type,
+                n_t=n_t, 
+                duplicate_K_test=duplicate_K_test
+            )
+        elif diffusion_type == "vp":
+            anomaly_scores_deviation = model.compute_deviation_score(
+                X_test, 
+                n_t=n_t, 
+                duplicate_K_test=duplicate_K_test, 
+                diffusion_type=diffusion_type
+            )
         return anomaly_scores_deviation
 
-    elif score_type == "reconstruction":
-        anomaly_scores_reconstruction = model.compute_reconstruction_score(
-            test_samples=X_test,
-            diffusion_type=diffusion_type,
-            n_t=n_t, 
-            duplicate_K_test=duplicate_K_test
-        )
+    elif score == "reconstruction":
+        if diffusion_type == "flow":
+            anomaly_scores_reconstruction = model.compute_reconstruction_score(
+                test_samples=X_test,
+                diffusion_type=diffusion_type,
+                n_t=n_t, 
+                duplicate_K_test=duplicate_K_test
+            )
+        else: 
+            raise ValueError("Reconstruction score is only implemented for diffusion.")
         return anomaly_scores_reconstruction
-    elif score_type == "decision":
-        anomaly_scores_decision = model.compute_decision_score(
-            test_samples=X_test,
-            diffusion_type=diffusion_type,
-            n_t=n_t, 
-            duplicate_K_test=duplicate_K_test
-        )
+    elif score == "decision":
+        if diffusion_type == "flow":
+            anomaly_scores_decision = model.compute_decision_score(
+                test_samples=X_test,
+                diffusion_type=diffusion_type,
+                n_t=n_t, 
+                duplicate_K_test=duplicate_K_test
+            )
+        elif diffusion_type == "vp":
+            anomaly_scores_decision = model.compute_decision_score_vp(
+                test_samples=X_test,
+                diffusion_type=diffusion_type,
+                n_t=n_t, 
+                duplicate_K_test=duplicate_K_test
+            )
         return anomaly_scores_decision
     
     else: 
-        raise ValueError(f"Unknown score type: {score_type}")
+        raise ValueError(f"Unknown score type: {score}")
 
 
 #noch mit binary, float etc. machen, als parameter übergeben!!!
@@ -178,30 +199,24 @@ def create_trained_tccm_model(X_train, dataset_name, seed):
 
 
 
-def calculate_tccm_scores(X_test, y_test, model, n_t, score_type):
-    """
-
-    """
-
+def calculate_tccm_scores(X_test, y_test, model, n_t, score):
     # --- Score 1: Decision Function  ---
-    if score_type == "decision":
+    if score == "decision":
         anomaly_scores_decision = model.decision_function(X_test)
         return anomaly_scores_decision
 
-        
     # --- Score 2: Deviation Score  ---
-    elif score_type == "deviation":
+    elif score == "deviation":
         anomaly_scores_deviation = model.compute_deviation_score(X_test, n_t=n_t)
         return anomaly_scores_deviation
-  
         
     # --- Score 3: Reconstruction Score  ---
-    elif score_type == "reconstruction":
+    elif score == "reconstruction":
         anomaly_scores_reconstruction = model.compute_reconstruction_score(X_test, n_t = n_t)
         return anomaly_scores_reconstruction
     
     else: 
-        raise ValueError(f"Unknown score type: {score_type}")
+        raise ValueError(f"Unknown score type: {score}")
 
 
 # # ============================================================================
@@ -269,25 +284,16 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
                         dataset_name=f"{dataset_name}_{model_name}",
                         diffusion_type=p["diffusion_type"]
                     )
-
-                    if score == "decision":
-                        scores = calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t=p["n_t"], duplicate_K_test=p["duplicate_K_test"], diffusion_type=p["diffusion_type"], score_type="decision")
-                    elif score == "deviation":
-                        scores = calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t=p["n_t"], duplicate_K_test=p["duplicate_K_test"], diffusion_type=p["diffusion_type"], score_type="deviation")
-                    elif score == "reconstruction":
-                        scores = calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t=p["n_t"], duplicate_K_test=p["duplicate_K_test"], diffusion_type=p["diffusion_type"], score_type="reconstruction")
+                    scores = calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t=p["n_t"], duplicate_K_test=p["duplicate_K_test"], diffusion_type=p["diffusion_type"], score=score)
+ 
                 if model_cnf["type"] == "tccm":
                     model, _ = create_trained_tccm_model(
                         X_train=X_train,
                         dataset_name=f"{dataset_name}_{model_name}",
                         seed=seed
                     )
-                    if score == "deviation":
-                        scores = calculate_tccm_scores(X_test, y_test, model, n_t=p["n_t"], score_type="deviation")
-                    elif score == "decision":
-                        scores = calculate_tccm_scores(X_test, y_test, model, n_t=p["n_t"], score_type="decision")
-                    elif score == "reconstruction":
-                        scores = calculate_tccm_scores(X_test, y_test, model, n_t=p["n_t"], score_type="reconstruction")
+                    scores = calculate_tccm_scores(X_test, y_test, model, n_t=p["n_t"], score=score)
+
 
                 auc = roc_auc_score(y_test, scores)
                 pr = average_precision_score(y_test, scores)
@@ -356,16 +362,24 @@ def plot_training_contamination_ablation_dynamic(results, contamination_levels_d
 
 
 
-# Plot-Typ 1: Pro Modell alle Scores vergleichen (AUROC und AUPRC getrennt)
-def plot_model_scores_comparison(all_results, model_name, metric="auroc"):
+def plot_model_scores_comparison(all_results, model_name, metric, dataset_names):
     """
     Zeigt für EIN Modell alle 3 Scores auf allen Datasets
     metric: "auroc" oder "auprc"
     """
+    # Diese Zeile fehlte!
     fig, axs = plt.subplots(1, len(dataset_names), figsize=(14, 5))
-    scores = ["deviation", "reconstruction", "decision"]
-    colors = {"deviation": "blue", "reconstruction": "green", "decision": "red"}
     
+    first_dataset = dataset_names[0]
+    scores = list(all_results[first_dataset][model_name].keys())
+    
+    # Definiere Farben für alle möglichen Scores
+    colors = {
+        "deviation": "blue", 
+        "reconstruction": "green", 
+        "decision": "red"
+    }
+
     for idx, dataset_name in enumerate(dataset_names):
         ax = axs[idx] if len(dataset_names) > 1 else axs
         
@@ -393,20 +407,23 @@ def plot_model_scores_comparison(all_results, model_name, metric="auroc"):
     plt.show()
 
 
-# Plot-Typ 2: Pro Score alle Modelle vergleichen (AUROC und AUPRC getrennt)
-def plot_score_models_comparison(all_results, score, metric="auroc"):
+def plot_score_models_comparison(all_results, score, metric, dataset_names):
     """
     Zeigt für EINEN Score alle Modelle auf allen Datasets
     metric: "auroc" oder "auprc"
     """
     fig, axs = plt.subplots(1, len(dataset_names), figsize=(14, 5))
     model_names = list(all_results[dataset_names[0]].keys())
-    colors = {"ForestDiffusion": "blue", "ForestFlow": "green", "TCCM": "red"}
+    colors = {"ForestFlow_1": "blue", "ForestFlow_2": "green", "TCCM": "red"}
     
     for idx, dataset_name in enumerate(dataset_names):
         ax = axs[idx] if len(dataset_names) > 1 else axs
         
         for model_name in model_names:
+            # Prüfe ob dieser Score für dieses Modell existiert
+            if score not in all_results[dataset_name][model_name]:
+                print(f"Skipping {model_name} for score '{score}' (not available)")
+                continue
             data = all_results[dataset_name][model_name][score]
             contam_levels = data["contamination_levels"]
             values = np.array(data[metric])
@@ -433,30 +450,34 @@ def plot_score_models_comparison(all_results, score, metric="auroc"):
 
 if __name__ == "__main__":
     dataset_names = ["29_Pima.npz"]
+                    #["5_campaign.npz"]
                      #"18_Ionosphere.npz"]
+
+
+    #attention with the names!
     models_to_run = {
-        "ForestDiffusion": {
+        "ForestFlow_1": {
+            "type": "forest",
+            "params": {
+                "n_t": 20,
+                "duplicate_K": 20,
+                "duplicate_K_test": 20,
+                "diffusion_type": "flow"
+            }
+        },
+        "ForestFlow_2": {
             "type": "forest",
             "params": {
                 "n_t": 10,
-                "duplicate_K": 2,
-                "duplicate_K_test": 2,
-                "diffusion_type": "vp"
-            }
-        },
-        "ForestFlow": {
-            "type": "forest",
-            "params": {
-                "n_t": 5,
-                "duplicate_K": 2,
-                "duplicate_K_test": 2,
+                "duplicate_K": 30,
+                "duplicate_K_test": 30,
                 "diffusion_type": "flow"
             }
         },
         "TCCM": {
             "type": "tccm",
             "params": {
-                "n_t": 100   # only used for scoring functions
+                "n_t": 400   # only used for scoring functions
             }
         }
     }   
@@ -465,25 +486,38 @@ if __name__ == "__main__":
     #         results, contamination_levels = run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names, model)
     #         results
     #         plot_training_contamination_ablation_dynamic(results, contamination_levels, model_name=model[0], score=score)
-all_results_combined = {}
+    all_results_combined = {}
 
-for model in models_to_run.items():
-    model_name = model[0]
+    for model_name, model_config in models_to_run.items():
+        model_type = model_config["type"]
+        params = model_config["params"]       
+        if model_type == "forest":
+            if params["diffusion_type"] == "vp":
+                score_list = ["deviation", "decision"]
+            elif params["diffusion_type"] == "flow":
+                score_list = ["deviation", "reconstruction", "decision"]
+            else:
+                score_list = ["deviation", "reconstruction", "decision"]  
+        elif model_type == "tccm":
+            score_list = ["deviation", "reconstruction", "decision"]
+        else:
+            raise ValueError(f"Unknown model type: {model_type}")
+
+        for score in score_list:
+            results = run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names, (model_name, model_config) )
+            for dataset_name, data in results.items():
+                if dataset_name not in all_results_combined:
+                    all_results_combined[dataset_name] = {}
+                if model_name not in all_results_combined[dataset_name]:
+                    all_results_combined[dataset_name][model_name] = {}
+                all_results_combined[dataset_name][model_name][score] = data
+    for model_name in models_to_run.keys():
+        plot_model_scores_comparison(all_results_combined, model_name, metric="auroc", dataset_names=dataset_names)
+        plot_model_scores_comparison(all_results_combined, model_name, metric="auprc", dataset_names=dataset_names)
+
     for score in ["deviation", "reconstruction", "decision"]:
-        results = run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names, model)
-        for dataset_name, data in results.items():
-            if dataset_name not in all_results_combined:
-                all_results_combined[dataset_name] = {}
-            if model_name not in all_results_combined[dataset_name]:
-                all_results_combined[dataset_name][model_name] = {}
-            all_results_combined[dataset_name][model_name][score] = data
-for model_name in models_to_run.keys():
-    plot_model_scores_comparison(all_results_combined, model_name, metric="auroc")
-    plot_model_scores_comparison(all_results_combined, model_name, metric="auprc")
-
-for score in ["deviation", "reconstruction", "decision"]:
-    plot_score_models_comparison(all_results_combined, score, metric="auroc")
-    plot_score_models_comparison(all_results_combined, score, metric="auprc")
+        plot_score_models_comparison(all_results_combined, score, metric="auroc", dataset_names=dataset_names)
+        plot_score_models_comparison(all_results_combined, score, metric="auprc", dataset_names=dataset_names)
 
 
 
