@@ -364,7 +364,7 @@ if __name__ == "__main__":
 
     dataset_names = {
         "Campaign_noefvfm":{
-            "file": "5_campaign.npz",
+            "file": "29_Pima.npz",
             "semi_supervised": True,
         }
         #"Fraud":{
@@ -403,6 +403,16 @@ if __name__ == "__main__":
 
     for dataset_name, dataset_info in dataset_names.items():
 
+#-------------------------
+
+
+#diffusion model don't have the new scoring functions!!!
+
+
+
+
+
+#-------------------------
         X_train, X_test, y_test = load_dataset(dataset_info["file"], semi_supervised=dataset_info["semi_supervised"])
         dataset_results = {}
 

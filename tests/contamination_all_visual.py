@@ -28,7 +28,6 @@ if str(project_root_dir) not in sys.path:
 from TCCM.FlowMatchingAD import TCCM
 from TCCM.functions import determine_FMAD_hyperparameters
 
-percentiles = [70, 80, 90, 95, 97.5, 99]
 
 # # ============================================================================
 # # adapted/copied from https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
@@ -221,13 +220,14 @@ def calculate_tccm_scores(X_test, y_test, model, n_t, score):
 
 
 # # ============================================================================
-# # based on https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/AblationStudies.py
+# # adapted (then extended) from https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/AblationStudies.py
 # # ============================================================================
 
 #extended to safing the results for the extreme cases (0% and max contamination)
 
 def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names, model):
-    seed_list = [0, 1, 2, 3, 4]
+    #seed_list = [0, 1, 2, 3, 4]
+    seed_list = [1,2,3]
     all_results = {}
     all_contam_levels = {}
 
@@ -405,7 +405,7 @@ def plot_training_contamination_ablation_dynamic(results, contamination_levels_d
 #needed for theshold metrics safing for extreme cases
 def compute_threshold_metrics(anomaly_scores, y_test):
     """Berechnet Metriken für verschiedene Threshold-Percentiles"""
-    thresholds_percentiles = percentiles
+    thresholds_percentiles = [70, 80, 90, 95, 97.5, 99]
     results = {
         "percentile_metrics": {},
         "best_f1": 0,
@@ -442,6 +442,10 @@ def compute_threshold_metrics(anomaly_scores, y_test):
             results["best_percentile"] = percentile
     
     return results
+
+
+
+
 
 
 
@@ -513,7 +517,7 @@ def aggregate_extreme_cases(extreme_cases_data):
             
             # Aggregiere Threshold-Metriken
             aggregated_thresholds = {}
-            for percentile in percentiles:
+            for percentile in [70, 80, 90, 95, 97.5, 99]:
                 f1s = [t["percentile_metrics"][percentile]["f1"] for t in threshold_list]
                 precisions = [t["percentile_metrics"][percentile]["precision"] for t in threshold_list]
                 recalls = [t["percentile_metrics"][percentile]["recall"] for t in threshold_list]
@@ -580,34 +584,175 @@ def plot_score_models_comparison(all_results, score, metric, dataset_names):
     plt.savefig(f"./results_ablation/all_models_{score}_{metric}.pdf")
     plt.show()
 
+def plot_extreme_cases_comparison(all_extreme_cases, dataset_name, metric="f1"):
+    """Vergleicht no_contamination vs full_contamination für alle Scores"""
+    
+    fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+    percentiles = [70, 80, 90, 95, 97.5, 99]
+    
+    for idx, (model_name, scores_data) in enumerate(all_extreme_cases.items()):
+        for score_idx, (score, datasets) in enumerate(scores_data.items()):
+            ax = axes[score_idx]
+            
+            metrics_no = datasets[dataset_name]["no_contamination"]["threshold_metrics"]
+            metrics_full = datasets[dataset_name]["full_contamination"]["threshold_metrics"]
+            
+            values_no = [metrics_no[p][f"{metric}_mean"] for p in percentiles]
+            stds_no = [metrics_no[p][f"{metric}_std"] for p in percentiles]
+            
+            values_full = [metrics_full[p][f"{metric}_mean"] for p in percentiles]
+            stds_full = [metrics_full[p][f"{metric}_std"] for p in percentiles]
+            
+            x = np.arange(len(percentiles))
+            width = 0.35
+            
+            ax.bar(x - width/2, values_no, width, label='No Contamination', 
+                   yerr=stds_no, capsize=3, color='steelblue')
+            ax.bar(x + width/2, values_full, width, label='Full Contamination', 
+                   yerr=stds_full, capsize=3, color='coral')
+            
+            ax.set_xlabel('Percentile')
+            ax.set_ylabel(metric.upper())
+            ax.set_title(f'{score.capitalize()} Score')
+            ax.set_xticks(x)
+            ax.set_xticklabels(percentiles)
+            ax.legend()
+            ax.set_ylim(0, 0.6)
+            ax.grid(axis='y', alpha=0.3)
+    
+    plt.suptitle(f'{dataset_name} - {metric.upper()} by Percentile Threshold', fontsize=14)
+    plt.tight_layout()
+    plt.savefig(f"./results_ablation/extreme_comparison_{metric}.pdf")
+    plt.show()
+
+def plot_precision_recall_tradeoff(all_extreme_cases, dataset_name):
+    """Zeigt Precision vs Recall für verschiedene Thresholds"""
+    
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+    
+    for model_name, scores_data in all_extreme_cases.items():
+        for case_idx, case_key in enumerate(["no_contamination", "full_contamination"]):
+            ax = axes[case_idx]
+            
+            for score, datasets in scores_data.items():
+                metrics = datasets[dataset_name][case_key]["threshold_metrics"]
+                
+                precisions = [metrics[p]["precision_mean"] for p in [70, 80, 90, 95, 97.5, 99]]
+                recalls = [metrics[p]["recall_mean"] for p in [70, 80, 90, 95, 97.5, 99]]
+                
+                ax.plot(recalls, precisions, marker='o', label=score, markersize=8)
+                
+                # Annotate mit Percentilen
+                for i, p in enumerate([70, 80, 90, 95, 97.5, 99]):
+                    ax.annotate(f'{p}', (recalls[i], precisions[i]), 
+                               textcoords="offset points", xytext=(5,5), fontsize=8)
+            
+            ax.set_xlabel('Recall')
+            ax.set_ylabel('Precision')
+            ax.set_title(f'{case_key.replace("_", " ").title()}')
+            ax.legend()
+            ax.set_xlim(0, 0.5)
+            ax.set_ylim(0.2, 0.7)
+            ax.grid(True, alpha=0.3)
+    
+    plt.suptitle(f'{dataset_name} - Precision-Recall Tradeoff', fontsize=14)
+    plt.tight_layout()
+    plt.savefig(f"./results_ablation/precision_recall_tradeoff.pdf")
+    plt.show()
+
+
+def plot_score_comparison(all_extreme_cases, dataset_name):
+    """Vergleicht alle 3 Scores nebeneinander"""
+    
+    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+    
+    for model_name, scores_data in all_extreme_cases.items():
+        for case_idx, case_key in enumerate(["no_contamination", "full_contamination"]):
+            ax = axes[case_idx]
+            
+            scores = list(scores_data.keys())
+            x = np.arange(3)  # AUC, AUPRC, Best F1
+            width = 0.25
+            
+            for i, score in enumerate(scores):
+                data = scores_data[score][dataset_name][case_key]
+                
+                values = [
+                    data["auc_mean"],
+                    data["auprc_mean"],
+                    max(data["threshold_metrics"].items(), key=lambda x: x[1]["f1_mean"])[1]["f1_mean"]
+                ]
+                stds = [
+                    data["auc_std"],
+                    data["auprc_std"],
+                    max(data["threshold_metrics"].items(), key=lambda x: x[1]["f1_mean"])[1]["f1_std"]
+                ]
+                
+                ax.bar(x + i*width, values, width, label=score, yerr=stds, capsize=3)
+            
+            ax.set_ylabel('Score')
+            ax.set_title(f'{case_key.replace("_", " ").title()}')
+            ax.set_xticks(x + width)
+            ax.set_xticklabels(['AUC', 'AUPRC', 'Best F1'])
+            ax.legend()
+            ax.set_ylim(0, 1)
+            ax.grid(axis='y', alpha=0.3)
+    
+    plt.suptitle(f'{dataset_name} - Score Comparison', fontsize=14)
+    plt.tight_layout()
+    plt.savefig(f"./results_ablation/score_comparison.pdf")
+    plt.show()
+
+
+def plot_f1_heatmap(all_extreme_cases, dataset_name):
+    """Heatmap: Scores x Percentiles für beide Cases"""
+    
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+    percentiles = [90, 95, 97.5, 99, 99.5, 99.9]
+    
+    for model_name, scores_data in all_extreme_cases.items():
+        for case_idx, case_key in enumerate(["no_contamination", "full_contamination"]):
+            ax = axes[case_idx]
+            
+            scores = list(scores_data.keys())
+            data_matrix = []
+            
+            for score in scores:
+                metrics = scores_data[score][dataset_name][case_key]["threshold_metrics"]
+                row = [metrics[p]["f1_mean"] for p in percentiles]
+                data_matrix.append(row)
+            
+            im = ax.imshow(data_matrix, cmap='RdYlGn', aspect='auto', vmin=0, vmax=0.5)
+            
+            ax.set_xticks(range(len(percentiles)))
+            ax.set_xticklabels(percentiles)
+            ax.set_yticks(range(len(scores)))
+            ax.set_yticklabels(scores)
+            ax.set_xlabel('Percentile')
+            ax.set_ylabel('Score Type')
+            ax.set_title(f'{case_key.replace("_", " ").title()}')
+            
+            # Werte in Zellen
+            for i in range(len(scores)):
+                for j in range(len(percentiles)):
+                    ax.text(j, i, f'{data_matrix[i][j]:.3f}', ha='center', va='center', fontsize=9)
+            
+            plt.colorbar(im, ax=ax, label='F1 Score')
+    
+    plt.suptitle(f'{dataset_name} - F1 Score Heatmap', fontsize=14)
+    plt.tight_layout()
+    plt.savefig(f"./results_ablation/f1_heatmap.pdf")
+    plt.show()
 
 
 if __name__ == "__main__":
     dataset_names = ["29_Pima.npz"]
 
     models_to_run = {
-        "ForestFlow_1": {
-            "type": "forest",
-            "params": {
-                "n_t": 2,
-                "duplicate_K": 2,
-                "duplicate_K_test": 2,
-                "diffusion_type": "flow"
-            }
-        },
-        "ForestDiffusion_1": {
-            "type": "forest",
-            "params": {
-                "n_t": 50,
-                "duplicate_K": 2,
-                "duplicate_K_test": 2,
-                "diffusion_type": "vp"
-            }
-        },
         "TCCM": {
             "type": "tccm",
             "params": {
-                "n_t": 4
+                "n_t": 200
             }
         }
     }
@@ -684,7 +829,12 @@ if __name__ == "__main__":
                     best_p = max(metrics['threshold_metrics'].items(), 
                                 key=lambda x: x[1]['f1_mean'])
                     print(f"\n    ✓ Best F1: {best_p[1]['f1_mean']:.4f} @ {best_p[0]}th percentile")
-
+    plot_extreme_cases_comparison(all_extreme_cases, dataset_names[0], metric="f1")
+    plot_extreme_cases_comparison(all_extreme_cases, dataset_names[0], metric="precision")
+    plot_extreme_cases_comparison(all_extreme_cases, dataset_names[0], metric="recall")
+    plot_precision_recall_tradeoff(all_extreme_cases, dataset_names[0])
+    plot_score_comparison(all_extreme_cases, dataset_names[0])
+    plot_f1_heatmap(all_extreme_cases, dataset_names[0])
 
 
 
