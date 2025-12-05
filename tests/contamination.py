@@ -28,7 +28,7 @@ if str(project_root_dir) not in sys.path:
 from TCCM.FlowMatchingAD import TCCM
 from TCCM.functions import determine_FMAD_hyperparameters
 
-percentiles = [70, 80, 90, 95, 97.5, 99]
+percentiles = [60, 50, 70, 80, 90, 95, 97.5, 99]
 
 # # ============================================================================
 # # adapted/copied from https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
@@ -227,13 +227,13 @@ def calculate_tccm_scores(X_test, y_test, model, n_t, score):
 #extended to safing the results for the extreme cases (0% and max contamination)
 
 def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names, model):
-    seed_list = [0, 1, 2, 3, 4]
+    #seed_list = [0, 1]
+    seed_list = [0,1]
     all_results = {}
     all_contam_levels = {}
 
     #safe for all maximum contamination levels for each dataset and for zero contamination
     extreme_cases_data = {}
-
 
     model_name = model[0]
     model_cnf = model[1]
@@ -358,51 +358,11 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
     #all_contam_levels contains the contamination levels used for each dataset
     return all_results, all_contam_levels, extreme_cases_data
 
-
-# Create the line plots
-def plot_training_contamination_ablation_dynamic(results, contamination_levels_dict, model_name, score):
-    fig, axs = plt.subplots(2, 4, figsize=(28, 10), sharey=True)
-    dataset_list = list(results.keys())
-
-    for i, dataset_name in enumerate(dataset_list):
-        row, col = divmod(i, 4)
-        ax = axs[row][col]
-
-        auroc = np.array(results[dataset_name]["auroc"])
-        auprc = np.array(results[dataset_name]["auprc"])
-        contam_levels = contamination_levels_dict[dataset_name]
-
-        ax.plot(contam_levels, auroc[:, 0], label="AUROC", color="blue", marker='o')
-        ax.fill_between(contam_levels,
-                        auroc[:, 0] - auroc[:, 1],
-                        auroc[:, 0] + auroc[:, 1],
-                        color="blue", alpha=0.2)
-
-        ax.plot(contam_levels, auprc[:, 0], label="AUPRC", color="red", marker='s')
-        ax.fill_between(contam_levels,
-                        auprc[:, 0] - auprc[:, 1],
-                        auprc[:, 0] + auprc[:, 1],
-                        color="red", alpha=0.2)
-
-        ax.set_title(dataset_name)
-        ax.set_xlabel("Abnormal Ratio in Training Set")
-        ax.set_ylim(0, 1.05)
-        ax.grid(True)
-
-        if col == 0:
-            ax.set_ylabel("Accuracy Score")
-
-    axs[0][3].legend(loc="upper center", bbox_to_anchor=(1.15, 1.1), fontsize="large")
-    plt.tight_layout()
-    os.makedirs("./results_ablation/", exist_ok=True)
-    plt.savefig(f"./results_ablation/{model_name}_{score}.pdf")
-    plt.show()
-
 # # ============================================================================
 # #  oben drüber wichtig!!!!!!!
 # # ============================================================================
 
-#needed for theshold metrics safing for extreme cases
+#needed for theshold metrics saving for extreme cases
 def compute_threshold_metrics(anomaly_scores, y_test):
     """Berechnet Metriken für verschiedene Threshold-Percentiles"""
     thresholds_percentiles = percentiles
@@ -583,15 +543,16 @@ def plot_score_models_comparison(all_results, score, metric, dataset_names):
 
 
 if __name__ == "__main__":
+    #dataset_names = ["29_Pima.npz"]
     dataset_names = ["29_Pima.npz"]
-
+    #dataset_names = ["5_campaign.npz"]
     models_to_run = {
         "ForestFlow_1": {
             "type": "forest",
             "params": {
-                "n_t": 2,
-                "duplicate_K": 2,
-                "duplicate_K_test": 2,
+                "n_t": 10,
+                "duplicate_K": 10,
+                "duplicate_K_test": 10,
                 "diffusion_type": "flow"
             }
         },
@@ -599,15 +560,15 @@ if __name__ == "__main__":
             "type": "forest",
             "params": {
                 "n_t": 50,
-                "duplicate_K": 2,
-                "duplicate_K_test": 2,
+                "duplicate_K": 10,
+                "duplicate_K_test": 10,
                 "diffusion_type": "vp"
             }
         },
         "TCCM": {
             "type": "tccm",
             "params": {
-                "n_t": 4
+                "n_t": 300
             }
         }
     }
