@@ -28,7 +28,7 @@ if str(project_root_dir) not in sys.path:
 from TCCM.FlowMatchingAD import TCCM
 from TCCM.functions import determine_FMAD_hyperparameters
 
-percentiles = [60, 50, 70, 80, 90, 95, 97.5, 99]
+percentiles = [40, 50, 70, 80, 90, 95, 97.5, 99]
 
 # # ============================================================================
 # # adapted/copied from https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
@@ -263,7 +263,7 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
         n_train_normal = len(X_train_normal)
         n_train_abnormal_max = len(X_train_abnormal_full)
         max_abnormal_ratio = n_train_abnormal_max / (n_train_abnormal_max + n_train_normal)
-        contamination_levels = np.linspace(0.001, max_abnormal_ratio, 10)
+        contamination_levels = np.linspace(0.001, max_abnormal_ratio, )
 
         # extreme cases
         extreme_contamination_levels = [0.0, max_abnormal_ratio]
