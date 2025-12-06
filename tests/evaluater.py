@@ -29,10 +29,6 @@ from TCCM.functions import determine_FMAD_hyperparameters
 
 
 
-
-
-
-
 # HINWEIS: Wir benötigen die preprocess-Funktion und die EFVFMDataset-Klasse NICHT mehr direkt,
 # da wir die fertigen, vom Preprocessing erstellten .npy-Dateien laden.
 # Es genügt, die .npy und .json Dateien zu laden, die du im letzten Schritt erstellt hast.
@@ -57,6 +53,11 @@ def load_dataset(dataset_name, semi_supervised):
         X_test = X_test_df_model.to_numpy(dtype=float)
         y_train = y_train.to_numpy().astype(int)
         y_test = y_test.to_numpy().astype(int)
+
+        print(f"  Train: {np.sum(y_train==0)} normal, {np.sum(y_train==1)} anomalies ({np.sum(y_train==1)/len(y_train)*100}%)")
+        print(f"  Test:  {np.sum(y_test==0)} normal, {np.sum(y_test==1)} anomalies ({np.sum(y_test==1)/len(y_test)*100:}%)")
+
+        #anomalieverteilung
         
     elif dataset_name.endswith(".npz"):
 
@@ -370,6 +371,47 @@ def calculate_tccm_scores(X_test, y_test, model, n_t):
         }
     }
 
+def evaluate_thresholds(anomaly_scores, y_test, score_name="Score"):
+    """
+    Berechnet Precision, Recall und F1 für verschiedene Percentile-Thresholds
+    """
+    percentiles = [60, 70, 75, 80, 85, 90, 95, 97.5, 99, 99.5, 99.9]
+
+    print(f"\n{'='*90}")
+    print(f"THRESHOLD ANALYSIS: {score_name}")
+    print(f"{'='*90}")
+    print(f"{'Percentile':<12} {'Threshold':>12} {'Precision':>12} {'Recall':>12} {'F1':>12}")
+    print(f"{'-'*90}")
+
+    best_f1 = 0
+    best_percentile = None
+
+    for p in percentiles:
+        threshold = np.percentile(anomaly_scores, p)
+        preds = (anomaly_scores > threshold).astype(int)
+        
+        tp = np.sum((preds == 1) & (y_test == 1))
+        fp = np.sum((preds == 1) & (y_test == 0))
+        fn = np.sum((preds == 0) & (y_test == 1))
+        
+        precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+        recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+        f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
+        
+        # Markiere besten F1
+        marker = ""
+        if f1 > best_f1:
+            best_f1 = f1
+            best_percentile = p
+        
+        print(f"{p:<12} {threshold:>12.4f} {precision:>12.4f} {recall:>12.4f} {f1:>12.4f}")
+
+    print(f"{'-'*90}")
+    print(f"✓ Best F1: {best_f1:.4f} @ {best_percentile}th percentile")
+    print(f"{'='*90}")
+
+    return best_percentile, best_f1
+
 if __name__ == "__main__":
 
     dataset_names = {
@@ -388,24 +430,24 @@ if __name__ == "__main__":
     }
 
     models_to_run = {
-        "ForestFlow": {
-            "type": "forest",
-            "params": {
-                "n_t": 10,
-                "duplicate_K": 10,
-                "duplicate_K_test": 10,
-                "diffusion_type": "flow"
-            }
-        },
-        "ForestDiffusion": {
-            "type": "forest",
-            "params": {
-                "n_t": 20,
-                "duplicate_K": 10,
-                "duplicate_K_test": 10,
-                "diffusion_type": "vp"
-            }
-        },
+        # "ForestFlow": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 10,
+        #         "duplicate_K": 10,
+        #         "duplicate_K_test": 10,
+        #         "diffusion_type": "flow"
+        #     }
+        # },
+        # "ForestDiffusion": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 20,
+        #         "duplicate_K": 10,
+        #         "duplicate_K_test": 10,
+        #         "diffusion_type": "vp"
+        #     }
+        # },
 
         "TCCM": {
             "type": "tccm",
@@ -416,17 +458,6 @@ if __name__ == "__main__":
     }   
 
     for dataset_name, dataset_info in dataset_names.items():
-
-#-------------------------
-
-
-#diffusion model don't have the new scoring functions!!!
-
-
-
-
-
-#-------------------------
         X_train, X_test, y_test = load_dataset(dataset_info["file"], semi_supervised=dataset_info["semi_supervised"])
         dataset_results = {}
 
@@ -480,6 +511,14 @@ if __name__ == "__main__":
                     results = calculate_tccm_scores(
                         X_test, y_test, model, n_t=p["n_t"]
                     )
+                if i == 4:  # Nur einmal am Ende ausgeben
+                    print(f"\n{'#'*80}")
+                    print(f"THRESHOLD ANALYSIS FOR {model_name}")
+                    print(f"{'#'*80}")
+                    evaluate_thresholds(results['decision']['scores'], y_test, f"{model_name} - Decision")
+                    evaluate_thresholds(results['deviation']['scores'], y_test, f"{model_name} - Deviation")
+                    if cfg["type"] != "forest" or cfg["params"].get("diffusion_type") != "vp":
+                        evaluate_thresholds(results['reconstruction']['scores'], y_test, f"{model_name} - Reconstruction")
 
                 # Ergebnisse speichern
                 time_train_list.append(time_train)

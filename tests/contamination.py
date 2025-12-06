@@ -227,8 +227,7 @@ def calculate_tccm_scores(X_test, y_test, model, n_t, score):
 #extended to safing the results for the extreme cases (0% and max contamination)
 
 def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names, model):
-    #seed_list = [0, 1]
-    seed_list = [0,1]
+    seed_list = [0,1,2,3,4]
     all_results = {}
     all_contam_levels = {}
 
@@ -263,7 +262,7 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
         n_train_normal = len(X_train_normal)
         n_train_abnormal_max = len(X_train_abnormal_full)
         max_abnormal_ratio = n_train_abnormal_max / (n_train_abnormal_max + n_train_normal)
-        contamination_levels = np.linspace(0.001, max_abnormal_ratio, )
+        contamination_levels = np.linspace(0.001, max_abnormal_ratio, 10)
 
         # extreme cases
         extreme_contamination_levels = [0.0, max_abnormal_ratio]
@@ -543,6 +542,9 @@ def plot_score_models_comparison(all_results, score, metric, dataset_names):
 
 
 if __name__ == "__main__":
+
+    """"Letze score funktion noch implementieren!!!!!!"""
+
     #dataset_names = ["29_Pima.npz"]
     dataset_names = ["29_Pima.npz"]
     #dataset_names = ["5_campaign.npz"]
@@ -586,7 +588,7 @@ if __name__ == "__main__":
             else:
                 score_list = ["deviation", "reconstruction", "decision"]
         elif model_type == "tccm":
-            score_list = ["deviation", "reconstruction", "decision"]
+            score_list = ["deviation","reconstruction", "decision"]
         else:
             raise ValueError(f"Unknown model type: {model_type}")
 
