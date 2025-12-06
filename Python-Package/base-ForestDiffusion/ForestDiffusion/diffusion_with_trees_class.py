@@ -590,7 +590,7 @@ class ForestDiffusionModel():
     return anomaly_scores  # [n_samples]
 
 # ============================================================================
-# compute_last_deviation_score
+# compute_decision_score
 # ============================================================================
   #-----------------------------------------------------------------------------------
   # same as deviation score but only considers the last noise level t = 1 , and inspired from decision function of tccm
