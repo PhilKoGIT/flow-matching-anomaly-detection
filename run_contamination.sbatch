@@ -16,7 +16,7 @@ source .venv/bin/activate
 # --- In dein Projektverzeichnis wechseln ---
 cd /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests
 
-# --- Startmeldung ---
+# --- Startmeldung ---0=/*66
 echo "== Job start =="
 
 # --- Python Script starten (ForestDiffusion Training) ---

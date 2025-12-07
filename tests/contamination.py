@@ -283,11 +283,10 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
         }
         for contam_idx, contam_ratio in enumerate(contamination_levels):
             aucs, prs = [], []
-            ####---------------------added 
 
             is_no_contam = (contam_idx == 0)  # Erster Level ≈ 0
             is_full_contam = (contam_idx == len(contamination_levels) - 1)  # Letzter Level
-            ####---------------------added end
+
             for seed in seed_list:
                 np.random.seed(seed)
                 random.seed(seed)
@@ -311,7 +310,7 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
                     )
                     scores = calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t=p["n_t"], duplicate_K_test=p["duplicate_K_test"], diffusion_type=p["diffusion_type"], score=score)
  
-                if model_cnf["type"] == "tccm":
+                elif model_cnf["type"] == "tccm":
                     model, _ = create_trained_tccm_model(
                         X_train=X_train,
                         dataset_name=f"{dataset_name}_{model_name}",
@@ -325,7 +324,6 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
                 aucs.append(auc)
                 prs.append(pr)
 
-                ####---------------------added 
                 #Safes extreme cases
                 if is_no_contam or is_full_contam:
                     case_key = "no_contamination" if is_no_contam else "full_contamination"
@@ -340,7 +338,6 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
                     threshold_metrics = compute_threshold_metrics(scores, y_test)
                     threshold_metrics["seed"] = seed
                     extreme_cases_data[dataset_name][case_key]["threshold_metrics_per_seed"].append(threshold_metrics)
-                ####---------------------added end
             auroc_all.append((np.mean(aucs), np.std(aucs)))
             auprc_all.append((np.mean(prs), np.std(prs)))
 
@@ -358,7 +355,7 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
     return all_results, all_contam_levels, extreme_cases_data
 
 # # ============================================================================
-# #  oben drüber wichtig!!!!!!!
+# #  
 # # ============================================================================
 
 #needed for theshold metrics saving for extreme cases
