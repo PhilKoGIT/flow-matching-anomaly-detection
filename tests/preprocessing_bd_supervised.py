@@ -138,8 +138,19 @@ def prepare_data_supervised():
     df = df_original.copy()
     df['original_index'] = df.index
     
+
+# data leakage!! unten hin 
+
+
+
     df = create_time_series_features(df)
     
+
+
+
+
+
+
     df = df.sample(frac=1, random_state=42).reset_index(drop=True)
     df = df.sort_values(["date_post"])
     df = df.drop("date_post", axis=1)

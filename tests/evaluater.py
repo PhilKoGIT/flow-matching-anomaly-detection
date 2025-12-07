@@ -34,13 +34,12 @@ from TCCM.functions import determine_FMAD_hyperparameters
 # Es genügt, die .npy und .json Dateien zu laden, die du im letzten Schritt erstellt hast.
 
 def load_dataset(dataset_name, semi_supervised):
-    
-    # Pfad zur Basisdatenbank
+
     base_dir = Path(__file__).resolve().parent
     data_dir = base_dir.parent / "data"
 
     if "business_dataset" in dataset_name:
-        # Dein bestehender Code für Business Dataset...
+        #load business datasets, preprocessed supervised or unsupervised
         cols_to_drop_for_model = ["bank_account_uuid"]
         if semi_supervised:
             X_train_df, X_test_df, y_train, y_test, train_mapping, test_mapping, feature_columns = prepare_data_supervised()
@@ -56,8 +55,6 @@ def load_dataset(dataset_name, semi_supervised):
 
         print(f"  Train: {np.sum(y_train==0)} normal, {np.sum(y_train==1)} anomalies ({np.sum(y_train==1)/len(y_train)*100}%)")
         print(f"  Test:  {np.sum(y_test==0)} normal, {np.sum(y_test==1)} anomalies ({np.sum(y_test==1)/len(y_test)*100:}%)")
-
-        #anomalieverteilung
         
     elif dataset_name.endswith(".npz"):
 
@@ -93,7 +90,6 @@ def load_dataset(dataset_name, semi_supervised):
             
     # NEUE SEKTION: Lade die EF-VFM-vorverarbeiteten Daten
     elif dataset_name.endswith("_efvfm"):
-        # Wir erwarten, dass der Ordner (z.B. "campaign_efvfm") existiert
         ef_dir = data_dir / dataset_name
         print(f"\nLade EF-VFM Daten aus Ordner: {ef_dir}")
 
@@ -139,6 +135,10 @@ def load_dataset(dataset_name, semi_supervised):
 # ... REST DES SKRIPTS (create_trained_model, calculate_scores, __main__) ...
 
 def create_ForestDiffusionModel(n_t, duplicate_K, seed, X_train, dataset_name, diffusion_type):
+    """
+    Create and train a ForestDiffusionModel with given hyperparameters.
+
+    """
     start_time_train = time.time()
     model = ForestDiffusionModel(
         X=X_train,
@@ -168,7 +168,13 @@ def create_ForestDiffusionModel(n_t, duplicate_K, seed, X_train, dataset_name, d
 
 
 def calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t, duplicate_K_test, diffusion_type):
-    # train time, dev time, rec time
+    """
+    Calculate all three ForestDiffusion anomaly scores
+    1. Decision Function Score
+    2. Deviation Score
+    3. Reconstruction Score
+    """
+
     # ---Computation deviation Score ---
     if diffusion_type == "flow":
         start_time_deviation = time.time()
@@ -215,6 +221,7 @@ def calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t, duplicate_
         auprc_decision = average_precision_score(y_test, anomaly_scores_decision)
   
     elif diffusion_type == "vp":
+        # ---Computation deviation Score ---
         start_time_deviation = time.time()
         anomaly_scores_deviation = model.compute_deviation_score_vp(
             test_samples=X_test,
@@ -250,8 +257,8 @@ def calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t, duplicate_
         
         auroc_decision = roc_auc_score(y_test, anomaly_scores_decision)
         auprc_decision = average_precision_score(y_test, anomaly_scores_decision)
-    
-
+    else:
+        raise ValueError(f"Unknown diffusion type: {diffusion_type}")
 
     return {
         'decision': {
@@ -274,28 +281,22 @@ def calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t, duplicate_
         }
     }
 
-#noch mit binary, float etc. machen, als parameter übergeben!!!
 
 def create_trained_tccm_model(X_train, dataset_name, seed):
     """
-    Erstellt und trainiert ein TCCM-Modell
+    Creates and trains a TCCM model with the hyperparameters for the specific dataset from this model https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/FMAD/functions.py
+
     """
     # Set random seed for reproducibility
     torch.manual_seed(seed)
     np.random.seed(seed)
     random.seed(seed)
     
-    # Hole die optimalen Hyperparameter für das Dataset
+    # Get the optimal hyperparameters for the dataset
     hyperparams = determine_FMAD_hyperparameters(dataset_name)
-    
-    # print(f"\nTraining TCCM with hyperparameters:")
-    # print(f"  Epochs: {hyperparams['epochs']}")
-    # print(f"  Learning Rate: {hyperparams['learning_rate']}")
-    # print(f"  Batch Size: {hyperparams['batch_size']}")
-    
     start_time = time.time()
     
-    # Initialisiere TCCM mit den Hyperparametern
+    # Initialize TCCM with the hyperparameters
     model = TCCM(
         n_features=X_train.shape[1],
         epochs=hyperparams['epochs'],
@@ -315,10 +316,10 @@ def create_trained_tccm_model(X_train, dataset_name, seed):
 
 def calculate_tccm_scores(X_test, y_test, model, n_t):
     """
-    Berechnet alle drei TCCM Anomaly Scores:
-    1. Decision Function Score (Equation 5)
-    2. Deviation Score (über mehrere Zeitpunkte)
-    3. Reconstruction Score (implizit in decision_function)
+    Calculates the three anomaly scores for a tccm model::
+    1. Decision Function Score  
+    2. Deviation Score
+    3. Reconstruction Score
     """
 
     # --- Score 1: Decision Function  ---
@@ -371,9 +372,10 @@ def calculate_tccm_scores(X_test, y_test, model, n_t):
         }
     }
 
+
 def evaluate_thresholds(anomaly_scores, y_test, score_name="Score"):
     """
-    Berechnet Precision, Recall und F1 für verschiedene Percentile-Thresholds
+    Calculates Precision, Recall, and F1 for various percentile thresholds
     """
     percentiles = [60, 70, 75, 80, 85, 90, 95, 97.5, 99, 99.5, 99.9]
 
@@ -398,7 +400,7 @@ def evaluate_thresholds(anomaly_scores, y_test, score_name="Score"):
         recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
         f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
         
-        # Markiere besten F1
+        # Mark best F1
         marker = ""
         if f1 > best_f1:
             best_f1 = f1
@@ -411,6 +413,9 @@ def evaluate_thresholds(anomaly_scores, y_test, score_name="Score"):
     print(f"{'='*90}")
 
     return best_percentile, best_f1
+
+
+
 
 if __name__ == "__main__":
 
@@ -481,7 +486,6 @@ if __name__ == "__main__":
             for i in range(5):
 
                 if cfg["type"] == "forest":
-                    # Parameter extrahieren
                     p = cfg["params"]
                     model, time_train = create_ForestDiffusionModel(
                         n_t=p["n_t"],
@@ -500,7 +504,6 @@ if __name__ == "__main__":
                     )
 
                 elif cfg["type"] == "tccm":
-                    # Parameter extrahieren
                     p = cfg["params"]
                     model, time_train = create_trained_tccm_model(
                         X_train=X_train,
@@ -511,7 +514,7 @@ if __name__ == "__main__":
                     results = calculate_tccm_scores(
                         X_test, y_test, model, n_t=p["n_t"]
                     )
-                if i == 4:  # Nur einmal am Ende ausgeben
+                if i == 4:  # Only print once at the end
                     print(f"\n{'#'*80}")
                     print(f"THRESHOLD ANALYSIS FOR {model_name}")
                     print(f"{'#'*80}")
@@ -520,7 +523,7 @@ if __name__ == "__main__":
                     if cfg["type"] != "forest" or cfg["params"].get("diffusion_type") != "vp":
                         evaluate_thresholds(results['reconstruction']['scores'], y_test, f"{model_name} - Reconstruction")
 
-                # Ergebnisse speichern
+                # Save results
                 time_train_list.append(time_train)
 
                 decision_auroc_list.append(results['decision']['auroc'])
@@ -535,8 +538,8 @@ if __name__ == "__main__":
                 reconstruction_auprc_list.append(results['reconstruction']['auprc'])
                 time_reconstruction_list.append(results['reconstruction']['time'])
 
-                        # --- NACH DEM RUN-LOOP: STATISTIKEN BERECHNEN ---
-
+            #calculate means and stds
+            
             dataset_results[model_name] = {
                 "dec_auroc_mean": np.mean(decision_auroc_list),
                 "dec_auroc_std":  np.std(decision_auroc_list),
@@ -568,7 +571,7 @@ if __name__ == "__main__":
         print(f"COMPARISON FOR DATASET: {dataset_name}")
         print("=" * 140)
 
-        # Header für Metriken
+        # Header for metrics
         header1 = (
             f"{'Model':<18} | "
             f"{'DecAUROC':<15} | {'DecAUPRC':<15} | "
@@ -590,7 +593,7 @@ if __name__ == "__main__":
             )
             print(line)
 
-        # Header für Zeiten
+        # Header for timing
         print("\n" + "-" * 100)
         print("TIMING (seconds):")
         print("-" * 100)

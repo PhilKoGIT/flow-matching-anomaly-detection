@@ -28,7 +28,7 @@ if str(project_root_dir) not in sys.path:
 from TCCM.FlowMatchingAD import TCCM
 from TCCM.functions import determine_FMAD_hyperparameters
 
-percentiles = [40, 50, 70, 80, 90, 95, 97.5, 99]
+percentiles = [20, 30, 40, 50, 70, 80, 90, 95, 97.5, 99]
 
 # # ============================================================================
 # # adapted/copied from https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
@@ -38,7 +38,6 @@ def load_adbench_npz(dataset_name, test_size=0.5, random_state=42):
     #part copied from by utils.py of https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
 
     base_dir = Path(__file__).resolve().parent
-    #file_path = base_dir.parent / "data" / "5_campaign.npz"
     file_path = base_dir.parent / "data_contamination" / dataset_name
     data = np.load(file_path, allow_pickle=True)
     X, y = data['X'], data['y'].astype(int)
@@ -71,7 +70,11 @@ def load_adbench_npz(dataset_name, test_size=0.5, random_state=42):
 
 
 def create_ForestDiffusionModel(n_t, duplicate_K, seed, X_train, dataset_name, diffusion_type):
-    start_time_train = time.time()
+    """
+
+    creates a ForestDiffusionModel with given parameters
+
+    """
     model = ForestDiffusionModel(
         X=X_train,
         label_y=None,     
@@ -81,28 +84,26 @@ def create_ForestDiffusionModel(n_t, duplicate_K, seed, X_train, dataset_name, d
         eps=1e-3,
         model='xgboost',
         max_depth=7,
-        #max_depth=2,
         n_estimators=100,
-        #n_estimators = 10,
         eta=0.3,
         gpu_hist=False,  
         n_batch=1,      
         seed=seed,
         n_jobs=-1,
-        bin_indexes=[],
-        cat_indexes=[],
+        bin_indexes=[],      #no categorical, binary or integer features in the datasets used here, only floats
+        cat_indexes=[],       
         int_indexes=[],
         remove_miss=False,
         p_in_one=True,      
     )
-    end_time_train = time.time()
-    time_train = end_time_train - start_time_train
-    print("✓ Model trained successfully on full training data!")
-
-    return model, time_train
+    return model
 
 
-def calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t, duplicate_K_test, diffusion_type, score):
+def calculate_scores_ForestDiffusionModel(X_test, model, n_t, duplicate_K_test, diffusion_type, score):
+    """
+    Calculates the  right score type for the ForestDiffusionModel (flow typer or vp type)
+
+    """
 
     if score == "deviation":
         if diffusion_type == "flow":
@@ -113,12 +114,14 @@ def calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t, duplicate_
                 duplicate_K_test=duplicate_K_test
             )
         elif diffusion_type == "vp":
-            anomaly_scores_deviation = model.compute_deviation_score(
+            anomaly_scores_deviation = model.compute_deviation_score_vp(
                 X_test, 
                 n_t=n_t, 
                 duplicate_K_test=duplicate_K_test, 
                 diffusion_type=diffusion_type
             )
+        else: 
+            raise ValueError(f"Unknown diffusion type: {diffusion_type}")
         return anomaly_scores_deviation
 
     elif score == "reconstruction":
@@ -130,7 +133,7 @@ def calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t, duplicate_
                 duplicate_K_test=duplicate_K_test
             )
         else: 
-            raise ValueError("Reconstruction score is only implemented for diffusion.")
+            raise ValueError("Reconstruction score is only implemented for flow.")
         return anomaly_scores_reconstruction
     elif score == "decision":
         if diffusion_type == "flow":
@@ -147,34 +150,33 @@ def calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t, duplicate_
                 n_t=n_t, 
                 duplicate_K_test=duplicate_K_test
             )
+        else: 
+            raise ValueError(f"Unknown diffusion type: {diffusion_type}")
         return anomaly_scores_decision
-    
     else: 
         raise ValueError(f"Unknown score type: {score}")
 
 
-#noch mit binary, float etc. machen, als parameter übergeben!!!
-
 def create_trained_tccm_model(X_train, dataset_name, seed):
     """
-    Erstellt und trainiert ein TCCM-Modell
+    
+    Creates and trains a TCCM model with the hyperparameters for the specific dataset from this model https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/FMAD/functions.py
+
     """
     # Set random seed for reproducibility
     torch.manual_seed(seed)
     np.random.seed(seed)
     random.seed(seed)
     
-    # Hole die optimalen Hyperparameter für das Dataset
+    # take the hyperparamters for the specific dataset
     hyperparams = determine_FMAD_hyperparameters(dataset_name)
     
     print(f"\nTraining TCCM with hyperparameters:")
     print(f"  Epochs: {hyperparams['epochs']}")
     print(f"  Learning Rate: {hyperparams['learning_rate']}")
     print(f"  Batch Size: {hyperparams['batch_size']}")
-    
-    start_time = time.time()
-    
-    # Initialisiere TCCM mit den Hyperparametern
+
+    # Initialize TCCM with the hyperparameters
     model = TCCM(
         n_features=X_train.shape[1],
         epochs=hyperparams['epochs'],
@@ -182,24 +184,18 @@ def create_trained_tccm_model(X_train, dataset_name, seed):
         batch_size=hyperparams['batch_size']
     )
     
-    # Trainiere das Modell
+    # Train the model
     model.fit(X_train)
-    
-    end_time_train = time.time()
-    time_train = end_time_train - start_time
-    
-    print(f"✓ TCCM Model trained successfully in {time_train:.2f} seconds!")
-    
-    # Speichere das Modell
-    model_path = f"{dataset_name}_tccm_model_seed{seed}.joblib"
-    joblib.dump(model, model_path)
-    print(f"✓ Model saved to {model_path}")
-    
-    return model, time_train
+
+    return model
 
 
+def calculate_tccm_scores(X_test, model, n_t, score):
+    """
+    Calculates the right score type for the TCCM model
 
-def calculate_tccm_scores(X_test, y_test, model, n_t, score):
+    """
+
     # --- Score 1: Decision Function  ---
     if score == "decision":
         anomaly_scores_decision = model.decision_function(X_test)
@@ -224,14 +220,19 @@ def calculate_tccm_scores(X_test, y_test, model, n_t, score):
 # # based on https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/AblationStudies.py
 # # ============================================================================
 
-#extended to safing the results for the extreme cases (0% and max contamination)
-
 def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names, model):
+
+    """
+    Runs training and evaluation for different contamination levels on fixed train/test split. A model is trained for each seed and contamination level.
+    
+    extended to save extreme cases data for (almost) no contamination and full contamination
+
+    """
     seed_list = [0,1,2,3,4]
     all_results = {}
     all_contam_levels = {}
 
-    #safe for all maximum contamination levels for each dataset and for zero contamination
+    #safe for all maximum contamination levels for each dataset and for (almost) zero contamination
     extreme_cases_data = {}
 
     model_name = model[0]
@@ -284,8 +285,8 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
         for contam_idx, contam_ratio in enumerate(contamination_levels):
             aucs, prs = [], []
 
-            is_no_contam = (contam_idx == 0)  # Erster Level ≈ 0
-            is_full_contam = (contam_idx == len(contamination_levels) - 1)  # Letzter Level
+            is_no_contam = (contam_idx == 0)  
+            is_full_contam = (contam_idx == len(contamination_levels) - 1)  
 
             for seed in seed_list:
                 np.random.seed(seed)
@@ -294,13 +295,13 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
                 n_ab = int(contam_ratio * n_train_normal / (1 - contam_ratio))
                 n_ab = min(n_ab, n_train_abnormal_max)
 
-                selected_ab = X_train_abnormal_full[:n_ab]  # Can be replaced by random sampling if needed
+                #adds the abnormal data to the training set based on the current contamination ratio
+                selected_ab = X_train_abnormal_full[:n_ab]  
                 X_train = np.vstack([X_train_normal, selected_ab])
-                y_train = np.zeros(len(X_train))  # label unused
 
                 p = model_cnf["params"]
                 if model_cnf["type"] == "forest":
-                    model, _ = create_ForestDiffusionModel(
+                    model = create_ForestDiffusionModel(
                         n_t=p["n_t"],
                         duplicate_K=p["duplicate_K"],
                         seed=seed,
@@ -308,16 +309,16 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
                         dataset_name=f"{dataset_name}_{model_name}",
                         diffusion_type=p["diffusion_type"]
                     )
-                    scores = calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t=p["n_t"], duplicate_K_test=p["duplicate_K_test"], diffusion_type=p["diffusion_type"], score=score)
- 
+                    scores = calculate_scores_ForestDiffusionModel(X_test, model, n_t=p["n_t"], duplicate_K_test=p["duplicate_K_test"], diffusion_type=p["diffusion_type"], score=score)
                 elif model_cnf["type"] == "tccm":
-                    model, _ = create_trained_tccm_model(
+                    model = create_trained_tccm_model(
                         X_train=X_train,
                         dataset_name=f"{dataset_name}_{model_name}",
                         seed=seed
                     )
-                    scores = calculate_tccm_scores(X_test, y_test, model, n_t=p["n_t"], score=score)
-
+                    scores = calculate_tccm_scores(X_test, model, n_t=p["n_t"], score=score)
+                else:
+                    raise ValueError(f"Unknown model type: {model_cnf['type']}")
 
                 auc = roc_auc_score(y_test, scores)
                 pr = average_precision_score(y_test, scores)
@@ -332,9 +333,8 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
                         "anomaly_scores": scores.copy(),
                         "auc": auc,
                         "auprc": pr
-                    })
-                    
-                    # Berechne Threshold-Metriken
+                    })   
+                    # Calculate and save threshold metrics
                     threshold_metrics = compute_threshold_metrics(scores, y_test)
                     threshold_metrics["seed"] = seed
                     extreme_cases_data[dataset_name][case_key]["threshold_metrics_per_seed"].append(threshold_metrics)
@@ -354,13 +354,15 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
     #all_contam_levels contains the contamination levels used for each dataset
     return all_results, all_contam_levels, extreme_cases_data
 
+
 # # ============================================================================
 # #  
 # # ============================================================================
 
 #needed for theshold metrics saving for extreme cases
 def compute_threshold_metrics(anomaly_scores, y_test):
-    """Berechnet Metriken für verschiedene Threshold-Percentiles"""
+    """Calculates metrics for different threshold percentiles"""
+    
     thresholds_percentiles = percentiles
     results = {
         "percentile_metrics": {},
@@ -401,20 +403,110 @@ def compute_threshold_metrics(anomaly_scores, y_test):
 
 
 
+def aggregate_extreme_cases(extreme_cases_data):
+    """Evaluaates the extreme cases data and aggregates the results across seeds"""
+    aggregated = {}
+
+    for dataset_name, cases in extreme_cases_data.items():
+        aggregated[dataset_name] = {}
+        
+        for case_key in ["no_contamination", "full_contamination"]:
+            case_data = cases[case_key]
+            scores_list = case_data["scores_per_seed"]
+            threshold_list = case_data["threshold_metrics_per_seed"]
+            
+            if not scores_list:
+                continue
+            
+            # Aggregate AUC and AUPRC
+            aucs = [s["auc"] for s in scores_list]
+            auprcs = [s["auprc"] for s in scores_list]
+            
+            # Aggregate Threshold Metrics
+            aggregated_thresholds = {}
+            for percentile in percentiles:
+                f1s = [t["percentile_metrics"][percentile]["f1"] for t in threshold_list]
+                precisions = [t["percentile_metrics"][percentile]["precision"] for t in threshold_list]
+                recalls = [t["percentile_metrics"][percentile]["recall"] for t in threshold_list]
+                
+                aggregated_thresholds[percentile] = {
+                    "f1_mean": np.mean(f1s),
+                    "f1_std": np.std(f1s),
+                    "precision_mean": np.mean(precisions),
+                    "precision_std": np.std(precisions),
+                    "recall_mean": np.mean(recalls),
+                    "recall_std": np.std(recalls)
+                }
+            
+            aggregated[dataset_name][case_key] = {
+                "auc_mean": np.mean(aucs),
+                "auc_std": np.std(aucs),
+                "auprc_mean": np.mean(auprcs),
+                "auprc_std": np.std(auprcs),
+                "threshold_metrics": aggregated_thresholds,
+                "raw_scores_per_seed": scores_list,  # Falls du die Rohdaten brauchst
+                "raw_threshold_metrics_per_seed": threshold_list
+            }
+
+    return aggregated
+
+
+
+def plot_score_models_comparison(all_results, score, metric, dataset_names, model_names):
+    """
+    Shows for one score all models comparison plots for all datasets
+    metric: "auroc" or "auprc"
+    
+    """
+    fig, axs = plt.subplots(1, len(dataset_names), figsize=(14, 5))
+    model_names = list(all_results[dataset_names[0]].keys())
+
+    # For each model name a color
+    colors = {"ForestDiffusion_1": "blue", "TCCM": "green", "ForestFlow_1": "red"}
+    
+    for idx, dataset_name in enumerate(dataset_names):
+        ax = axs[idx] if len(dataset_names) > 1 else axs
+        
+        for model_name in model_names:
+
+            if score not in all_results[dataset_name][model_name]:
+                print(f"Skipping {model_name} for score '{score}' (not available)")
+                continue
+            data = all_results[dataset_name][model_name][score]
+            contam_levels = data["contamination_levels"]
+            values = np.array(data[metric])
+            
+            ax.plot(contam_levels, values[:, 0], label=model_name,
+                   color=colors.get(model_name, "black"), marker='o')
+            ax.fill_between(contam_levels,
+                          values[:, 0] - values[:, 1],
+                          values[:, 0] + values[:, 1],
+                          color=colors.get(model_name, "black"), alpha=0.2)
+        
+        ax.set_title(f"{dataset_name} - {score}")
+        ax.set_xlabel("Contamination Level")
+        ax.set_ylabel(metric.upper())
+        ax.set_ylim(0, 1.05)
+        ax.grid(True)
+        ax.legend()
+    
+    plt.tight_layout()
+    plt.savefig(f"./results_ablation/all_models_{score}_{metric}.pdf")
+    plt.show()
 
 
 def plot_model_scores_comparison(all_results, model_name, metric, dataset_names):
     """
-    Zeigt für EIN Modell alle 3 Scores auf allen Datasets
-    metric: "auroc" oder "auprc"
+    Shows for one model all 3 scores on all datasets
+    metric: "auroc" or "auprc"
+
     """
-    # Diese Zeile fehlte!
     fig, axs = plt.subplots(1, len(dataset_names), figsize=(14, 5))
     
     first_dataset = dataset_names[0]
     scores = list(all_results[first_dataset][model_name].keys())
     
-    # Definiere Farben für alle möglichen Scores
+    # Define colors for all possible scores
     colors = {
         "deviation": "blue", 
         "reconstruction": "green", 
@@ -448,95 +540,6 @@ def plot_model_scores_comparison(all_results, model_name, metric, dataset_names)
     plt.show()
 
 
-def aggregate_extreme_cases(extreme_cases_data):
-    """Aggregiert die Ergebnisse über alle Seeds"""
-    aggregated = {}
-
-    for dataset_name, cases in extreme_cases_data.items():
-        aggregated[dataset_name] = {}
-        
-        for case_key in ["no_contamination", "full_contamination"]:
-            case_data = cases[case_key]
-            scores_list = case_data["scores_per_seed"]
-            threshold_list = case_data["threshold_metrics_per_seed"]
-            
-            if not scores_list:
-                continue
-            
-            # Aggregiere AUC/AUPRC
-            aucs = [s["auc"] for s in scores_list]
-            auprcs = [s["auprc"] for s in scores_list]
-            
-            # Aggregiere Threshold-Metriken
-            aggregated_thresholds = {}
-            for percentile in percentiles:
-                f1s = [t["percentile_metrics"][percentile]["f1"] for t in threshold_list]
-                precisions = [t["percentile_metrics"][percentile]["precision"] for t in threshold_list]
-                recalls = [t["percentile_metrics"][percentile]["recall"] for t in threshold_list]
-                
-                aggregated_thresholds[percentile] = {
-                    "f1_mean": np.mean(f1s),
-                    "f1_std": np.std(f1s),
-                    "precision_mean": np.mean(precisions),
-                    "precision_std": np.std(precisions),
-                    "recall_mean": np.mean(recalls),
-                    "recall_std": np.std(recalls)
-                }
-            
-            aggregated[dataset_name][case_key] = {
-                "auc_mean": np.mean(aucs),
-                "auc_std": np.std(aucs),
-                "auprc_mean": np.mean(auprcs),
-                "auprc_std": np.std(auprcs),
-                "threshold_metrics": aggregated_thresholds,
-                "raw_scores_per_seed": scores_list,  # Falls du die Rohdaten brauchst
-                "raw_threshold_metrics_per_seed": threshold_list
-            }
-
-    return aggregated
-
-
-
-def plot_score_models_comparison(all_results, score, metric, dataset_names):
-    """
-    Zeigt für EINEN Score alle Modelle auf allen Datasets
-    metric: "auroc" oder "auprc"
-    """
-    fig, axs = plt.subplots(1, len(dataset_names), figsize=(14, 5))
-    model_names = list(all_results[dataset_names[0]].keys())
-    colors = {"ForestFlow_1": "blue", "ForestDiffusion_1": "green", "TCCM": "red"}
-    
-    for idx, dataset_name in enumerate(dataset_names):
-        ax = axs[idx] if len(dataset_names) > 1 else axs
-        
-        for model_name in model_names:
-            # Prüfe ob dieser Score für dieses Modell existiert
-            if score not in all_results[dataset_name][model_name]:
-                print(f"Skipping {model_name} for score '{score}' (not available)")
-                continue
-            data = all_results[dataset_name][model_name][score]
-            contam_levels = data["contamination_levels"]
-            values = np.array(data[metric])
-            
-            ax.plot(contam_levels, values[:, 0], label=model_name,
-                   color=colors.get(model_name, "black"), marker='o')
-            ax.fill_between(contam_levels,
-                          values[:, 0] - values[:, 1],
-                          values[:, 0] + values[:, 1],
-                          color=colors.get(model_name, "black"), alpha=0.2)
-        
-        ax.set_title(f"{dataset_name} - {score}")
-        ax.set_xlabel("Contamination Level")
-        ax.set_ylabel(metric.upper())
-        ax.set_ylim(0, 1.05)
-        ax.grid(True)
-        ax.legend()
-    
-    plt.tight_layout()
-    plt.savefig(f"./results_ablation/all_models_{score}_{metric}.pdf")
-    plt.show()
-
-
 
 if __name__ == "__main__":
 
@@ -545,25 +548,27 @@ if __name__ == "__main__":
     #dataset_names = ["29_Pima.npz"]
     dataset_names = ["29_Pima.npz"]
     #dataset_names = ["5_campaign.npz"]
+
+    #MAX three models!
     models_to_run = {
-        "ForestFlow_1": {
-            "type": "forest",
-            "params": {
-                "n_t": 10,
-                "duplicate_K": 10,
-                "duplicate_K_test": 10,
-                "diffusion_type": "flow"
-            }
-        },
-        "ForestDiffusion_1": {
-            "type": "forest",
-            "params": {
-                "n_t": 50,
-                "duplicate_K": 10,
-                "duplicate_K_test": 10,
-                "diffusion_type": "vp"
-            }
-        },
+        # "ForestFlow_1": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 10,
+        #         "duplicate_K": 10,
+        #         "duplicate_K_test": 10,
+        #         "diffusion_type": "flow"
+        #     }
+        # },
+        # "ForestDiffusion_1": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 5,
+        #         "duplicate_K": 2,
+        #         "duplicate_K_test": 2,
+        #         "diffusion_type": "vp"
+        #     }
+        # },
         "TCCM": {
             "type": "tccm",
             "params": {
@@ -601,7 +606,7 @@ if __name__ == "__main__":
                     all_results_combined[dataset_name][model_name] = {}
                 all_results_combined[dataset_name][model_name][score] = data
             
-            # Sammle Extremfälle (aggregiert)
+            # Aggregate extreme cases
             aggregated = aggregate_extreme_cases(extreme_cases)
             
             if model_name not in all_extreme_cases:
@@ -614,10 +619,10 @@ if __name__ == "__main__":
         plot_model_scores_comparison(all_results_combined, model_name, metric="auprc", dataset_names=dataset_names)
 
     for score in ["deviation", "reconstruction", "decision"]:
-        plot_score_models_comparison(all_results_combined, score, metric="auroc", dataset_names=dataset_names)
-        plot_score_models_comparison(all_results_combined, score, metric="auprc", dataset_names=dataset_names)
+        plot_score_models_comparison(all_results_combined,  score, metric="auroc", dataset_names=dataset_names, model_names=list(models_to_run.keys()))
+        plot_score_models_comparison(all_results_combined, score, metric="auprc", dataset_names=dataset_names, model_names=list(models_to_run.keys()))
 
-    # Ausgabe der Extremfälle
+    # Printing extreme cases summary
     print("\n" + "="*80)
     print("EXTREME CASES SUMMARY")
     print("="*80)
