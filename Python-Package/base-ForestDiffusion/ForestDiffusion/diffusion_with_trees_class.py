@@ -422,7 +422,7 @@ class ForestDiffusionModel():
     - for each copy, sample a random noise -> build interpolation samples at each noise level -> x_t_samples_rep and calculate the true velocity v_true (rectified flow)
     - let the model predict the velocity of every interpolation sample at every noise level for every rep_sample
     - compute the squared error between true velocity and predicted velocity at every noise level
-    - average over the error of all noise levels for every rep_sample -> anomaly score per rep_sample
+    - sum up the error of all noise levels for every rep_sample -> anomaly score per rep_sample
     - average over all rep_samples -> final anomaly score per test sample
 
     """

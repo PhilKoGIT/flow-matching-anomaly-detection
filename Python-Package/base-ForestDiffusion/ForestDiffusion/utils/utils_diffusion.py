@@ -131,10 +131,10 @@ def euler_solve(y0, my_model, N=101):
 #this method makes points follow an ode from a certain noise level to the data distribution
 
 # x_t contains interpolation points at a certain noise_step/time level
-# t is the starting time stept
+# t0 is the starting time step
 
 def euler_solve_from_x_t(x_t, t0, my_model, n_t, steps_left):
-    h = 1/(n_t -1) #delta t
+    h = 1/(n_t -1) #delta t         .... actually (1-eps)/(n_t-1), but since euler_solve from above also uses 1/(n_t-1) we keep it like this for consistency ->my_model also rounds
     y = x_t       #starting point
     t = t0     #starting time
     for i in range(steps_left):

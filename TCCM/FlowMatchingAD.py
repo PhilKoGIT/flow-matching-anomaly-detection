@@ -69,24 +69,24 @@ class TCCM:
         """
         X = torch.tensor(X_test, dtype=torch.float32)
         X = X.to(next(self.model.parameters()).device)
-        
+        x_t = self.build_data_xt_tccm(X_test, n_t)  # Build interpolated points x(t) for TCCM
         anomaly_scores = torch.zeros(X.shape[0], device=X.device)
         t_levels = torch.linspace(0, 1.0, n_t)
 
         with torch.no_grad():
-            for t_val in t_levels:
+            for i, t_val in enumerate(t_levels):
                 t = torch.full((X.shape[0], 1), t_val.item(), device=X.device)
-                v_pred = self.model(X, t)
+                x_t_i = torch.tensor(x_t[i], dtype=torch.float32, device=X.device)
+                v_pred = self.model(x_t_i, t)
                 v_true = -X
                 squared_error = torch.sum((v_true - v_pred) ** 2, dim=1)
                 anomaly_scores += squared_error
-        
         return (anomaly_scores).cpu().numpy()
 
 
     def build_data_xt_tccm(self, X, n_t):
         """
-        Build interpolated points x(t) for TCCM. Like in Forest-Flow. This will be used to compute the reconstruction score starting from every interpolation point and summing them up.
+        Build interpolated points x(t). Like in Forest-Flow. This will be used to compute the scores.
 
         """
         b, c = X.shape
@@ -141,8 +141,7 @@ class TCCM:
             #only go to n_t-1 because starting from t=1 makes no sense
             for i, t_val in enumerate(t_values[:-1]):
                 # x(t)s for this time point
-                x_t = torch.tensor(x_t_interpolations[i], dtype=torch.float32, device=device)  
-                
+                x_t = torch.tensor(x_t_interpolations[i], dtype=torch.float32, device=device)        
                 # Follow the flow from t to 1
                 steps_left = n_t - i - 1
                 x_endpos = self.euler_solve_from_x_t(x_t, t0=t_val, steps_left=steps_left, n_t=n_t)

@@ -30,12 +30,23 @@ from TCCM.functions import determine_FMAD_hyperparameters
 
 percentiles = [20, 30, 40, 50, 70, 80, 90, 95, 97.5, 99]
 
+
+"""
+File runs contamination studies for the given models and datasets.
+
+"""
+
 # # ============================================================================
 # # adapted/copied from https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
 # # ============================================================================
 
 def load_adbench_npz(dataset_name, test_size=0.5, random_state=42):
     #part copied from by utils.py of https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
+
+    """
+    loads a npz dataset and does the printed split
+
+    """
 
     base_dir = Path(__file__).resolve().parent
     file_path = base_dir.parent / "data_contamination" / dataset_name
@@ -67,8 +78,6 @@ def load_adbench_npz(dataset_name, test_size=0.5, random_state=42):
 # # ============================================================================
 
 
-
-
 def create_ForestDiffusionModel(n_t, duplicate_K, seed, X_train, dataset_name, diffusion_type):
     """
 
@@ -83,7 +92,7 @@ def create_ForestDiffusionModel(n_t, duplicate_K, seed, X_train, dataset_name, d
         diffusion_type=diffusion_type, 
         eps=1e-3,
         model='xgboost',
-        max_depth=7,
+        max_depth=7,  #use default hyperparameters for xgboost
         n_estimators=100,
         eta=0.3,
         gpu_hist=False,  
@@ -96,12 +105,14 @@ def create_ForestDiffusionModel(n_t, duplicate_K, seed, X_train, dataset_name, d
         remove_miss=False,
         p_in_one=True,      
     )
+    print(f"\nTraining ForestDiffusionModel ({diffusion_type}) on dataset: {dataset_name} with n_t={n_t}, duplicate_K={duplicate_K}, seed={seed}")
     return model
 
 
 def calculate_scores_ForestDiffusionModel(X_test, model, n_t, duplicate_K_test, diffusion_type, score):
     """
-    Calculates the  right score type for the ForestDiffusionModel (flow typer or vp type)
+    Calculates the  right score type for the given ForestDiffusionModel (flow type or vp type)
+    Selects the right funcition to call
 
     """
 
@@ -186,6 +197,7 @@ def create_trained_tccm_model(X_train, dataset_name, seed):
     
     # Train the model
     model.fit(X_train)
+    print(f"TCCM model trained on dataset: {dataset_name} with seed: {seed}")
 
     return model
 
@@ -462,8 +474,8 @@ def plot_score_models_comparison(all_results, score, metric, dataset_names, mode
     model_names = list(all_results[dataset_names[0]].keys())
 
     # For each model name a color
-    colors = {"ForestDiffusion_1": "blue", "TCCM": "green", "ForestFlow_1": "red"}
-    
+    #colors = {"ForestDiffusion_1": "blue", "TCCM": "green", "ForestFlow_1": "red"}
+    colors = {"ForestDiffusion_1": "red", "ForestDiffusion_2": "green"}
     for idx, dataset_name in enumerate(dataset_names):
         ax = axs[idx] if len(dataset_names) > 1 else axs
         
@@ -550,32 +562,52 @@ if __name__ == "__main__":
     #dataset_names = ["5_campaign.npz"]
 
     #MAX three models!
+
+    #Change names in plot_score_models_comparison!!
+
     models_to_run = {
+        #duplicate_K and duplicate_K_test should be the same for contamination studies
         # "ForestFlow_1": {
         #     "type": "forest",
         #     "params": {
-        #         "n_t": 10,
-        #         "duplicate_K": 10,
-        #         "duplicate_K_test": 10,
+        #         "n_t": 5,
+        #         "duplicate_K": 3,
+        #         "duplicate_K_test": 3,
         #         "diffusion_type": "flow"
         #     }
         # },
-        # "ForestDiffusion_1": {
+        #duplicate_K and duplicate_K_test should be the same for contamination studies
+        "ForestDiffusion_1": {
+            "type": "forest",
+            "params": {
+                "n_t": 3,
+                "duplicate_K": 1,
+                "duplicate_K_test": 1,
+                "diffusion_type": "flow"
+            }
+        },
+        # "ForestDiffusion_2": {
         #     "type": "forest",
         #     "params": {
-        #         "n_t": 5,
-        #         "duplicate_K": 2,
-        #         "duplicate_K_test": 2,
-        #         "diffusion_type": "vp"
+        #         "n_t": 40,
+        #         "duplicate_K": 5,
+        #         "duplicate_K_test": 5,
+        #         "diffusion_type": "flow"
         #     }
         # },
-        "TCCM": {
-            "type": "tccm",
-            "params": {
-                "n_t": 300
-            }
-        }
-    }
+    #     "TCCM_n_t_20": {
+    #         "type": "tccm",
+    #         "params": {
+    #             "n_t": 20
+    #         }
+    #     }, 
+    #     "TCCM_n_t_60": {
+    #         "type": "tccm",
+    #         "params": {
+    #             "n_t": 60
+    #         }
+    #     }
+     }
     
     all_results_combined = {}
     all_extreme_cases = {}
@@ -583,7 +615,8 @@ if __name__ == "__main__":
     for model_name, model_config in models_to_run.items():
         model_type = model_config["type"]
         params = model_config["params"]
-        
+        #duplicate_K and duplicate_K_test should be the same for contamination studies
+        assert params.get("duplicate_K") == params.get("duplicate_K_test"), "duplicate_K and duplicate_K_test must be the same"
         if model_type == "forest":
             if params["diffusion_type"] == "vp":
                 score_list = ["deviation", "decision"]

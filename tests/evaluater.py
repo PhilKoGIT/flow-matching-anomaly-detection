@@ -470,6 +470,7 @@ if __name__ == "__main__":
             print("\n" + "#" * 80)
             print(f"Running model: {model_name} on dataset: {dataset_name}")
             print("#" * 80)
+            assert cfg["params"].get("duplicate_K") == cfg["params"].get("duplicate_K_test"), "duplicate_K and duplicate_K_test must be the same"
 
             decision_auroc_list = []
             decision_auprc_list = []
