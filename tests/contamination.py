@@ -475,7 +475,7 @@ def plot_score_models_comparison(all_results, score, metric, dataset_names, mode
 
     # For each model name a color
     #colors = {"ForestDiffusion_1": "blue", "TCCM": "green", "ForestFlow_1": "red"}
-    colors = {"ForestDiffusion_1": "red", "ForestDiffusion_2": "green"}
+    colors = {"TCCM_n_t_20": "red", "TCCM_n_t_10": "green"}
     for idx, dataset_name in enumerate(dataset_names):
         ax = axs[idx] if len(dataset_names) > 1 else axs
         
@@ -577,15 +577,15 @@ if __name__ == "__main__":
         #     }
         # },
         #duplicate_K and duplicate_K_test should be the same for contamination studies
-        "ForestDiffusion_1": {
-            "type": "forest",
-            "params": {
-                "n_t": 3,
-                "duplicate_K": 1,
-                "duplicate_K_test": 1,
-                "diffusion_type": "flow"
-            }
-        },
+        # "ForestDiffusion_1": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 3,
+        #         "duplicate_K": 1,
+        #         "duplicate_K_test": 1,
+        #         "diffusion_type": "flow"
+        #     }
+        # },
         # "ForestDiffusion_2": {
         #     "type": "forest",
         #     "params": {
@@ -595,18 +595,18 @@ if __name__ == "__main__":
         #         "diffusion_type": "flow"
         #     }
         # },
-    #     "TCCM_n_t_20": {
-    #         "type": "tccm",
-    #         "params": {
-    #             "n_t": 20
-    #         }
-    #     }, 
-    #     "TCCM_n_t_60": {
-    #         "type": "tccm",
-    #         "params": {
-    #             "n_t": 60
-    #         }
-    #     }
+        "TCCM_n_t_20": {
+            "type": "tccm",
+            "params": {
+                "n_t": 20
+            }
+        }, 
+        "TCCM_n_t_60": {
+            "type": "tccm",
+            "params": {
+                "n_t": 10
+            }
+        }
      }
     
     all_results_combined = {}
@@ -616,7 +616,7 @@ if __name__ == "__main__":
         model_type = model_config["type"]
         params = model_config["params"]
         #duplicate_K and duplicate_K_test should be the same for contamination studies
-        assert params.get("duplicate_K") == params.get("duplicate_K_test"), "duplicate_K and duplicate_K_test must be the same"
+        assert params.get("duplicate_K") == params.get("duplicate_K_test"), "duplicate_K and duplicate_K_test must be the same, for simplicity"
         if model_type == "forest":
             if params["diffusion_type"] == "vp":
                 score_list = ["deviation", "decision"]

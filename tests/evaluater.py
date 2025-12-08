@@ -84,7 +84,7 @@ def load_dataset(dataset_name, semi_supervised):
             print(f"Training data: {X_train.shape}, Normal: {len(y_train)}")
             print(f"Test data: {X_test.shape}, Normal: {sum(y_test == 0)}, Anomalies: {sum(y_test == 1)}")
         else:
-            # Falls unsupervised, nur die Rohdaten laden (nicht hier implementiert)
+            #case in the contamination study 
             pass
         #-----------------------------------
             
@@ -414,7 +414,46 @@ def evaluate_thresholds(anomaly_scores, y_test, score_name="Score"):
 
     return best_percentile, best_f1
 
+def compute_threshold_metrics(anomaly_scores, y_test, score_name):
+    """Calculates metrics for different threshold percentiles"""
+    percentiles = [60, 70, 75, 80, 85, 90, 95, 97.5, 99, 99.5, 99.9]
+    thresholds_percentiles = percentiles
+    results = {
+        "percentile_metrics": {},
+        "best_f1": 0,
+        "best_threshold": None,
+        "best_percentile": None
+    }
+    
+    for percentile in thresholds_percentiles:
+        threshold = np.percentile(anomaly_scores, percentile)
+        preds = (anomaly_scores > threshold).astype(int)
 
+        tp = np.sum((preds == 1) & (y_test == 1))
+        fp = np.sum((preds == 1) & (y_test == 0))
+        fn = np.sum((preds == 0) & (y_test == 1))
+        tn = np.sum((preds == 0) & (y_test == 0))
+
+        precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+        recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+        f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
+        accuracy = (tp + tn) / len(y_test)
+
+        results["percentile_metrics"][percentile] = {
+            "threshold": threshold,
+            "precision": precision,
+            "recall": recall,
+            "f1": f1,
+            "accuracy": accuracy,
+            "tp": tp, "fp": fp, "tn": tn, "fn": fn
+        }
+        
+        if f1 > results["best_f1"]:
+            results["best_f1"] = f1
+            results["best_threshold"] = threshold
+            results["best_percentile"] = percentile
+    
+    return results
 
 
 if __name__ == "__main__":
@@ -424,9 +463,13 @@ if __name__ == "__main__":
         #     "file": "29_Pima.npz",
         #     "semi_supervised": True,
         # }
-        "business_dataset":{
+        "business_dataset_semi":{
             "file": "business_dataset.csv",  
             "semi_supervised": True,    
+        },
+        "business_dataset_un":{
+            "file": "business_dataset.csv",  
+            "semi_supervised": False,    
         }
         #"Fraud":{
         #    "file": "13_fraud.npz",   
@@ -457,7 +500,7 @@ if __name__ == "__main__":
         "TCCM": {
             "type": "tccm",
             "params": {
-                "n_t": 100   # only used for scoring functions
+                "n_t": 10   # only used for scoring functions
             }
         }
     }   
@@ -470,7 +513,7 @@ if __name__ == "__main__":
             print("\n" + "#" * 80)
             print(f"Running model: {model_name} on dataset: {dataset_name}")
             print("#" * 80)
-            assert cfg["params"].get("duplicate_K") == cfg["params"].get("duplicate_K_test"), "duplicate_K and duplicate_K_test must be the same"
+            assert cfg["params"].get("duplicate_K") == cfg["params"].get("duplicate_K_test"), "duplicate_K and duplicate_K_test must be the same for simplicity reason"
 
             decision_auroc_list = []
             decision_auprc_list = []
@@ -485,7 +528,7 @@ if __name__ == "__main__":
             time_reconstruction_list = []
 
             for i in range(5):
-
+                #create the correct model and calculate scores
                 if cfg["type"] == "forest":
                     p = cfg["params"]
                     model, time_train = create_ForestDiffusionModel(
@@ -519,10 +562,10 @@ if __name__ == "__main__":
                     print(f"\n{'#'*80}")
                     print(f"THRESHOLD ANALYSIS FOR {model_name}")
                     print(f"{'#'*80}")
-                    evaluate_thresholds(results['decision']['scores'], y_test, f"{model_name} - Decision")
-                    evaluate_thresholds(results['deviation']['scores'], y_test, f"{model_name} - Deviation")
-                    if cfg["type"] != "forest" or cfg["params"].get("diffusion_type") != "vp":
-                        evaluate_thresholds(results['reconstruction']['scores'], y_test, f"{model_name} - Reconstruction")
+                    compute_threshold_metrics(results['decision']['scores'], y_test, f"{model_name} - Decision")
+                    compute_threshold_metrics(results['deviation']['scores'], y_test, f"{model_name} - Deviation")
+                    if cfg["params"].get("diffusion_type") != "vp":
+                        compute_threshold_metrics(results['reconstruction']['scores'], y_test, f"{model_name} - Reconstruction")
 
                 # Save results
                 time_train_list.append(time_train)
