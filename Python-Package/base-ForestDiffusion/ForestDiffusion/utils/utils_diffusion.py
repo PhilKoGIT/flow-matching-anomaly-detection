@@ -43,16 +43,6 @@ def build_data_xt(x0, x1, x_covs=None, n_t=101, diffusion_type='flow', eps=1e-3,
 
 #### Below is for Flow-Matching Sampling ####
 
-# Euler solver
-def euler_solve(y0, my_model, N=101):
-  h = 1 / (N-1)
-  y = y0
-  t = 0
-  # from t=0 to t=1
-  for i in range(N-1):
-    y = y + h*my_model(t=t, y=y)
-    t = t + h
-  return y
 
 # Get X[t], y where t is a scalar
 def get_xt(x1, t, dim, diffusion_type='flow', eps=1e-3, sde=None, x0=None):
@@ -143,11 +133,11 @@ def euler_solve(y0, my_model, N=101):
 # x_t contains interpolation points at a certain noise_step/time level
 # t is the starting time stept
 
-def euler_solve_from_x_t(x_t, t0, my_model, steps_left):
-    h = (1.0 - t0) / steps_left
-    y = x_t
-    t = t0
+def euler_solve_from_x_t(x_t, t0, my_model, n_t, steps_left):
+    h = 1/(n_t -1) #delta t
+    y = x_t       #starting point
+    t = t0     #starting time
     for i in range(steps_left):
-        y = y + h * my_model(t=t, y=y)
-        t = t + h
+        y = y + h * my_model(t=t, y=y)    #new point x_new = x_start + v* delta_t
+        t = t + h              #new time t_new = t_start + delta_t    
     return y

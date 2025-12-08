@@ -413,18 +413,19 @@ class ForestDiffusionModel():
 # ============================================================================
 # compute_deviation_score
 # ============================================================================
-  #-----------------------------------------------------------------------------------
-
-    # - copy test sample    duplicate_K_test times -> n_samples_rep 
-    # - for each copy, sample a random noise -> build interpolation samples at each noise level -> x_t_samples_rep and calculate the true velocity v_true (rectified flow)
-    # - let the model predict the velocity of every interpolation sample at every noise level for every rep_sample
-    # - compute the squared error between true velocity and predicted velocity at every noise level
-    # - average over the error of all noise levels for every rep_sample -> anomaly score per rep_sample
-    # - average over all rep_samples -> final anomaly score per test sample
-  #-----------------------------------------------------------------------------------
 
 
-  def compute_deviation_score(self, test_samples, diffusion_type, n_t=None, duplicate_K_test=None):
+  def compute_deviation_score(self, test_samples, diffusion_type, n_t, duplicate_K_test=1):
+
+    """
+    - copy test sample    duplicate_K_test times -> n_samples_rep 
+    - for each copy, sample a random noise -> build interpolation samples at each noise level -> x_t_samples_rep and calculate the true velocity v_true (rectified flow)
+    - let the model predict the velocity of every interpolation sample at every noise level for every rep_sample
+    - compute the squared error between true velocity and predicted velocity at every noise level
+    - average over the error of all noise levels for every rep_sample -> anomaly score per rep_sample
+    - average over all rep_samples -> final anomaly score per test sample
+
+    """
     assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
     assert self.diffusion_type == diffusion_type, "Diffusion type must be the same as the trained model"
@@ -436,16 +437,17 @@ class ForestDiffusionModel():
         n_t = self.n_t
     if len(self.cat_indexes) > 0:
       test_samples, column_names_before, column_names_after = self.dummify(test_samples)
+    
     test_samples = self.scaler.transform(test_samples)
     
     n_samples = test_samples.shape[0]
     n_features = test_samples.shape[1]
 
-    #duplicate test samples
+    #duplicate test samples in form [duplicate_K_test x n_samples, n_features]
     test_samples_rep = np.tile(test_samples, (duplicate_K_test, 1))
     n_samples_rep = test_samples_rep.shape[0] 
 
-  #create mask, for class because unsupervised (label_y = None)
+  #create mask, for class because unsupervised (label_y = None), as in other methods
     mask_y = {0: np.ones(n_samples_rep, dtype=bool)}
 
   #take partial model bc of constraints
@@ -459,20 +461,24 @@ class ForestDiffusionModel():
     #for each test_sample_rep copy sample a random noise
     X0 = np.random.normal(size=test_samples_rep.shape)
 
-    #returns for every test_rep_sample a new interpolation sample at every noise level and the true velocity v_true
+    #returns for every test_rep_sample a interpolation sample at every noise level and the true velocity v_true
     x_t_samples_rep, v_true = build_data_xt(
         X0, 
         test_samples_rep, 
         n_t=n_t, 
         diffusion_type=diffusion_type, 
         eps=self.eps, 
-        sde=self.sde
+    #    sde=self.sde
     )
+    #x_t samples rep looks like this : [sample1_1_t1, sample1_2_t1, sample1_2_t1..., sample2_1_t1... sample1_1_t2...; c]
+
+    #initialise anomaly scores for every replicated test sample
     anomaly_scores_rep = np.zeros(n_samples_rep)
+    #get noise levels as created in build_data_xt
     t_levels = np.linspace(self.eps, 1, n_t)
 
     for i, t in enumerate(t_levels):
-        #for all test_samples_rep get the samples at the same noise level t
+        #iterate over every noise level
         start_idx = i * n_samples_rep
         end_idx = (i + 1) * n_samples_rep
         X_t = x_t_samples_rep[start_idx:end_idx, :]
@@ -482,11 +488,11 @@ class ForestDiffusionModel():
         squared_error = np.sum((v_true - v_pred_t) ** 2, axis=1)
         #sum the squared error for every noise level of one rep_sample
         anomaly_scores_rep += squared_error
-    # average over all noise levels
+    # average over all noise levels -> actually redundant 
     anomaly_scores_rep = anomaly_scores_rep 
     #group again for each test sample
     anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K_test, n_samples)
-    #average over all test_samples_rep for one test sample
+    #average over all the errors of the duplicates for one test sample
     anomaly_scores = anomaly_scores_rep.mean(axis=0)  
     return anomaly_scores  
 
@@ -494,17 +500,17 @@ class ForestDiffusionModel():
 # compute_reconstruction_score
 # ============================================================================
 
-    ######################################
-    # - copy test sample duplicate_K_test times -> n_samples_rep 
-    # - for each copy sample a random noise -> build interpolation samples at each noise level -> x_t_samples_rep 
-    # - solve ode for every noise level t except last
-    # - compute with actual test sample the reconstruction error (mse) for every reconstructed sample at every noise level
-    # - average over the error of all noise levels for every rep_sample -> anomaly score per rep_sample
-    # - average over all rep_samples -> final anomaly score per test sample
+  def compute_reconstruction_score(self, test_samples, diffusion_type, n_t, duplicate_K_test=1):
 
-    ######################################
-
-  def compute_reconstruction_score(self, test_samples, diffusion_type, n_t=None, duplicate_K_test = None):
+    """ 
+     - copy test sample duplicate_K_test times -> n_samples_rep 
+    - for each copy sample a random noise -> build interpolation samples at each noise level -> x_t_samples_rep 
+    - solve ode for every noise level t (for all the replicated samples) except last (not meaningful, since we are already at the goal)
+    - compute with actual test sample the reconstruction error (squared error as a metric) for every reconstructed sample at every noise level
+    - sum up the error of all noise levels for each rep_sample -> anomaly score per rep_sample
+    - sum up over all the rep samples belonging for one test sample -> final anomaly score per test sample
+    
+    """
     assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
     assert self.diffusion_type == diffusion_type, "Diffusion type must be the same as the trained model"
@@ -560,18 +566,21 @@ class ForestDiffusionModel():
     #get noise levels
     t_levels = np.linspace(self.eps, 1, n_t)
 
-    #skip the last level, bc at t=1 is noise and no reconstruction makes sense
+    #skip the last level, bc at t=1 is data and no reconstruction makes sense
     for i, t in enumerate(t_levels[:-1]):
         
         #get rep_samples at the same noise level t
         start_idx = i * n_samples_rep
         end_idx = (i + 1) * n_samples_rep
         X_t = x_t_samples_rep[start_idx:end_idx, :]
-        steps = n_t - i -1 
+        #steps left to end at t=1
+        stepsleft = n_t - i -1 
         #solve ode from noise level t to t=1
-        ode_solved = euler_solve_from_x_t(x_t=X_t.reshape(-1),t0=t,my_model=model,steps_left=steps,)
-        #convert to data space in order to make comparable with test sample
-        solution = ode_solved.reshape(X_t.shape[0], self.c) # [b, c]
+
+        #ode_solve_from_x_t self implemented!
+        ode_solved = euler_solve_from_x_t(x_t=X_t.reshape(-1),t0=t,my_model=model,steps_left=stepsleft, n_t=n_t)
+        #convert to data space in order to make comparable with test sample 
+        solution = ode_solved.reshape(X_t.shape[0], self.c) 
         solution = self.unscale(solution)
         solution = self.clean_onehot_data(solution)
         solution = self.clip_extremes(solution)
@@ -582,22 +591,21 @@ class ForestDiffusionModel():
         #sum the squared error for every noise level of one rep_sample
         anomaly_scores_rep += squared_error
 
-    anomaly_scores_rep = anomaly_scores_rep   #  average over all noise levels, actually not necessary 
-    anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K_test, n_samples) #group again for each test sample
-    #over all noise levels for one testsample (lines)
+    anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K_test, n_samples) #group again for each test sample 
+    #average over all rep_samples for one test sample
     anomaly_scores = anomaly_scores_rep.mean(axis=0)  #calculate mean over all duplicate_K_test copies
-    return anomaly_scores  # [n_samples]
+    return anomaly_scores  
 
 # ============================================================================
 # compute_decision_score
 # ============================================================================
-  #-----------------------------------------------------------------------------------
-  # same as deviation score but only considers the last noise level t = 1 , and inspired from decision function of tccm
 
-  #-----------------------------------------------------------------------------------
+  def compute_decision_score(self, test_samples, diffusion_type, n_t, duplicate_K_test=1):
 
-
-  def compute_decision_score(self, test_samples, diffusion_type, n_t=None, duplicate_K_test=None):
+    """
+   # same as deviation score but only considers the last noise level t = 1 , and inspired from decision function of tccm
+    """
+    assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
     assert self.diffusion_type == diffusion_type, "Diffusion type must be the same as the trained model"
 
@@ -657,34 +665,31 @@ class ForestDiffusionModel():
     #sum the squared error for every noise level of one rep_sample
     anomaly_scores_rep += squared_error
 
-    anomaly_scores_rep = anomaly_scores_rep 
     #group again for each test sample
     anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K_test, n_samples)
     #average over all test_samples_rep for one test sample
     anomaly_scores = anomaly_scores_rep.mean(axis=0)  
+
     return anomaly_scores  
   
   # ============================================================================
 # compute_deviation_score_vp
 # ============================================================================
 
-  def compute_deviation_score_vp(self, test_samples, n_t, duplicate_K_test, diffusion_type):
+  def compute_deviation_score_vp(self, test_samples, n_t, diffusion_type, duplicate_K_test=1):
       """
-      Deviation Score für VP Diffusion.
-      
-      Vergleicht die vorhergesagte Score-Function mit der wahren Score-Function
-      über alle Zeitschritte.
+      Deviation Score for vp
+    
       """
       assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
       assert self.diffusion_type == 'vp', "This function is only for VP diffusion"
+      assert self.diffusion_type == diffusion_type, "Diffusion type must be the same as the trained model"
 
       if self.label_y is not None:
           raise Exception("Anomaly score only for unsupervised learning")
       
       if n_t is None:
           n_t = self.n_t
-      if duplicate_K_test is None:
-          duplicate_K_test = 1
           
       if len(self.cat_indexes) > 0:
           test_samples, column_names_before, column_names_after = self.dummify(test_samples)
@@ -713,7 +718,7 @@ class ForestDiffusionModel():
       X0 = np.random.normal(size=test_samples_rep.shape)
       
       anomaly_scores_rep = np.zeros(n_samples_rep)
-      t_levels = np.linspace(self.eps, 1, n_t)  # Avoid t=1 for numerical stability
+      t_levels = np.linspace(self.eps, 1, n_t) 
 
       for i, t in enumerate(t_levels):
           # Create x_t using VP forward process: x_t = mean + std * noise
@@ -731,8 +736,6 @@ class ForestDiffusionModel():
           squared_error = np.sum((score_true - score_pred) ** 2, axis=1)
           anomaly_scores_rep += squared_error
 
-      anomaly_scores_rep = anomaly_scores_rep 
-      
       # Group again for each test sample
       anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K_test, n_samples)
       
@@ -748,21 +751,18 @@ class ForestDiffusionModel():
 
   def compute_decision_score_vp(self, test_samples, n_t , duplicate_K_test, diffusion_type):
       """
-      Decision Score für VP Diffusion.
-      
-      Wie Deviation Score, aber nur am letzten Zeitschritt (t nahe 1),
-      inspiriert von TCCM decision function.
+      Decision Score for vp
+
       """
       assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
       assert self.diffusion_type == 'vp', "This function is only for VP diffusion"
+      assert self.diffusion_type == diffusion_type, "Diffusion type must be the same as the trained model"
 
       if self.label_y is not None:
           raise Exception("Anomaly score only for unsupervised learning")
       
       if n_t is None:
           n_t = self.n_t
-      if duplicate_K_test is None:
-          duplicate_K_test = 1
           
       if len(self.cat_indexes) > 0:
           test_samples, column_names_before, column_names_after = self.dummify(test_samples)
@@ -814,6 +814,13 @@ class ForestDiffusionModel():
       
       return anomaly_scores
 
+  # ============================================================================
+  # 
+  # =========================================================================
+
+  # ============================================================================
+  # 
+  # =========================================================================
 
 
   # Generate new data by solving the reverse ODE/SDE

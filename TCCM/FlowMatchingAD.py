@@ -52,14 +52,26 @@ class TCCM:
 
         anomaly_scores = anomaly_scores.cpu().numpy()
         return anomaly_scores
+    
+    
+    #----------------------------------------------------------------------------
+    #----------------------------------------------------------------------------
+
+    #Implementation of the scoring functions and helper functions
+
+    #----------------------------------------------------------------------------
     #----------------------------------------------------------------------------
     
     def compute_deviation_score(self, X_test, n_t):
+        """
+        Compute the deviation score similar to the ForestDiffusion implementation. v_true is different here.
+
+        """
         X = torch.tensor(X_test, dtype=torch.float32)
         X = X.to(next(self.model.parameters()).device)
         
         anomaly_scores = torch.zeros(X.shape[0], device=X.device)
-        t_levels = torch.linspace(0.1, 1.0, n_t)
+        t_levels = torch.linspace(0, 1.0, n_t)
 
         with torch.no_grad():
             for t_val in t_levels:
@@ -69,106 +81,84 @@ class TCCM:
                 squared_error = torch.sum((v_true - v_pred) ** 2, dim=1)
                 anomaly_scores += squared_error
         
-        return (anomaly_scores / n_t).cpu().numpy()
+        return (anomaly_scores).cpu().numpy()
 
-    # added scoring function 
-
-
-
-    #SQUARED ERROR FOR CONSISTENCY WITH FOREST FLOW... was unterschied norm?!
-    #----------------------------------------------------------------------------
 
     def build_data_xt_tccm(self, X, n_t):
         """
         Build interpolated points x(t) for TCCM. Like in Forest-Flow. This will be used to compute the reconstruction score starting from every interpolation point and summing them up.
-        Returns:
-            x_t: Interpolated points [n_t, b, c]
-            t_values: Time points [n_t]
+
         """
         b, c = X.shape
         
         t = np.linspace(0, 1.0, num=n_t)
-        X_expanded = np.expand_dims(X, axis=0)        # [1, b, c]
-        t_expanded = np.expand_dims(t, axis=(1, 2))   # [n_t, 1, 1]
+        X_expanded = np.expand_dims(X, axis=0)        
+        t_expanded = np.expand_dims(t, axis=(1, 2))   
+        #calculate interpolated points
+        x_t = (1 - t_expanded) * X_expanded          
         
-        x_t = (1 - t_expanded) * X_expanded           # [n_t, b, c]
-        
-        return x_t, t
+        return x_t
 
 
-    def follow_flow(self, x_start, t_start, n_steps):
-        """
-        Follow the learned flow from t_start to t=1.
-        """
-        x_current = x_start.clone()
-        delta_t = (1.0 - t_start) / max(n_steps, 1)
-        
-        with torch.no_grad():
-            for step in range(n_steps):
-                t_val = t_start + step * delta_t
-                t = torch.full((x_current.shape[0], 1), t_val, device=x_current.device)
-                v = self.model(x_current, t)
-                x_current = x_current + v * delta_t
-        
-        return x_current
+    def euler_solve_from_x_t(self, x_t, t0, steps_left, n_t):
+            """
+            Follow the learned flow from t_start to t=1. Same as Forest-Flow implementation.
+            """
+            y = x_t.clone() # starting point (Tensor)
+            h = 1/(n_t -1) # delta t (Float)
+            t_float = t0 # Speichert die Zeit als Python Float
 
+            device = y.device # Gerät vom Startpunkt übernehmen
+
+            with torch.no_grad():
+                for step in range(steps_left):          
+                    t_tensor = torch.full(
+                        (y.shape[0], 1),           
+                        t_float,                  
+                        dtype=torch.float32,
+                        device=device
+                    )
+                    # Euler-Schritt:
+                    y = y + h * self.model(y, t_tensor) 
+                    t_float = t_float + h          
+            return y
 
     def compute_reconstruction_score(self, X_test, n_t):
         """
-        Same principle as the reconstruction score from the Forest-Flow
+        Same principle as the reconstruction score from the Forest-Models
         For every time step t, start from x(t) and follow the flow to t=1.
-        Measure the distance to the origin as anomaly score and sum up the error for all starting points
+        Measure the distance (squared error) to the origin as anomaly score and sum up for all starting points
         .
         """
         device = next(self.model.parameters()).device
         
         # Build interpolated points
-        x_t_interpolations, t_values = self.build_data_xt_tccm(X_test, n_t)  # [n_t, b, c]
-        
+        x_t_interpolations = self.build_data_xt_tccm(X_test, n_t) 
+        t_values = np.linspace(0, 1.0, num=n_t)  
         b = X_test.shape[0]
-        anomaly_scores = np.zeros(b)
-        
+        anomaly_scores = np.zeros(b) 
         with torch.no_grad():
             #only go to n_t-1 because starting from t=1 makes no sense
             for i, t_val in enumerate(t_values[:-1]):
-                # x(t) for this time point
-                x_t = torch.tensor(x_t_interpolations[i], dtype=torch.float32, device=device)  # [b, c]
+                # x(t)s for this time point
+                x_t = torch.tensor(x_t_interpolations[i], dtype=torch.float32, device=device)  
                 
                 # Follow the flow from t to 1
                 steps_left = n_t - i - 1
-                x_final = self.follow_flow(x_t, t_start=t_val, n_steps=steps_left)
+                x_endpos = self.euler_solve_from_x_t(x_t, t0=t_val, steps_left=steps_left, n_t=n_t)
                 
                 # Distance to the origin
-                dist = torch.norm(x_final, dim=1).cpu().numpy()  # [b]
-                anomaly_scores += dist
-        
-        # Average over all time points
-        anomaly_scores = anomaly_scores / n_t
+                squared_error = torch.sum((x_endpos - 0) ** 2, dim=1).cpu().numpy()
+                anomaly_scores += squared_error
+        anomaly_scores = anomaly_scores 
         
         return anomaly_scores
 
-
-    def compute_simple_reconstruction_score(self, X_test, n_t):
-        """
-        Starts from x(0) = X_test and follows the flow to t=1 directly.
-        Measures the distance to the origin as anomaly score.
-        
-        """
-        X = torch.tensor(X_test, dtype=torch.float32)
-        X = X.to(next(self.model.parameters()).device)
-        
-        x_current = X.clone()
-        delta_t = 1.0 / n_t
-        
-        with torch.no_grad():
-            for step in range(n_t):
-                t = torch.full((X.shape[0], 1), step * delta_t, device=X.device)
-                v = self.model(x_current, t)
-                x_current = x_current + v * delta_t
-        
-        anomaly_scores = torch.norm(x_current, dim=1)
-        
-        return anomaly_scores.cpu().numpy()
+    
+#----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
 
 
 # The implementation of TCCM for robustness verification docked in nn.Module
