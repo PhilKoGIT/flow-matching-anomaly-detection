@@ -27,6 +27,10 @@ if str(project_root_dir) not in sys.path:
     sys.path.append(str(project_root_dir))
 from TCCM.FlowMatchingAD import TCCM
 from TCCM.functions import determine_FMAD_hyperparameters
+import hashlib
+MODEL_CACHE_DIR = Path(__file__).resolve().parent / "saved_models"
+MODEL_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
 
 percentiles = [20, 30, 40, 50, 70, 80, 90, 95, 97.5, 99]
 
@@ -239,13 +243,9 @@ def calculate_tccm_scores(X_test, model, n_t, score):
 
 
 # # ============================================================================
-# # based on https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/AblationStudies.py
+# # contamination principle based on https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/AblationStudies.py
 # # ============================================================================
 #for saving which the models that were already trained (bc scoring function is independet of model training)
-tccm = False
-forestdiffusion = False
-forestflow = False
-
 
 def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names, model):
 
@@ -326,24 +326,33 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
                 selected_ab = X_train_abnormal_full[:n_ab]  
                 X_train = np.vstack([X_train_normal, selected_ab])
 
+                # Hole Modell aus Cache oder trainiere (falls noch nicht vorhanden)
+                model = get_or_train_model(
+                    dataset_name=dataset_name,
+                    model_name=model_name,
+                    model_cnf=model_cnf,
+                    contam_idx=contam_idx,
+                    seed=seed,
+                    X_train=X_train,
+                )
+
                 p = model_cnf["params"]
                 if model_cnf["type"] == "forest":
-                    model = create_ForestDiffusionModel(
+                    scores = calculate_scores_ForestDiffusionModel(
+                        X_test,
+                        model,
                         n_t=p["n_t"],
-                        duplicate_K=p["duplicate_K"],
-                        seed=seed,
-                        X_train=X_train,
-                        dataset_name=f"{dataset_name}_{model_name}",
-                        diffusion_type=p["diffusion_type"]
+                        duplicate_K_test=p["duplicate_K_test"],
+                        diffusion_type=p["diffusion_type"],
+                        score=score
                     )
-                    scores = calculate_scores_ForestDiffusionModel(X_test, model, n_t=p["n_t"], duplicate_K_test=p["duplicate_K_test"], diffusion_type=p["diffusion_type"], score=score)
                 elif model_cnf["type"] == "tccm":
-                    model = create_trained_tccm_model(
-                        X_train=X_train,
-                        dataset_name=f"{dataset_name}_{model_name}",
-                        seed=seed
+                    scores = calculate_tccm_scores(
+                        X_test,
+                        model,
+                        n_t=p["n_t"],
+                        score=score
                     )
-                    scores = calculate_tccm_scores(X_test, model, n_t=p["n_t"], score=score)
                 else:
                     raise ValueError(f"Unknown model type: {model_cnf['type']}")
 
@@ -385,6 +394,109 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
 # # ============================================================================
 # #  
 # # ============================================================================
+
+
+# # ============================================================================
+# #  Helper functions 
+# # ============================================================================
+
+
+
+def build_model_config_dict(dataset_name, model_name, model_cnf, contam_idx, seed):
+    """
+    creats a unique config dict that contains everything that influences the trained model.
+    """
+    return {
+        "dataset_name": dataset_name,
+        "model_name": model_name,
+        "model_type": model_cnf["type"],
+        "params": model_cnf["params"],   # z.B. n_t, duplicate_K, diffusion_type, ...
+        "contam_idx": int(contam_idx),   # Index des Contamination-Levels
+        "seed": int(seed),
+    }
+
+
+def get_model_cache_path(config_dict):
+    """
+    
+
+    """
+    config_str = json.dumps(config_dict, sort_keys=True)
+    config_hash = hashlib.md5(config_str.encode("utf-8")).hexdigest()
+
+    # Struktur: saved_models/<dataset>/<model_name>/<hash>.joblib
+    dataset_name = config_dict["dataset_name"]
+    model_name = config_dict["model_name"]
+
+    model_dir = MODEL_CACHE_DIR / dataset_name / model_name
+    model_dir.mkdir(parents=True, exist_ok=True)
+
+    model_path = model_dir / f"{config_hash}.joblib"
+
+    # Optional: Config als JSON mit ablegen (nur zum Nachsehen)
+    config_json_path = model_dir / f"{config_hash}.json"
+    if not config_json_path.exists():
+        with open(config_json_path, "w") as f:
+            json.dump(config_dict, f, indent=2, sort_keys=True)
+
+    return model_path
+
+def get_or_train_model(dataset_name, model_name, model_cnf, contam_idx, seed, X_train):
+    # Build a unique configuration dictionary that identifies this model instance
+    config_dict = build_model_config_dict(dataset_name, model_name, model_cnf, contam_idx, seed)
+
+    # Determine the cache file path based on the hash of the configuration
+    model_path = get_model_cache_path(config_dict)
+
+    # ---------------------------------------------------------
+    # 1. Check if the model has been trained before
+    # ---------------------------------------------------------
+    if model_path.exists():
+        print(f"[*] Loading cached {model_cnf['type']} model from {model_path}")
+        model = joblib.load(model_path)
+        return model
+
+    # ---------------------------------------------------------
+    # 2. Train the model because no cached version exists yet
+    # ---------------------------------------------------------
+    print(
+        f"[*] No cached model found. Training model for "
+        f"{dataset_name}, {model_name}, contam_idx={contam_idx}, seed={seed}"
+    )
+
+    params = model_cnf["params"]
+
+    if model_cnf["type"] == "forest":
+        # Create and train a ForestDiffusion model (flow or vp)
+        model = create_ForestDiffusionModel(
+            n_t=params["n_t"],
+            duplicate_K=params["duplicate_K"],
+            seed=seed,
+            X_train=X_train,
+            dataset_name=f"{dataset_name}_{model_name}",
+            diffusion_type=params["diffusion_type"]
+        )
+
+    elif model_cnf["type"] == "tccm":
+        # Create and train a TCCM model
+        model = create_trained_tccm_model(
+            X_train=X_train,
+            dataset_name=f"{dataset_name}_{model_name}",
+            seed=seed
+        )
+
+    else:
+        raise ValueError(f"Unknown model type: {model_cnf['type']}")
+
+    # ---------------------------------------------------------
+    # 3. Save the newly trained model to disk
+    # ---------------------------------------------------------
+    joblib.dump(model, model_path)
+    print(f"[*] Model saved to {model_path}")
+
+    # Return the trained model
+    return model
+
 
 #needed for theshold metrics saving for extreme cases
 def compute_threshold_metrics(anomaly_scores, y_test):
@@ -489,7 +601,7 @@ def plot_score_models_comparison(all_results, score, metric, dataset_names, mode
     model_names = list(all_results[dataset_names[0]].keys())
 
     # For each model name a color
-    colors = {"ForestFlow_n20_k10": "blue", "ForestDiffusion_n50_k10": "green", "TCCM_n100": "red"}
+    colors = {"ForestFlow_nt20_dk20": "blue", "ForestDiffusion_nt50_dk10": "green", "TCCM_nt50": "red"}
     #colors = {"TCCM_n_t_20": "red", "TCCM_n_t_300": "green"}
     for idx, dataset_name in enumerate(dataset_names):
         ax = axs[idx] if len(dataset_names) > 1 else axs
@@ -582,7 +694,33 @@ if __name__ == "__main__":
 
     models_to_run = {
 
-        "ForestFlow_n20_k10": {
+        # "ForestFlow_n20_k10": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 5,
+        #         "duplicate_K": 2,
+        #         "duplicate_K_test": 2,
+        #         "diffusion_type": "flow"
+        #     },
+        # },
+        # "ForestDiffusion_n50_k10": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 5,
+        #         "duplicate_K": 2,
+        #         "duplicate_K_test": 2,
+        #         "diffusion_type": "vp"
+        #     },
+        # },
+        # "TCCM_n100": {
+        #     "type": "tccm",
+        #     "params": {
+        #         "n_t": 10
+        #     }
+        # }
+
+
+        "ForestFlow_nt20_dk20": {
             "type": "forest",
             "params": {
                 "n_t": 20,
@@ -591,7 +729,7 @@ if __name__ == "__main__":
                 "diffusion_type": "flow"
             },
         },
-        "ForestDiffusion_n50_k10": {
+        "ForestDiffusion_nt50_dk10": {
             "type": "forest",
             "params": {
                 "n_t": 50,
@@ -600,38 +738,12 @@ if __name__ == "__main__":
                 "diffusion_type": "vp"
             },
         },
-        "TCCM_n100": {
+        "TCCM_nt50": {
             "type": "tccm",
             "params": {
-                "n_t": 100
+                "n_t": 50
             }
         }
-
-
-        # "ForestFlow_n5_k5": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 20,
-        #         "duplicate_K": 10,
-        #         "duplicate_K_test": 10,
-        #         "diffusion_type": "flow"
-        #     },
-        # },
-        # "ForestDiffusion_n5_k5": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 50,
-        #         "duplicate_K": 10,
-        #         "duplicate_K_test": 10,
-        #         "diffusion_type": "vp"
-        #     },
-        # },
-        # "TCCM_n200": {
-        #     "type": "tccm",
-        #     "params": {
-        #         "n_t": 50
-        #     }
-        # }
      }
     
     all_results_combined = {}
