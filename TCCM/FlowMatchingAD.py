@@ -64,7 +64,7 @@ class TCCM:
     
     def compute_deviation_score(self, X_test, n_t):
         """
-        Compute the deviation score similar to the ForestDiffusion implementation. v_true is different here.
+        Compute the deviation score similar to the ForestDiffusion implementation. v_true is not constant but depended of the position.
 
         """
         X = torch.tensor(X_test, dtype=torch.float32)
@@ -78,7 +78,7 @@ class TCCM:
                 t = torch.full((X.shape[0], 1), t_val.item(), device=X.device)
                 x_t_i = torch.tensor(x_t[i], dtype=torch.float32, device=X.device)
                 v_pred = self.model(x_t_i, t)
-                v_true = -X
+                v_true = -x_t_i # True contraction vector at time t
                 squared_error = torch.sum((v_true - v_pred) ** 2, dim=1)
                 anomaly_scores += squared_error
         return (anomaly_scores).cpu().numpy()
@@ -141,7 +141,8 @@ class TCCM:
             #only go to n_t-1 because starting from t=1 makes no sense
             for i, t_val in enumerate(t_values[:-1]):
                 # x(t)s for this time point
-                x_t = torch.tensor(x_t_interpolations[i], dtype=torch.float32, device=device)        
+                x_t = torch.tensor(x_t_interpolations[i], dtype=torch.float32, device=device)  
+                
                 # Follow the flow from t to 1
                 steps_left = n_t - i - 1
                 x_endpos = self.euler_solve_from_x_t(x_t, t0=t_val, steps_left=steps_left, n_t=n_t)

@@ -109,6 +109,9 @@ def create_ForestDiffusionModel(n_t, duplicate_K, seed, X_train, dataset_name, d
     return model
 
 
+
+
+
 def calculate_scores_ForestDiffusionModel(X_test, model, n_t, duplicate_K_test, diffusion_type, score):
     """
     Calculates the  right score type for the given ForestDiffusionModel (flow type or vp type)
@@ -143,8 +146,15 @@ def calculate_scores_ForestDiffusionModel(X_test, model, n_t, duplicate_K_test, 
                 n_t=n_t, 
                 duplicate_K_test=duplicate_K_test
             )
-        else: 
-            raise ValueError("Reconstruction score is only implemented for flow.")
+        elif diffusion_type == "vp": 
+            anomaly_scores_reconstruction = model.compute_reconstruction_score_vp(
+                test_samples=X_test,
+                diffusion_type=diffusion_type,
+                n_t=n_t, 
+                duplicate_K_test=duplicate_K_test
+            )
+        else:
+            raise ValueError(f"Unknown diffusion type: {diffusion_type}")
         return anomaly_scores_reconstruction
     elif score == "decision":
         if diffusion_type == "flow":
@@ -152,14 +162,14 @@ def calculate_scores_ForestDiffusionModel(X_test, model, n_t, duplicate_K_test, 
                 test_samples=X_test,
                 diffusion_type=diffusion_type,
                 n_t=n_t, 
-                duplicate_K_test=duplicate_K_test
+                duplicate_K_test=2*duplicate_K_test
             )
         elif diffusion_type == "vp":
             anomaly_scores_decision = model.compute_decision_score_vp(
                 test_samples=X_test,
                 diffusion_type=diffusion_type,
                 n_t=n_t, 
-                duplicate_K_test=duplicate_K_test
+                duplicate_K_test=2*duplicate_K_test
             )
         else: 
             raise ValueError(f"Unknown diffusion type: {diffusion_type}")
@@ -231,6 +241,11 @@ def calculate_tccm_scores(X_test, model, n_t, score):
 # # ============================================================================
 # # based on https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/AblationStudies.py
 # # ============================================================================
+#for saving which the models that were already trained (bc scoring function is independet of model training)
+tccm = False
+forestdiffusion = False
+forestflow = False
+
 
 def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names, model):
 
@@ -474,8 +489,8 @@ def plot_score_models_comparison(all_results, score, metric, dataset_names, mode
     model_names = list(all_results[dataset_names[0]].keys())
 
     # For each model name a color
-    #colors = {"ForestDiffusion_1": "blue", "TCCM": "green", "ForestFlow_1": "red"}
-    colors = {"TCCM_n_t_20": "red", "TCCM_n_t_300": "green"}
+    colors = {"ForestFlow_n20_k10": "blue", "ForestDiffusion_n50_k10": "green", "TCCM_n100": "red"}
+    #colors = {"TCCM_n_t_20": "red", "TCCM_n_t_300": "green"}
     for idx, dataset_name in enumerate(dataset_names):
         ax = axs[idx] if len(dataset_names) > 1 else axs
         
@@ -558,53 +573,63 @@ if __name__ == "__main__":
     """"Letze score funktion noch implementieren!!!!!!"""
 
     #dataset_names = ["29_Pima.npz"]
-    dataset_names = ["29_Pima.npz"]
-    #dataset_names = ["5_campaign.npz"]
+    #dataset_names = ["29_Pima.npz"]
+    dataset_names = ["5_campaign.npz"]
 
     #MAX three models!
 
     #Change names in plot_score_models_comparison!!
 
     models_to_run = {
-        #duplicate_K and duplicate_K_test should be the same for contamination studies
-        # "ForestFlow_1": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 5,
-        #         "duplicate_K": 3,
-        #         "duplicate_K_test": 3,
-        #         "diffusion_type": "flow"
-        #     }
-        # },
-        #duplicate_K and duplicate_K_test should be the same for contamination studies
-        # "ForestDiffusion_1": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 3,
-        #         "duplicate_K": 1,
-        #         "duplicate_K_test": 1,
-        #         "diffusion_type": "flow"
-        #     }
-        # },
-        "ForestDiffusion_2": {
+
+        "ForestFlow_n20_k10": {
             "type": "forest",
             "params": {
                 "n_t": 20,
-                "duplicate_K": 5,
-                "duplicate_K_test": 5,
-                "diffusion_type": "vp"
-            }
+                "duplicate_K": 10,
+                "duplicate_K_test": 10,
+                "diffusion_type": "flow"
+            },
         },
-        # "TCCM_n_t_20": {
+        "ForestDiffusion_n50_k10": {
+            "type": "forest",
+            "params": {
+                "n_t": 50,
+                "duplicate_K": 10,
+                "duplicate_K_test": 10,
+                "diffusion_type": "vp"
+            },
+        },
+        "TCCM_n100": {
+            "type": "tccm",
+            "params": {
+                "n_t": 100
+            }
+        }
+
+
+        # "ForestFlow_n5_k5": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 20,
+        #         "duplicate_K": 10,
+        #         "duplicate_K_test": 10,
+        #         "diffusion_type": "flow"
+        #     },
+        # },
+        # "ForestDiffusion_n5_k5": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 50,
+        #         "duplicate_K": 10,
+        #         "duplicate_K_test": 10,
+        #         "diffusion_type": "vp"
+        #     },
+        # },
+        # "TCCM_n200": {
         #     "type": "tccm",
         #     "params": {
-        #         "n_t": 20
-        #     }
-        # }, 
-        # "TCCM_n_t_300": {
-        #     "type": "tccm",
-        #     "params": {
-        #         "n_t": 3
+        #         "n_t": 50
         #     }
         # }
      }
@@ -618,11 +643,7 @@ if __name__ == "__main__":
         #duplicate_K and duplicate_K_test should be the same for contamination studies
         assert params.get("duplicate_K") == params.get("duplicate_K_test"), "duplicate_K and duplicate_K_test must be the same, for simplicity"
         if model_type == "forest":
-            if params["diffusion_type"] == "vp":
- #               score_list = ["deviation", "decision"]
-                score_list = ["deviation", "decision"]
-            else:
-                score_list = ["deviation", "reconstruction", "decision"]
+            score_list =["deviation", "reconstruction", "decision"]            
         elif model_type == "tccm":
             score_list = ["deviation","reconstruction", "decision"]
         else:

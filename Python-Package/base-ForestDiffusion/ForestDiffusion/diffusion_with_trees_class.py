@@ -429,7 +429,7 @@ class ForestDiffusionModel():
     assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
     assert self.diffusion_type == diffusion_type, "Diffusion type must be the same as the trained model"
-
+    assert n_t == self.n_t, "n_t must match training n_t"
     if self.label_y is not None:
         raise Exception("Anomaly score only for unsupervised learning")
     
@@ -514,7 +514,7 @@ class ForestDiffusionModel():
     assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
     assert self.diffusion_type == diffusion_type, "Diffusion type must be the same as the trained model"
-
+    assert n_t == self.n_t, "n_t must match training n_t"
 
     if self.label_y is not None:
         raise Exception("Anomaly score only for unsupervised learning")
@@ -608,7 +608,7 @@ class ForestDiffusionModel():
     assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
     assert self.diffusion_type == diffusion_type, "Diffusion type must be the same as the trained model"
-
+    assert n_t == self.n_t, "n_t must match training n_t"
     if self.label_y is not None:
         raise Exception("Anomaly score only for unsupervised learning")
     
@@ -684,7 +684,8 @@ class ForestDiffusionModel():
       assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
       assert self.diffusion_type == 'vp', "This function is only for VP diffusion"
       assert self.diffusion_type == diffusion_type, "Diffusion type must be the same as the trained model"
-
+      assert n_t == self.n_t, "n_t must match training n_t"
+      
       if self.label_y is not None:
           raise Exception("Anomaly score only for unsupervised learning")
       
@@ -757,6 +758,7 @@ class ForestDiffusionModel():
       assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
       assert self.diffusion_type == 'vp', "This function is only for VP diffusion"
       assert self.diffusion_type == diffusion_type, "Diffusion type must be the same as the trained model"
+      assert n_t == self.n_t, "n_t must match training n_t"
 
       if self.label_y is not None:
           raise Exception("Anomaly score only for unsupervised learning")
@@ -813,6 +815,93 @@ class ForestDiffusionModel():
       anomaly_scores = anomaly_scores_rep.mean(axis=0)
       
       return anomaly_scores
+
+  def compute_reconstruction_score_vp(self, test_samples, n_t, diffusion_type, duplicate_K_test=1):
+      """
+      Reconstruction score for VP diffusion
+      
+      """
+      assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
+      assert self.diffusion_type == 'vp', "This function is only for VP diffusion"
+      assert self.diffusion_type == diffusion_type, "Diffusion type must be the same as the trained model"
+      assert n_t == self.n_t, "n_t must match training n_t"
+
+      if self.label_y is not None:
+          raise Exception("Anomaly score only for unsupervised learning")
+
+      if n_t is None:
+          n_t = self.n_t
+
+      # Categorical handling + Scaling wie in den anderen Scores
+      if len(self.cat_indexes) > 0:
+          test_samples, _, _ = self.dummify(test_samples)
+      test_samples = self.scaler.transform(test_samples)
+
+      n_samples = test_samples.shape[0]
+      n_features = test_samples.shape[1]
+
+      # Dupliziere Samples für MC über Noise
+      test_samples_rep = np.tile(test_samples, (duplicate_K_test, 1))
+      n_samples_rep = test_samples_rep.shape[0]
+
+      # Ground-Truth x0 im Datenraum zum Vergleich (unscaled + One-Hot-Cleaning + Clipping)
+      test_samples_rep_unscaled = self.unscale(test_samples_rep.copy())
+      test_samples_rep_unscaled = self.clean_onehot_data(test_samples_rep_unscaled)
+      test_samples_rep_unscaled = self.clip_extremes(test_samples_rep_unscaled)
+
+      # Mask für unsupervised (label_y = None)
+      mask_y = {0: np.ones(n_samples_rep, dtype=bool)}
+
+      # Modell gibt Score (my_model macht schon: x0_hat -> score = -x0_hat/sigma)
+      model = partial(
+          self.my_model,
+          mask_y=mask_y,
+          dmat=self.n_batch > 0,
+          unflatten=False,
+          X_covs=None
+      )
+
+      # Noise z ~ N(0, I)
+      X0 = np.random.normal(size=test_samples_rep.shape)
+
+      anomaly_scores_rep = np.zeros(n_samples_rep)
+      t_levels = np.linspace(self.eps, 1, n_t)
+
+      for t in t_levels:
+          # Vorwärts-Diffusion: x_t = mean + std * z
+          mean, std = self.sde.marginal_prob(test_samples_rep, t)
+          X_t = mean + std * X0     # [n_samples_rep, n_features]
+
+          # Score-Schätzung s_theta(x_t, t)
+          score_pred = model(t=t, y=X_t)   # gleiche Shape wie X_t
+
+          # alpha(t), sigma(t) aus SDE holen
+          alpha_, sigma_ = self.sde.marginal_prob_coef(test_samples_rep, t)
+          # Sicherstellen, dass sie broadcastbar sind
+          if np.ndim(alpha_) == 1:
+              alpha_ = alpha_.reshape(-1, 1)
+          if np.ndim(sigma_) == 1:
+              sigma_ = sigma_.reshape(-1, 1)
+
+          # Rekonstruktion x_hat0 im SCALED Space:
+          # x_hat = (x_t + sigma^2 * score_pred) / alpha
+          x_hat_scaled = (X_t + (sigma_ ** 2) * score_pred) / alpha_
+
+          # Zurück in Datenraum bringen
+          x_hat_unscaled = self.unscale(x_hat_scaled.copy())
+          x_hat_unscaled = self.clean_onehot_data(x_hat_unscaled)
+          x_hat_unscaled = self.clip_extremes(x_hat_unscaled)
+
+          # Squared Error zur echten Test-Sample-Kopie
+          squared_error = np.sum((test_samples_rep_unscaled - x_hat_unscaled) ** 2, axis=1)
+          anomaly_scores_rep += squared_error
+
+      # Wieder zu [duplicate_K_test, n_samples] formen und über Noise-MC mitteln
+      anomaly_scores_rep = anomaly_scores_rep.reshape(duplicate_K_test, n_samples)
+      anomaly_scores = anomaly_scores_rep.mean(axis=0)
+
+      return anomaly_scores
+
 
   # ============================================================================
   # 

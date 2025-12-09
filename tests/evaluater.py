@@ -459,18 +459,18 @@ def compute_threshold_metrics(anomaly_scores, y_test, score_name):
 if __name__ == "__main__":
 
     dataset_names = {
-        # "Campaign_noefvfm":{
-        #     "file": "29_Pima.npz",
-        #     "semi_supervised": True,
-        # }
-        "business_dataset_semi":{
-            "file": "business_dataset.csv",  
-            "semi_supervised": True,    
-        },
-        "business_dataset_un":{
-            "file": "business_dataset.csv",  
-            "semi_supervised": False,    
+        "Campaign":{
+            "file": "5_campaign.npz",
+            "semi_supervised": True,
         }
+        # "business_dataset_semi":{
+        #     "file": "business_dataset.csv",  
+        #     "semi_supervised": True,    
+        # },
+        # "business_dataset_un":{
+        #     "file": "business_dataset.csv",  
+        #     "semi_supervised": False,    
+        # }
         #"Fraud":{
         #    "file": "13_fraud.npz",   
         #    "semi_supervised": True,
@@ -478,29 +478,29 @@ if __name__ == "__main__":
     }
 
     models_to_run = {
-        # "ForestFlow": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 10,
-        #         "duplicate_K": 10,
-        #         "duplicate_K_test": 10,
-        #         "diffusion_type": "flow"
-        #     }
-        # },
-        # "ForestDiffusion": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 20,
-        #         "duplicate_K": 10,
-        #         "duplicate_K_test": 10,
-        #         "diffusion_type": "vp"
-        #     }
-        # },
 
-        "TCCM": {
+        "ForestFlow_n20_k20": {
+            "type": "forest",
+            "params": {
+                "n_t": 20,
+                "duplicate_K": 20,
+                "duplicate_K_test": 20,
+                "diffusion_type": "flow"
+            },
+        },
+        "ForestDiffusion_n50_k20": {
+            "type": "forest",
+            "params": {
+                "n_t": 50,
+                "duplicate_K": 20,
+                "duplicate_K_test": 20,
+                "diffusion_type": "vp"
+            },
+        },
+        "TCCM_n200": {
             "type": "tccm",
             "params": {
-                "n_t": 10   # only used for scoring functions
+                "n_t": 200
             }
         }
     }   

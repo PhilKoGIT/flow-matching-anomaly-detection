@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH -J contamination
-#SBATCH -p gpu_a100_il
+#SBATCH -p gpu_a100_short
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=32G
-#SBATCH --time=01:00:00
+#SBATCH --time=00:30:00
 #SBATCH -o slurm/%x-%j.out
 #SBATCH -e slurm/%x-%j.err
 
