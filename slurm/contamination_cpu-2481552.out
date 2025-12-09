@@ -1,0 +1,10 @@
+== Job start (CPU-Partition: cpu_il) ==
+Python Script wird mit 1 Kernen gestartet...
+ 
+Dataset loaded successfully!
+Training data: (18274, 62), Normal: 18274
+Test data: (22914, 62), Normal: 18274, Anomalies: 4640
+
+################################################################################
+Running model: ForestFlow on dataset: Campaign
+################################################################################

@@ -166,14 +166,14 @@ def calculate_scores_ForestDiffusionModel(X_test, model, n_t, duplicate_K_test, 
                 test_samples=X_test,
                 diffusion_type=diffusion_type,
                 n_t=n_t, 
-                duplicate_K_test=2*duplicate_K_test
+                duplicate_K_test=duplicate_K_test
             )
         elif diffusion_type == "vp":
             anomaly_scores_decision = model.compute_decision_score_vp(
                 test_samples=X_test,
                 diffusion_type=diffusion_type,
                 n_t=n_t, 
-                duplicate_K_test=2*duplicate_K_test
+                duplicate_K_test=duplicate_K_test
             )
         else: 
             raise ValueError(f"Unknown diffusion type: {diffusion_type}")
@@ -253,6 +253,18 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
     Runs training and evaluation for different contamination levels on fixed train/test split. A model is trained for each seed and contamination level.
     
     extended to save extreme cases data for (almost) no contamination and full contamination
+
+    ## Experimental Setup
+
+    For the contamination study, we follow the methodology of 
+    [TCCM, 2023], where all data (train + test) is scaled together 
+    using a single StandardScaler. This ensures that the test set 
+    remains consistently transformed across all contamination levels, 
+    allowing for fair comparison of model robustness. 
+
+    Note: This differs from a production setting, where the scaler 
+    would only be fitted on training data. However, for the purpose 
+    of this ablation study, test set consistency is prioritized.
 
     """
     seed_list = [0,1,2,3,4]
@@ -424,7 +436,7 @@ def get_model_cache_path(config_dict):
     config_str = json.dumps(config_dict, sort_keys=True)
     config_hash = hashlib.md5(config_str.encode("utf-8")).hexdigest()
 
-    # Struktur: saved_models/<dataset>/<model_name>/<hash>.joblib
+    # Structure: saved_models/<dataset>/<model_name>/<hash>.joblib
     dataset_name = config_dict["dataset_name"]
     model_name = config_dict["model_name"]
 
@@ -442,23 +454,22 @@ def get_model_cache_path(config_dict):
     return model_path
 
 def get_or_train_model(dataset_name, model_name, model_cnf, contam_idx, seed, X_train):
+    """
+    this method eihter 
+    """
     # Build a unique configuration dictionary that identifies this model instance
     config_dict = build_model_config_dict(dataset_name, model_name, model_cnf, contam_idx, seed)
 
     # Determine the cache file path based on the hash of the configuration
     model_path = get_model_cache_path(config_dict)
 
-    # ---------------------------------------------------------
-    # 1. Check if the model has been trained before
-    # ---------------------------------------------------------
+    #check if model was trained before
     if model_path.exists():
         print(f"[*] Loading cached {model_cnf['type']} model from {model_path}")
         model = joblib.load(model_path)
         return model
 
-    # ---------------------------------------------------------
-    # 2. Train the model because no cached version exists yet
-    # ---------------------------------------------------------
+    #train the model if no cached version exists
     print(
         f"[*] No cached model found. Training model for "
         f"{dataset_name}, {model_name}, contam_idx={contam_idx}, seed={seed}"
@@ -487,14 +498,9 @@ def get_or_train_model(dataset_name, model_name, model_cnf, contam_idx, seed, X_
 
     else:
         raise ValueError(f"Unknown model type: {model_cnf['type']}")
-
-    # ---------------------------------------------------------
-    # 3. Save the newly trained model to disk
-    # ---------------------------------------------------------
+    # Save the trained model, so it can be used for other scores 
     joblib.dump(model, model_path)
     print(f"[*] Model saved to {model_path}")
-
-    # Return the trained model
     return model
 
 
@@ -601,7 +607,7 @@ def plot_score_models_comparison(all_results, score, metric, dataset_names, mode
     model_names = list(all_results[dataset_names[0]].keys())
 
     # For each model name a color
-    colors = {"ForestFlow_nt20_dk20": "blue", "ForestDiffusion_nt50_dk10": "green", "TCCM_nt50": "red"}
+    colors = {"ForestFlow_nt20_dk10": "blue", "ForestDiffusion_nt50_dk10": "green", "TCCM_nt50": "red"}
     #colors = {"TCCM_n_t_20": "red", "TCCM_n_t_300": "green"}
     for idx, dataset_name in enumerate(dataset_names):
         ax = axs[idx] if len(dataset_names) > 1 else axs
@@ -694,7 +700,7 @@ if __name__ == "__main__":
 
     models_to_run = {
 
-        # "ForestFlow_n20_k10": {
+        # "ForestFlow_nt20_dk20": {
         #     "type": "forest",
         #     "params": {
         #         "n_t": 5,
@@ -703,7 +709,7 @@ if __name__ == "__main__":
         #         "diffusion_type": "flow"
         #     },
         # },
-        # "ForestDiffusion_n50_k10": {
+        # "ForestDiffusion_nt50_dk10": {
         #     "type": "forest",
         #     "params": {
         #         "n_t": 5,
@@ -712,7 +718,7 @@ if __name__ == "__main__":
         #         "diffusion_type": "vp"
         #     },
         # },
-        # "TCCM_n100": {
+        # "TCCM_nt50": {
         #     "type": "tccm",
         #     "params": {
         #         "n_t": 10
@@ -720,7 +726,7 @@ if __name__ == "__main__":
         # }
 
 
-        "ForestFlow_nt20_dk20": {
+        "ForestFlow_nt20_dk10": {
             "type": "forest",
             "params": {
                 "n_t": 20,
@@ -754,10 +760,8 @@ if __name__ == "__main__":
         params = model_config["params"]
         #duplicate_K and duplicate_K_test should be the same for contamination studies
         assert params.get("duplicate_K") == params.get("duplicate_K_test"), "duplicate_K and duplicate_K_test must be the same, for simplicity"
-        if model_type == "forest":
+        if model_type == "forest" or model_type == "tccm":
             score_list =["deviation", "reconstruction", "decision"]            
-        elif model_type == "tccm":
-            score_list = ["deviation","reconstruction", "decision"]
         else:
             raise ValueError(f"Unknown model type: {model_type}")
 

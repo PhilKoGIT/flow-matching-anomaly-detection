@@ -235,13 +235,19 @@ def calculate_scores_ForestDiffusionModel(X_test, y_test, model, n_t, duplicate_
         auroc_deviation = roc_auc_score(y_test, anomaly_scores_deviation)
         auprc_deviation = average_precision_score(y_test, anomaly_scores_deviation)
         
-        #---Computation decision Score ---
-        #no reconstruction score for vp diffusion implemented
-
-        auroc_reconstruction = 0
-        auprc_reconstruction = 0
-        time_reconstruction = 0
-        anomaly_scores_reconstruction = 0
+        #---Computation reconstruction Score ---
+        start_time_reconstruction = time.time()
+        anomaly_scores_reconstruction = model.compute_reconstruction_score_vp(
+            test_samples=X_test,
+            diffusion_type=diffusion_type,
+            n_t=n_t, 
+            duplicate_K_test=duplicate_K_test
+        )
+        end_time_reconstruction = time.time()
+        time_reconstruction = end_time_reconstruction - start_time_reconstruction
+        
+        auroc_reconstruction = roc_auc_score(y_test, anomaly_scores_reconstruction)
+        auprc_reconstruction = average_precision_score(y_test, anomaly_scores_reconstruction)
         
 
         #---Computation decision Score ---
@@ -476,31 +482,37 @@ if __name__ == "__main__":
         #    "semi_supervised": True,
         #    "type": "efvfm"
     }
+    """Rekonstruktion noch implementieren !!!! und auch model speichern!! 
+# modellspeicherung überflüssig.... weil alle scores hintereinander
+#case with full anomalies in training and test: already done in contamination.py
+
+"""
+
 
     models_to_run = {
 
-        "ForestFlow_n20_k20": {
+        "ForestFlow": {
             "type": "forest",
             "params": {
                 "n_t": 20,
-                "duplicate_K": 20,
-                "duplicate_K_test": 20,
+                "duplicate_K": 10,
+                "duplicate_K_test": 10,
                 "diffusion_type": "flow"
             },
         },
-        "ForestDiffusion_n50_k20": {
+        "ForestDiffusion": {
             "type": "forest",
             "params": {
                 "n_t": 50,
-                "duplicate_K": 20,
-                "duplicate_K_test": 20,
+                "duplicate_K": 10,
+                "duplicate_K_test": 10,
                 "diffusion_type": "vp"
             },
         },
-        "TCCM_n200": {
+        "TCCM": {
             "type": "tccm",
             "params": {
-                "n_t": 200
+                "n_t": 50
             }
         }
     }   
@@ -637,25 +649,32 @@ if __name__ == "__main__":
             )
             print(line)
 
-        # Header for timing
+        # Header für Timing
         print("\n" + "-" * 100)
         print("TIMING (seconds):")
         print("-" * 100)
+
         header2 = (
             f"{'Model':<18} | "
-            f"{'TrainT':<15} | {'DecT':<15} | {'DevT':<15} | {'RecT':<15} | {'TotalT':>10}"
+            f"{'TrainT':>15} | "     
+            f"{'DecT':>15} | "       
+            f"{'DevT':>15} | "       
+            f"{'RecT':>15} | "       
+            f"{'TotalT':>15}"        
         )
         print(header2)
         print("-" * len(header2))
 
         for model_name, stats in dataset_results.items():
-            total_time = stats['train_time_mean'] + stats['dec_time_mean'] + stats['dev_time_mean'] + stats['rec_time_mean']
+            total_time = (stats['train_time_mean'] + stats['dec_time_mean'] + 
+                        stats['dev_time_mean'] + stats['rec_time_mean'])
+            
             line = (
                 f"{model_name:<18} | "
-                f"{stats['train_time_mean']:.2f}  | "
-                f"{stats['dec_time_mean']:.4f}| "
-                f"{stats['dev_time_mean']:.4f} | "
-                f"{stats['rec_time_mean']:.4f}| "
-                f"{total_time:>10.2f}"
+                f"{stats['train_time_mean']:>15.2f} | "   
+                f"{stats['dec_time_mean']:>15.4f} | "     
+                f"{stats['dev_time_mean']:>15.4f} | "     
+                f"{stats['rec_time_mean']:>15.4f} | "     
+                f"{total_time:>15.2f}"                    
             )
             print(line)

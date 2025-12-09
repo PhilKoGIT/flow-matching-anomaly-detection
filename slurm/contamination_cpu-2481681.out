@@ -1,0 +1,11 @@
+== Job start (CPU-Partition: cpu_il) ==
+Python Script wird mit 1 Kernen gestartet...
+
+ Dataset: 5_campaign.npz with model: ForestFlow_nt20_dk10 and score: deviation
+ 
+Dataset loaded successfully!
+Training data: (18274, 62), Normal: 18274
+Test data: (22914, 62), Normal: 18274, Anomalies: 4640
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/6101921e7e01f933487dfd39d65116f1.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/cff2422e330f2ab3a4ce7993720ab125.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt20_dk10, contam_idx=0, seed=2
