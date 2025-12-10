@@ -16,8 +16,8 @@ import json
 import joblib
 from sklearn.metrics import average_precision_score
 import time
-from preprocessing_bd_unsupervised import prepare_data_unsupervised
-from preprocessing_bd_supervised import prepare_data_supervised
+from ForestDiffusion.tests.preprocessing_bd_unsupervised_old import prepare_data_unsupervised
+from ForestDiffusion.tests.preprocessing_bd_supervised_old import prepare_data_supervised
 import sys
 current_file_path = Path(__file__).resolve()
 parent_dir = current_file_path.parent
@@ -512,7 +512,7 @@ if __name__ == "__main__":
         "TCCM": {
             "type": "tccm",
             "params": {
-                "n_t": 10
+                "n_t": 50
             }
         }
     }   

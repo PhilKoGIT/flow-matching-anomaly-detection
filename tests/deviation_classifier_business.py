@@ -21,7 +21,7 @@ pd.set_option("display.max_columns", None)   # Alle Spalten anzeigen
 pd.set_option("display.max_colwidth", None)  # Full content in each cell
 
 # RICHTIGE DATEI HIER
-from ForestDiffusion.tests.preprocessing_bd_supervised import prepare_data
+from ForestDiffusion.tests.preprocessing_bd_supervised_old import prepare_data
 
 # ============================================================================
 # SETUP

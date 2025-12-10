@@ -18,8 +18,8 @@ import joblib
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import average_precision_score
 import time
-from preprocessing_bd_unsupervised import prepare_data_unsupervised
-from preprocessing_bd_supervised import prepare_data_supervised
+from ForestDiffusion.tests.preprocessing_bd_unsupervised_old import prepare_data_unsupervised
+from ForestDiffusion.tests.preprocessing_bd_supervised_old import prepare_data_supervised
 
 
 #copied partly from by utils.py of https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py

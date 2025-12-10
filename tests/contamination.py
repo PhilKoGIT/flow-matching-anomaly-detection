@@ -17,8 +17,8 @@ import json
 import joblib
 from sklearn.metrics import average_precision_score
 import time
-from preprocessing_bd_unsupervised import prepare_data_unsupervised
-from preprocessing_bd_supervised import prepare_data_supervised
+from ForestDiffusion.tests.preprocessing_bd_unsupervised_old import prepare_data_unsupervised
+from ForestDiffusion.tests.preprocessing_bd_supervised_old import prepare_data_supervised
 import sys
 current_file_path = Path(__file__).resolve()
 parent_dir = current_file_path.parent
@@ -113,12 +113,9 @@ def create_ForestDiffusionModel(n_t, duplicate_K, seed, X_train, dataset_name, d
     return model
 
 
-
-
-
 def calculate_scores_ForestDiffusionModel(X_test, model, n_t, duplicate_K_test, diffusion_type, score):
     """
-    Calculates the  right score type for the given ForestDiffusionModel (flow type or vp type)
+    Calls the  right score type for the given ForestDiffusionModel (flow type or vp type)
     Selects the right funcition to call
 
     """
@@ -245,7 +242,6 @@ def calculate_tccm_scores(X_test, model, n_t, score):
 # # ============================================================================
 # # contamination principle based on https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/AblationStudies.py
 # # ============================================================================
-#for saving which the models that were already trained (bc scoring function is independet of model training)
 
 def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names, model):
 
@@ -254,17 +250,7 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
     
     extended to save extreme cases data for (almost) no contamination and full contamination
 
-    ## Experimental Setup
-
-    For the contamination study, we follow the methodology of 
-    [TCCM, 2023], where all data (train + test) is scaled together 
-    using a single StandardScaler. This ensures that the test set 
-    remains consistently transformed across all contamination levels, 
-    allowing for fair comparison of model robustness. 
-
-    Note: This differs from a production setting, where the scaler 
-    would only be fitted on training data. However, for the purpose 
-    of this ablation study, test set consistency is prioritized.
+    returns: dict entry for dataset with model name, score, auroc and auprc values for each run and contamination levels
 
     """
     seed_list = [0,1,2,3,4]
@@ -321,12 +307,13 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
                 "threshold_metrics_per_seed": []
             }
         }
+        #iterate over contamination levels
         for contam_idx, contam_ratio in enumerate(contamination_levels):
             aucs, prs = [], []
 
             is_no_contam = (contam_idx == 0)  
             is_full_contam = (contam_idx == len(contamination_levels) - 1)  
-
+            #different seeds for each contamination level
             for seed in seed_list:
                 np.random.seed(seed)
                 random.seed(seed)
@@ -338,7 +325,7 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
                 selected_ab = X_train_abnormal_full[:n_ab]  
                 X_train = np.vstack([X_train_normal, selected_ab])
 
-                # Hole Modell aus Cache oder trainiere (falls noch nicht vorhanden)
+                # Take model from cache or train new one
                 model = get_or_train_model(
                     dataset_name=dataset_name,
                     model_name=model_name,
@@ -396,41 +383,36 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
             "auprc": auprc_all,
             "contamination_levels": contamination_levels 
         }
-
-    #all results contains a dictionary for each dataset with auroc and auprc values (with mean and std) for each contamination level
-    #added score and model_name contamination for grouping and creating plots
-    #all_contam_levels contains the contamination levels used for each dataset
     return all_results, all_contam_levels, extreme_cases_data
-
-
 # # ============================================================================
 # #  
 # # ============================================================================
 
 
+
+
 # # ============================================================================
 # #  Helper functions 
 # # ============================================================================
-
-
-
 def build_model_config_dict(dataset_name, model_name, model_cnf, contam_idx, seed):
     """
+
     creats a unique config dict that contains everything that influences the trained model.
+
     """
     return {
         "dataset_name": dataset_name,
         "model_name": model_name,
         "model_type": model_cnf["type"],
-        "params": model_cnf["params"],   # z.B. n_t, duplicate_K, diffusion_type, ...
-        "contam_idx": int(contam_idx),   # Index des Contamination-Levels
+        "params": model_cnf["params"],   
+        "contam_idx": int(contam_idx),   
         "seed": int(seed),
     }
 
 
 def get_model_cache_path(config_dict):
     """
-    
+    get model_cache path based on hash of config dict
 
     """
     config_str = json.dumps(config_dict, sort_keys=True)
@@ -455,7 +437,9 @@ def get_model_cache_path(config_dict):
 
 def get_or_train_model(dataset_name, model_name, model_cnf, contam_idx, seed, X_train):
     """
-    this method eihter 
+    this method either loads a cached model or trains a new one if no cached version exists
+    returns: trained model 
+
     """
     # Build a unique configuration dictionary that identifies this model instance
     config_dict = build_model_config_dict(dataset_name, model_name, model_cnf, contam_idx, seed)
@@ -464,6 +448,7 @@ def get_or_train_model(dataset_name, model_name, model_cnf, contam_idx, seed, X_
     model_path = get_model_cache_path(config_dict)
 
     #check if model was trained before
+    #if: return cached model
     if model_path.exists():
         print(f"[*] Loading cached {model_cnf['type']} model from {model_path}")
         model = joblib.load(model_path)
@@ -506,7 +491,11 @@ def get_or_train_model(dataset_name, model_name, model_cnf, contam_idx, seed, X_
 
 #needed for theshold metrics saving for extreme cases
 def compute_threshold_metrics(anomaly_scores, y_test):
-    """Calculates metrics for different threshold percentiles"""
+    """Calculates metrics (precision, recall, f1) for different threshold percentiles
+
+    returns: entry with metrics for each percentile and best f1 score info
+    
+    """
     
     thresholds_percentiles = percentiles
     results = {
@@ -599,7 +588,7 @@ def aggregate_extreme_cases(extreme_cases_data):
 
 def plot_score_models_comparison(all_results, score, metric, dataset_names, model_names):
     """
-    Shows for one score all models comparison plots for all datasets
+    Shows for one scoretype all models comparison plot for all datasets and one metric
     metric: "auroc" or "auprc"
     
     """
@@ -607,7 +596,7 @@ def plot_score_models_comparison(all_results, score, metric, dataset_names, mode
     model_names = list(all_results[dataset_names[0]].keys())
 
     # For each model name a color
-    colors = {"ForestFlow_nt20_dk20": "blue", "ForestDiffusion_nt50_dk20": "green", "ForestFlow_nt20_dk10": "red"}
+    colors = {"ForestFlow_nt20_dk10": "blue", "ForestDiffusion_nt50_dk10": "green", "TCCM_nt50": "red"}
     #colors = {"TCCM_nt50": "blue", "TCCM_nt100": "red", "TCCM_nt200": "green"}
     for idx, dataset_name in enumerate(dataset_names):
         ax = axs[idx] if len(dataset_names) > 1 else axs
@@ -636,13 +625,13 @@ def plot_score_models_comparison(all_results, score, metric, dataset_names, mode
         ax.legend()
     
     plt.tight_layout()
-    plt.savefig(f"./results_vp/all_models_{score}_{metric}.pdf")
+    plt.savefig(f"./results_all/all_models_{score}_{metric}.pdf")
     plt.show()
 
 
 def plot_model_scores_comparison(all_results, model_name, metric, dataset_names):
     """
-    Shows for one model all 3 scores on all datasets
+    Shows for one model all 3 scores on each dataset for one metric
     metric: "auroc" or "auprc"
 
     """
@@ -657,7 +646,6 @@ def plot_model_scores_comparison(all_results, model_name, metric, dataset_names)
         "reconstruction": "green", 
         "decision": "red"
     }
-
     for idx, dataset_name in enumerate(dataset_names):
         ax = axs[idx] if len(dataset_names) > 1 else axs
         
@@ -681,15 +669,11 @@ def plot_model_scores_comparison(all_results, model_name, metric, dataset_names)
         ax.legend()
     
     plt.tight_layout()
-    plt.savefig(f"./results_vp/{model_name}_all_scores_{metric}.pdf")
+    plt.savefig(f"./results_all/{model_name}_all_scores_{metric}.pdf")
     plt.show()
-
-
 
 if __name__ == "__main__":
 
-    #dataset_names = ["29_Pima.npz"]
-    #dataset_names = ["29_Pima.npz"]
     dataset_names = ["5_campaign.npz"]
 
     #MAX three models!
@@ -699,24 +683,25 @@ if __name__ == "__main__":
 
 
 
-
+    #define models to run
+    #change names in plot_score_models_comparison accordingly
     models_to_run = {
 
-        # "ForestFlow_nt20_dk20": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 20,
-        #         "duplicate_K": 20,
-        #         "duplicate_K_test": 20,
-        #         "diffusion_type": "flow"
-        #     },
-        # },
-        "ForestDiffusion_nt50_dk20": {
+        "ForestFlow_nt20_dk10": {
+            "type": "forest",
+            "params": {
+                "n_t": 20,
+                "duplicate_K": 10,
+                "duplicate_K_test": 10,
+                "diffusion_type": "flow"
+            },
+        },
+        "ForestDiffusion_nt50_dk10": {
             "type": "forest",
             "params": {
                 "n_t": 50,
-                "duplicate_K": 20,
-                "duplicate_K_test": 20,
+                "duplicate_K": 10,
+                "duplicate_K_test": 10,
                 "diffusion_type": "vp"
             },
         },
@@ -728,7 +713,7 @@ if __name__ == "__main__":
         #         "duplicate_K_test": 20,
         #         "diffusion_type": "flow"
         #     },
-        # }
+        # },
         # "ForestDiffusion_nt50_dk20": {
         #     "type": "forest",
         #     "params": {
@@ -738,10 +723,22 @@ if __name__ == "__main__":
         #         "diffusion_type": "vp"
         #     },
         # },
-        #  "TCCM_nt50": {
+         "TCCM_nt50": {
+            "type": "tccm",
+            "params": {
+                "n_t": 50
+            },
+        },
+        #          "TCCM_nt100": {
         #     "type": "tccm",
         #     "params": {
-        #         "n_t": 50
+        #         "n_t": 100
+        #     },
+        # },
+        #          "TCCM_nt200": {
+        #     "type": "tccm",
+        #     "params": {
+        #         "n_t": 200
         #     },
         # },
      }
@@ -749,16 +746,18 @@ if __name__ == "__main__":
     all_results_combined = {}
     all_extreme_cases = {}
 
+    #iterate over the given models
     for model_name, model_config in models_to_run.items():
         model_type = model_config["type"]
         params = model_config["params"]
-        #duplicate_K and duplicate_K_test should be the same for contamination studies
+        #duplicate_K and duplicate_K_test should be the same for contamination studies (for simplicity)
         assert params.get("duplicate_K") == params.get("duplicate_K_test"), "duplicate_K and duplicate_K_test must be the same, for simplicity"
+        #check valid model type and assign score list
         if model_type == "forest" or model_type == "tccm":
             score_list =["deviation", "reconstruction", "decision"]            
         else:
             raise ValueError(f"Unknown model type: {model_type}")
-
+        #iterate over the score types
         for score in score_list:
             results, contam_levels, extreme_cases = run_training_contamination_ablation_dynamic_fixed_split(
                 score, dataset_names, (model_name, model_config)
