@@ -477,7 +477,7 @@ class ForestDiffusionModel():
     #get noise levels as created in build_data_xt
     t_levels = np.linspace(self.eps, 1, n_t)
 
-    for i, t in enumerate(t_levels):
+    for i, t in enumerate(t_levels[n_t//2:]):
         #iterate over every noise level
         start_idx = i * n_samples_rep
         end_idx = (i + 1) * n_samples_rep
@@ -567,7 +567,7 @@ class ForestDiffusionModel():
     t_levels = np.linspace(self.eps, 1, n_t)
 
     #skip the last level, bc at t=1 is data and no reconstruction makes sense
-    for i, t in enumerate(t_levels[:-1]):
+    for i, t in enumerate(t_levels[n_t//2:-1]):
         
         #get rep_samples at the same noise level t
         start_idx = i * n_samples_rep
@@ -721,7 +721,7 @@ class ForestDiffusionModel():
       anomaly_scores_rep = np.zeros(n_samples_rep)
       t_levels = np.linspace(self.eps, 1, n_t) 
 
-      for i, t in enumerate(t_levels):
+      for i, t in enumerate(t_levels[n_t//2:]):
           # Create x_t using VP forward process: x_t = mean + std * noise
           mean, std = self.sde.marginal_prob(test_samples_rep, t)
           X_t = mean + std * X0
@@ -867,7 +867,7 @@ class ForestDiffusionModel():
       anomaly_scores_rep = np.zeros(n_samples_rep)
       t_levels = np.linspace(self.eps, 1, n_t)
 
-      for t in t_levels:
+      for t in t_levels[n_t//2:]:
           # Vorwärts-Diffusion: x_t = mean + std * z
           mean, std = self.sde.marginal_prob(test_samples_rep, t)
           X_t = mean + std * X0     # [n_samples_rep, n_features]

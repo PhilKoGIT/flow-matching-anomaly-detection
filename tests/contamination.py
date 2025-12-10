@@ -607,8 +607,8 @@ def plot_score_models_comparison(all_results, score, metric, dataset_names, mode
     model_names = list(all_results[dataset_names[0]].keys())
 
     # For each model name a color
-    colors = {"ForestFlow_nt20_dk10": "blue", "ForestDiffusion_nt50_dk10": "green", "TCCM_nt50": "red"}
-    #colors = {"TCCM_n_t_20": "red", "TCCM_n_t_300": "green"}
+    colors = {"ForestFlow_nt20_dk20": "blue", "ForestDiffusion_nt50_dk20": "green", "ForestFlow_nt20_dk10": "red"}
+    #colors = {"TCCM_nt50": "blue", "TCCM_nt100": "red", "TCCM_nt200": "green"}
     for idx, dataset_name in enumerate(dataset_names):
         ax = axs[idx] if len(dataset_names) > 1 else axs
         
@@ -636,7 +636,7 @@ def plot_score_models_comparison(all_results, score, metric, dataset_names, mode
         ax.legend()
     
     plt.tight_layout()
-    plt.savefig(f"./results_ablation/all_models_{score}_{metric}.pdf")
+    plt.savefig(f"./results_vp/all_models_{score}_{metric}.pdf")
     plt.show()
 
 
@@ -681,75 +681,69 @@ def plot_model_scores_comparison(all_results, model_name, metric, dataset_names)
         ax.legend()
     
     plt.tight_layout()
-    plt.savefig(f"./results_ablation/{model_name}_all_scores_{metric}.pdf")
+    plt.savefig(f"./results_vp/{model_name}_all_scores_{metric}.pdf")
     plt.show()
 
 
 
 if __name__ == "__main__":
 
-    """"Letze score funktion noch implementieren!!!!!!"""
-
     #dataset_names = ["29_Pima.npz"]
     #dataset_names = ["29_Pima.npz"]
     dataset_names = ["5_campaign.npz"]
 
     #MAX three models!
-
+#----------------------------------------------
     #Change names in plot_score_models_comparison!!
+    #change resultfiles!!
+
+
+
 
     models_to_run = {
 
         # "ForestFlow_nt20_dk20": {
         #     "type": "forest",
         #     "params": {
-        #         "n_t": 5,
-        #         "duplicate_K": 2,
-        #         "duplicate_K_test": 2,
+        #         "n_t": 20,
+        #         "duplicate_K": 20,
+        #         "duplicate_K_test": 20,
         #         "diffusion_type": "flow"
         #     },
         # },
-        # "ForestDiffusion_nt50_dk10": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 5,
-        #         "duplicate_K": 2,
-        #         "duplicate_K_test": 2,
-        #         "diffusion_type": "vp"
-        #     },
-        # },
-        # "TCCM_nt50": {
-        #     "type": "tccm",
-        #     "params": {
-        #         "n_t": 10
-        #     }
-        # }
-
-
-        "ForestFlow_nt20_dk10": {
-            "type": "forest",
-            "params": {
-                "n_t": 20,
-                "duplicate_K": 10,
-                "duplicate_K_test": 10,
-                "diffusion_type": "flow"
-            },
-        },
-        "ForestDiffusion_nt50_dk10": {
+        "ForestDiffusion_nt50_dk20": {
             "type": "forest",
             "params": {
                 "n_t": 50,
-                "duplicate_K": 10,
-                "duplicate_K_test": 10,
+                "duplicate_K": 20,
+                "duplicate_K_test": 20,
                 "diffusion_type": "vp"
             },
         },
-        "TCCM_nt50": {
-            "type": "tccm",
-            "params": {
-                "n_t": 50
-            }
-        }
+        # "ForestFlow_nt20_dk20": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 20,
+        #         "duplicate_K": 20,
+        #         "duplicate_K_test": 20,
+        #         "diffusion_type": "flow"
+        #     },
+        # }
+        # "ForestDiffusion_nt50_dk20": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 50,
+        #         "duplicate_K": 20,
+        #         "duplicate_K_test": 20,
+        #         "diffusion_type": "vp"
+        #     },
+        # },
+        #  "TCCM_nt50": {
+        #     "type": "tccm",
+        #     "params": {
+        #         "n_t": 50
+        #     },
+        # },
      }
     
     all_results_combined = {}

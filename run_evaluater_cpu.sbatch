@@ -2,7 +2,7 @@
 #
 # --- Slurm Konfiguration für CPU-Job ---
 #
-#SBATCH -J contamination_cpu   # Name des Jobs (angepasst)
+#SBATCH -J evaluater_cpu   # Name des Jobs (angepasst)
 #SBATCH -p cpu_il              # NEUE PARTITION: CPU Ice Lake (72h Limit)
 #SBATCH --cpus-per-task=16      # CPUs anfordern (z.B. 4)
 #SBATCH --mem=32G              # Speicher anfordern (z.B. 16GB, oft reicht weniger ohne GPU)

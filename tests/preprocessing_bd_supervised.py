@@ -142,18 +142,11 @@ def prepare_data_supervised():
 # data leakage!! unten hin 
 
 
-
-    df = create_time_series_features(df)
-    
-
-
-
-
-
+    df['date_post'] = pd.to_datetime(df['date_post'], format='%Y%m%d')
 
     df = df.sample(frac=1, random_state=42).reset_index(drop=True)
     df = df.sort_values(["date_post"])
-    df = df.drop("date_post", axis=1)
+   # df = df.drop("date_post", axis=1)
 
     target_col = "anomaly_description"
     df[target_col] = df[target_col].notna().astype(int)
@@ -170,13 +163,17 @@ def prepare_data_supervised():
     X_anom = X[anom_mask]
     y_anom = y[anom_mask]
 
-    split_index = int(0.8 * len(X_normal))
+    split_index = int(0.5 * len(X_normal))
 
     X_train = X_normal.iloc[:split_index].copy()
     y_train = y_normal.iloc[:split_index].copy()
+    X_train = create_time_series_features(X_train)
+
 
     X_test = pd.concat([X_normal.iloc[split_index:], X_anom], axis=0).copy()
     y_test = pd.concat([y_normal.iloc[split_index:], y_anom], axis=0).copy()
+    X_test = create_time_series_features(X_test)
+
 
     train_mapping = pd.DataFrame({
         'transformed_index': range(len(X_train)),
@@ -258,7 +255,7 @@ def get_original_rows(transformed_indices, mapping_df, original_data_path="data/
 
 def main():
     """Main execution function."""
-    X_train, X_test, y_train, y_test, train_mapping, test_mapping, feature_columns = prepare_data()
+    X_train, X_test, y_train, y_test, train_mapping, test_mapping, feature_columns = prepare_data_supervised()
     
     print("\n=== Data Preparation Complete ===")
     print(f"Training set: {X_train.shape}")
@@ -273,6 +270,13 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+"""
+skalieren?"
+"""
+
 
 
 

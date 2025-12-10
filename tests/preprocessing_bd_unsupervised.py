@@ -147,12 +147,11 @@ def prepare_data_unsupervised():
     df['original_index'] = df.index
     
     # Feature engineering
-    df = create_time_series_features(df)
+#    df = create_time_series_features(df)
     
-    # Shuffle and sort
-    df = df.sample(frac=1, random_state=42).reset_index(drop=True)
-    df = df.sort_values(["date_post"])
-    df = df.drop("date_post", axis=1)
+    df['date_post'] = pd.to_datetime(df['date_post'], format='%Y%m%d')
+    df = df.sort_values('date_post')  
+    df = df.reset_index(drop=True)    
 
     # Create target
     target_col = "anomaly_description"
@@ -168,6 +167,16 @@ def prepare_data_unsupervised():
     # Split data
     X_train = X[:split_index].copy()
     X_test = X[split_index:].copy()
+
+
+    X_train = create_time_series_features(X_train)
+    X_train = X_train.sort_values(["date_post"])
+    X_train = X_train.drop("date_post", axis=1)
+
+    X_test = create_time_series_features(X_test)
+    X_test = X_test.sort_values(["date_post"])
+    X_test = X_test.drop("date_post", axis=1)
+
     y_train = y[:split_index].copy()
     y_test = y[split_index:].copy()
 
@@ -258,7 +267,7 @@ def get_original_rows(transformed_indices, mapping_df, original_data_path="data/
 
 def main():
     """Main execution function."""
-    X_train, X_test, y_train, y_test, train_mapping, test_mapping, feature_columns = prepare_data()
+    X_train, X_test, y_train, y_test, train_mapping, test_mapping, feature_columns = prepare_data_unsupervised()
     
     print("\n=== Data Preparation Complete ===")
     print(f"Training set: {X_train.shape}")

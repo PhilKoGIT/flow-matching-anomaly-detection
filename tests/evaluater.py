@@ -458,21 +458,22 @@ def compute_threshold_metrics(anomaly_scores, y_test, score_name):
             results["best_f1"] = f1
             results["best_threshold"] = threshold
             results["best_percentile"] = percentile
-    
+
+        print(f"Percentile: {percentile}, Threshold: {threshold:.4f}, Precision: {precision:.4f}, Recall: {recall:.4f}, F1: {f1:.4f}, Accuracy: {accuracy:.4f}")
     return results
 
 
 if __name__ == "__main__":
 
     dataset_names = {
-        "Campaign":{
-            "file": "5_campaign.npz",
-            "semi_supervised": True,
-        }
-        # "business_dataset_semi":{
-        #     "file": "business_dataset.csv",  
-        #     "semi_supervised": True,    
-        # },
+        # "Campaign":{
+        #     "file": "5_campaign.npz",
+        #     "semi_supervised": True,
+        # }
+        "business_dataset_semi":{
+            "file": "business_dataset.csv",  
+            "semi_supervised": True,    
+        },
         # "business_dataset_un":{
         #     "file": "business_dataset.csv",  
         #     "semi_supervised": False,    
@@ -491,24 +492,23 @@ if __name__ == "__main__":
 
     models_to_run = {
 
-        "ForestFlow": {
-            "type": "forest",
-            "params": {
-                "n_t": 20,
-                "duplicate_K": 10,
-                "duplicate_K_test": 10,
-                "diffusion_type": "flow"
-            },
-        },
-        "ForestDiffusion": {
-            "type": "forest",
-            "params": {
-                "n_t": 50,
-                "duplicate_K": 10,
-                "duplicate_K_test": 10,
-                "diffusion_type": "vp"
-            },
-        },
+        # "ForestFlow": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 5,
+        #         "duplicate_K": 3,
+        #         "duplicate_K_test": 1,
+        #         "diffusion_type": "flow"
+        #     },
+        # },
+        # "ForestDiffusion": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 5,
+        #         "duplicate_K": 1,
+        #         "duplicate_K_test": 1,
+        #         "diffusion_type": "vp"
+        #     },
         "TCCM": {
             "type": "tccm",
             "params": {
@@ -574,10 +574,9 @@ if __name__ == "__main__":
                     print(f"\n{'#'*80}")
                     print(f"THRESHOLD ANALYSIS FOR {model_name}")
                     print(f"{'#'*80}")
-                    compute_threshold_metrics(results['decision']['scores'], y_test, f"{model_name} - Decision")
-                    compute_threshold_metrics(results['deviation']['scores'], y_test, f"{model_name} - Deviation")
-                    if cfg["params"].get("diffusion_type") != "vp":
-                        compute_threshold_metrics(results['reconstruction']['scores'], y_test, f"{model_name} - Reconstruction")
+                    evaluate_thresholds(results['decision']['scores'], y_test, f"{model_name} - Decision")
+                    evaluate_thresholds(results['deviation']['scores'], y_test, f"{model_name} - Deviation")
+                    evaluate_thresholds(results['reconstruction']['scores'], y_test, f"{model_name} - Reconstruction")
 
                 # Save results
                 time_train_list.append(time_train)

@@ -6,17 +6,13 @@ import random
 import uuid
 import os
 
-#we just let the return time be debit... no reversal, to not use the other anomaly type
-#only DEBIT transactions in the dataset
 
-#we have for every different customer one different anomaly type injected
-
-NUM_CUSTOMERS = 10
-START_DATE = date(2021, 1, 1)
+NUM_CUSTOMERS = 20
+START_DATE = date(2017, 1, 1)
 END_DATE = date(2023, 12, 31)
 OUTPUT_DIR = "output"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
-OUTPUT_FILENAME = os.path.join(OUTPUT_DIR, "business_transactions_dataset_v5.csv")
+OUTPUT_FILENAME = os.path.join(OUTPUT_DIR, "business_dataset.csv")
 
 fake = Faker()
 Faker.seed(0)
@@ -307,7 +303,7 @@ if __name__ == "__main__":
             #day_jitter=1
         )
         # Inject an anomaly
-        how_many_anomalies = random.randint(0, 3)
+        how_many_anomalies = random.randint(0, 10)
         which_anomaly = random.randint(0, len(anomaly_injectors)-1)
         for x in range(how_many_anomalies):
             clean_series = anomaly_injectors[which_anomaly](clean_series)

@@ -74,7 +74,7 @@ class TCCM:
         t_levels = torch.linspace(0, 1.0, n_t)
 
         with torch.no_grad():
-            for i, t_val in enumerate(t_levels):
+            for i, t_val in enumerate(t_levels[n_t//2:]):
                 t = torch.full((X.shape[0], 1), t_val.item(), device=X.device)
                 x_t_i = torch.tensor(x_t[i], dtype=torch.float32, device=X.device)
                 v_pred = self.model(x_t_i, t)
@@ -139,7 +139,7 @@ class TCCM:
         anomaly_scores = np.zeros(b) 
         with torch.no_grad():
             #only go to n_t-1 because starting from t=1 makes no sense
-            for i, t_val in enumerate(t_values[:-1]):
+            for i, t_val in enumerate(t_values[n_t//2:-1]):
                 # x(t)s for this time point
                 x_t = torch.tensor(x_t_interpolations[i], dtype=torch.float32, device=device)  
                 
