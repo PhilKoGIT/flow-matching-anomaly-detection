@@ -1,0 +1,10 @@
+{
+  "contam_idx": 1,
+  "dataset_name": "business_dataset",
+  "model_name": "TCCM_nt50",
+  "model_type": "tccm",
+  "params": {
+    "n_t": 50
+  },
+  "seed": 3
+}
