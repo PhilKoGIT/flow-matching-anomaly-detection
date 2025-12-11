@@ -1,0 +1,28 @@
+== Job Start: Thu Dec 11 01:50:18 PM CET 2025 ==
+Python: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/bin/python
+Imports dauern ~2-3 Minuten, bitte warten...
+
+ Dataset: 5_campaign.npz with model: ForestFlow_nt20_dk10 and score: deviation
+ 
+Dataset loaded successfully!
+Training data: (18274, 62), Normal: 18274
+Test data: (22914, 62), Normal: 18274, Anomalies: 4640
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/6101921e7e01f933487dfd39d65116f1.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/2422ef228a0088de10a7aa78c0610fa5.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/9606a7fc15d4fd81276f5b3159b2b002.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/42973c90c5f60301e56e8b6b991cbe6f.joblib
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n688
+Job ID: 2573125
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: CANCELLED (exit code 0)
+Nodes: 1
+Cores per node: 16
+CPU Utilized: 00:00:02
+CPU Efficiency: 0.01% of 06:13:52 core-walltime
+Job Wall-clock time: 00:23:22
+Memory Utilized: 8.68 GB
+Memory Efficiency: 27.12% of 32.00 GB (32.00 GB/node)

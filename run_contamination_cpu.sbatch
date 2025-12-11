@@ -1,29 +1,24 @@
 #!/bin/bash
-#
-# --- Slurm Konfiguration für CPU-Job ---
-#
-#SBATCH -J contamination_cpu   # Name des Jobs (angepasst)
-#SBATCH -p cpu_il              # NEUE PARTITION: CPU Ice Lake (72h Limit)
-#SBATCH --cpus-per-task=32      # CPUs anfordern (z.B. 4)
-#SBATCH --mem=64G              # Speicher anfordern (z.B. 16GB, oft reicht weniger ohne GPU)
-#SBATCH --time=72:00:00        # Zeit anpassen (z.B. 2 Stunden, um auf der sicheren Seite zu sein)
+#SBATCH -J cont_vp
+#SBATCH -p cpu_il
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=32G
+#SBATCH --time=50:00:00
 #SBATCH -o slurm/%x-%j.out
 #SBATCH -e slurm/%x-%j.err
 
-
-# --- Environment laden ---
 source ~/.bashrc
-source .venv/bin/activate
+conda deactivate
 
-# --- In dein Projektverzeichnis wechseln ---
 cd /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests
+source ../.venv/bin/activate
 
-# --- Startmeldung ---
-echo "== Job start (CPU-Partition: cpu_il) =="
-echo "Python Script wird mit $(nproc) Kernen gestartet..."
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
-# --- Python Script starten ---
-python contamination.py
+echo "== Job Start: $(date) =="
+echo "Python: $(which python)"
+echo "Imports dauern ~2-3 Minuten, bitte warten..."
 
-# --- Ende ---
-echo "== Job abgeschlossen =="
+python -u contamination.py
+
+echo "== Job Ende: $(date) =="

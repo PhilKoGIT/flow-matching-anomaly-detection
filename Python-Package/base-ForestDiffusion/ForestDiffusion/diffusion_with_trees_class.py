@@ -477,10 +477,15 @@ class ForestDiffusionModel():
     #get noise levels as created in build_data_xt
     t_levels = np.linspace(self.eps, 1, n_t)
 
+    # for i, t in enumerate(t_levels[n_t//2:]):
+    #     #iterate over every noise level
+    #     start_idx = i * n_samples_rep
+    #     end_idx = (i + 1) * n_samples_rep
+    #     X_t = x_t_samples_rep[start_idx:end_idx, :]
     for i, t in enumerate(t_levels[n_t//2:]):
-        #iterate over every noise level
-        start_idx = i * n_samples_rep
-        end_idx = (i + 1) * n_samples_rep
+        actual_time_idx = n_t // 2 + i
+        start_idx = actual_time_idx * n_samples_rep
+        end_idx = (actual_time_idx + 1) * n_samples_rep
         X_t = x_t_samples_rep[start_idx:end_idx, :]
         #predict velocity with the model for all test_samples_rep at noise level t
         v_pred_t = model(t=t, y=X_t)
@@ -511,7 +516,7 @@ class ForestDiffusionModel():
     - sum up over all the rep samples belonging for one test sample -> final anomaly score per test sample
     
     """
-    assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
+    assert self.diffusion_type == 'flow', "reconstruction score only for flow-matching"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
     assert self.diffusion_type == diffusion_type, "Diffusion type must be the same as the trained model"
     assert n_t == self.n_t, "n_t must match training n_t"
@@ -566,19 +571,41 @@ class ForestDiffusionModel():
     #get noise levels
     t_levels = np.linspace(self.eps, 1, n_t)
 
-    #skip the last level, bc at t=1 is data and no reconstruction makes sense
-    for i, t in enumerate(t_levels[n_t//2:-1]):
+    # #skip the last level, bc at t=1 is data and no reconstruction makes sense
+    # for i, t in enumerate(t_levels[n_t//2:-1]):
         
-        #get rep_samples at the same noise level t
-        start_idx = i * n_samples_rep
-        end_idx = (i + 1) * n_samples_rep
-        X_t = x_t_samples_rep[start_idx:end_idx, :]
-        #steps left to end at t=1
-        stepsleft = n_t - i -1 
-        #solve ode from noise level t to t=1
+    #     #get rep_samples at the same noise level t
+    #     start_idx = i * n_samples_rep
+    #     end_idx = (i + 1) * n_samples_rep
+    #     X_t = x_t_samples_rep[start_idx:end_idx, :]
+    #     #steps left to end at t=1
+    #     stepsleft = n_t - i -1 
+    #     #solve ode from noise level t to t=1
 
-        #ode_solve_from_x_t self implemented!
-        ode_solved = euler_solve_from_x_t(x_t=X_t.reshape(-1),t0=t,my_model=model,steps_left=stepsleft, n_t=n_t)
+    #     #ode_solve_from_x_t self implemented!
+    #     ode_solved = euler_solve_from_x_t(x_t=X_t.reshape(-1),t0=t,my_model=model,steps_left=stepsleft, n_t=n_t)
+
+    t_levels = np.linspace(self.eps, 1, n_t)
+
+    for i, t in enumerate(t_levels[n_t//2:-1]):
+        # Der tatsächliche Zeitindex in t_levels
+        actual_time_idx = n_t // 2 + i
+        
+        # Korrekte Indizes für x_t_samples_rep
+        start_idx = actual_time_idx * n_samples_rep
+        end_idx = (actual_time_idx + 1) * n_samples_rep
+        X_t = x_t_samples_rep[start_idx:end_idx, :]
+        
+        # Korrekte steps_left: von actual_time_idx bis zum letzten Index (n_t-1)
+        steps_left = (n_t - 1) - actual_time_idx
+        
+        ode_solved = euler_solve_from_x_t(
+            x_t=X_t.reshape(-1),
+            t0=t,
+            my_model=model,
+            steps_left=steps_left,
+            n_t=n_t
+        )
         #convert to data space in order to make comparable with test sample 
         solution = ode_solved.reshape(X_t.shape[0], self.c) 
         solution = self.unscale(solution)
@@ -605,7 +632,7 @@ class ForestDiffusionModel():
     """
    # same as deviation score but only considers the last noise level t = 1 , and inspired from decision function of tccm
     """
-    assert self.diffusion_type == 'flow', "Deviation score only for flow-matching"
+    assert self.diffusion_type == 'flow', "Decision score only for flow-matching"
     assert not np.isnan(test_samples).any(), "test_samples must not contain NaNs"
     assert self.diffusion_type == diffusion_type, "Diffusion type must be the same as the trained model"
     assert n_t == self.n_t, "n_t must match training n_t"

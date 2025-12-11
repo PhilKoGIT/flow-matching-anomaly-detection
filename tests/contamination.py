@@ -17,8 +17,8 @@ import json
 import joblib
 from sklearn.metrics import average_precision_score
 import time
-from ForestDiffusion.tests.preprocessing_bd_unsupervised_old import prepare_data_unsupervised
-from ForestDiffusion.tests.preprocessing_bd_supervised_old import prepare_data_supervised
+from preprocessing_bd_unsupervised import prepare_data_unsupervised
+from preprocessing_bd_supervised import prepare_data_supervised
 import sys
 current_file_path = Path(__file__).resolve()
 parent_dir = current_file_path.parent
@@ -39,6 +39,34 @@ percentiles = [20, 30, 40, 50, 70, 80, 90, 95, 97.5, 99]
 File runs contamination studies for the given models and datasets.
 
 """
+
+
+from preprocessing_bd_contamination import load_business_dataset_for_contamination
+
+
+# 2. Add this new loading function (after load_adbench_npz):
+# ----------------------------------------------------------------------------
+def load_business_dataset_contamination(test_size=0.5, random_state=42):
+    """
+    Load business dataset for contamination studies.
+    Returns same structure as load_adbench_npz but with separate train_abnormal.
+    
+    Returns:
+        X_train_normal: Normal training data (scaled)
+        y_train_normal: Labels (all zeros)
+        X_train_abnormal: Abnormal data for contamination (scaled)
+        X_test: Test set (scaled)
+        y_test: Test labels
+    """
+    X_train_normal, X_train_abnormal, X_test, y_test = load_business_dataset_for_contamination(
+        test_size=test_size, 
+        random_state=random_state
+    )
+    
+    y_train_normal = np.zeros(len(X_train_normal))
+    
+    return X_train_normal, y_train_normal, X_train_abnormal, X_test, y_test
+
 
 # # ============================================================================
 # # adapted/copied from https://github.com/ZhongLIFR/TCCM-NIPS/blob/main/utils.py
@@ -267,31 +295,36 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
         auroc_all = []
         auprc_all = []
 
+
         # ============================
         # Split normal / anomaly using fixed random seed 42
         # ============================
-        X_train_full, y_train_full, X_test_full, y_test_full = load_adbench_npz(dataset_name, test_size=0.5, random_state=42)
-        X_all = np.vstack([X_train_full, X_test_full])
-        y_all = np.concatenate([y_train_full, y_test_full])
+        if dataset_name == "business_dataset":
+            # Business dataset - already returns split data
+            X_train_normal, y_train_normal, X_train_abnormal_full, X_test, y_test = load_business_dataset_contamination(
+                test_size=0.5, random_state=42
+            )
 
-        X_normal = X_all[y_all == 0]
-        X_abnormal = X_all[y_all == 1]
+        else:
+                X_train_full, y_train_full, X_test_full, y_test_full = load_adbench_npz(dataset_name, test_size=0.5, random_state=42)
+                X_all = np.vstack([X_train_full, X_test_full])
+                y_all = np.concatenate([y_train_full, y_test_full])
 
-        from sklearn.model_selection import train_test_split
-        
-        X_train_normal, X_test_normal = train_test_split(X_normal, test_size=0.5, random_state=42, stratify=None)
-        X_train_abnormal_full, X_test_abnormal = train_test_split(X_abnormal, test_size=0.5, random_state=42, stratify=None)
+                X_normal = X_all[y_all == 0]
+                X_abnormal = X_all[y_all == 1]
 
-        X_test = np.vstack([X_test_normal, X_test_abnormal])
-        y_test = np.concatenate([np.zeros(len(X_test_normal)), np.ones(len(X_test_abnormal))])
+                from sklearn.model_selection import train_test_split
+                
+                X_train_normal, X_test_normal = train_test_split(X_normal, test_size=0.5, random_state=42, stratify=None)
+                X_train_abnormal_full, X_test_abnormal = train_test_split(X_abnormal, test_size=0.5, random_state=42, stratify=None)
+
+                X_test = np.vstack([X_test_normal, X_test_abnormal])
+                y_test = np.concatenate([np.zeros(len(X_test_normal)), np.ones(len(X_test_abnormal))])
 
         n_train_normal = len(X_train_normal)
         n_train_abnormal_max = len(X_train_abnormal_full)
         max_abnormal_ratio = n_train_abnormal_max / (n_train_abnormal_max + n_train_normal)
         contamination_levels = np.linspace(0.001, max_abnormal_ratio, 10)
-
-        # extreme cases
-        extreme_contamination_levels = [0.0, max_abnormal_ratio]
 
         all_contam_levels[dataset_name] = contamination_levels
 
@@ -596,8 +629,8 @@ def plot_score_models_comparison(all_results, score, metric, dataset_names, mode
     model_names = list(all_results[dataset_names[0]].keys())
 
     # For each model name a color
-    colors = {"ForestFlow_nt20_dk10": "blue", "ForestDiffusion_nt50_dk10": "green", "TCCM_nt50": "red"}
-    #colors = {"TCCM_nt50": "blue", "TCCM_nt100": "red", "TCCM_nt200": "green"}
+    #colors = {"ForestFlow_nt20_dk10": "blue", "ForestFlow_nt20_dk20": "green", "ForestDiffusion_nt50_dk10": "red", "ForestDiffusion_nt50_dk20": "orange"}
+    colors = {"TCCM_nt50": "blue", "TCCM_nt100": "red", "TCCM_nt200": "green"}
     for idx, dataset_name in enumerate(dataset_names):
         ax = axs[idx] if len(dataset_names) > 1 else axs
         
@@ -625,7 +658,7 @@ def plot_score_models_comparison(all_results, score, metric, dataset_names, mode
         ax.legend()
     
     plt.tight_layout()
-    plt.savefig(f"./results_all/all_models_{score}_{metric}.pdf")
+    plt.savefig(f"./results_ablation/all_models_{score}_{metric}.pdf")
     plt.show()
 
 
@@ -669,13 +702,13 @@ def plot_model_scores_comparison(all_results, model_name, metric, dataset_names)
         ax.legend()
     
     plt.tight_layout()
-    plt.savefig(f"./results_all/{model_name}_all_scores_{metric}.pdf")
+    plt.savefig(f"./results_ablation/{model_name}_all_scores_{metric}.pdf")
     plt.show()
 
 if __name__ == "__main__":
 
-    dataset_names = ["5_campaign.npz"]
-
+    #dataset_names = ["5_campaign.npz"]
+    dataset_names = ["business_dataset"]
     #MAX three models!
 #----------------------------------------------
     #Change names in plot_score_models_comparison!!
@@ -685,26 +718,27 @@ if __name__ == "__main__":
 
     #define models to run
     #change names in plot_score_models_comparison accordingly
+
     models_to_run = {
 
-        "ForestFlow_nt20_dk10": {
-            "type": "forest",
-            "params": {
-                "n_t": 20,
-                "duplicate_K": 10,
-                "duplicate_K_test": 10,
-                "diffusion_type": "flow"
-            },
-        },
-        "ForestDiffusion_nt50_dk10": {
-            "type": "forest",
-            "params": {
-                "n_t": 50,
-                "duplicate_K": 10,
-                "duplicate_K_test": 10,
-                "diffusion_type": "vp"
-            },
-        },
+        # "ForestFlow_nt20_dk10": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 20,
+        #         "duplicate_K": 10,
+        #         "duplicate_K_test": 10,
+        #         "diffusion_type": "flow"
+        #     },
+        # },
+        # "ForestDiffusion_nt50_dk10": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 50,
+        #         "duplicate_K": 10,
+        #         "duplicate_K_test": 10,
+        #         "diffusion_type": "vp"
+        #     },
+        # },
         # "ForestFlow_nt20_dk20": {
         #     "type": "forest",
         #     "params": {

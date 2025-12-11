@@ -1,17 +1,18 @@
 #!/bin/bash
 #SBATCH -J contamination
-#SBATCH -p gpu_a100_short
+#SBATCH -p gpu_a100_il
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=32G
-#SBATCH --time=00:30:00
+#SBATCH --time=30:00:00
 #SBATCH -o slurm/%x-%j.out
 #SBATCH -e slurm/%x-%j.err
-
+source ~/.bashrc
+conda deactivate
 
 # --- Environment laden ---
 source ~/.bashrc
-source .venv/bin/activate
+source ../.venv/bin/activate
 
 # --- In dein Projektverzeichnis wechseln ---
 cd /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests

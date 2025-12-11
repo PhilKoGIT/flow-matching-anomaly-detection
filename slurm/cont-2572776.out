@@ -1,0 +1,33 @@
+== Job Start: Thu Dec 11 12:07:26 PM CET 2025 ==
+Python: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/bin/python
+Imports dauern ~2-3 Minuten, bitte warten...
+
+ Dataset: 5_campaign.npz with model: ForestFlow_nt20_dk10 and score: deviation
+ 
+Dataset loaded successfully!
+Training data: (18274, 62), Normal: 18274
+Test data: (22914, 62), Normal: 18274, Anomalies: 4640
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/6101921e7e01f933487dfd39d65116f1.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/2422ef228a0088de10a7aa78c0610fa5.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/9606a7fc15d4fd81276f5b3159b2b002.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/42973c90c5f60301e56e8b6b991cbe6f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/816b60ad13e24578fba566dbf71cdd54.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/43794659cecd1b9b0ede89aa37de1766.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/d0731ae8ade46425a88dd51800185f68.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/781d4e2033d9cdf11303c2115ee1f07f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/4986da951ec6d4962e65d9c5c8367695.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/205e0b5831687e585fa36c469a52fa2e.joblib
+
+ Dataset: 5_campaign.npz with model: ForestFlow_nt20_dk10 and score: reconstruction
+ 
+Dataset loaded successfully!
+Training data: (18274, 62), Normal: 18274
+Test data: (22914, 62), Normal: 18274, Anomalies: 4640
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/6101921e7e01f933487dfd39d65116f1.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/2422ef228a0088de10a7aa78c0610fa5.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/9606a7fc15d4fd81276f5b3159b2b002.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/42973c90c5f60301e56e8b6b991cbe6f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/816b60ad13e24578fba566dbf71cdd54.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/43794659cecd1b9b0ede89aa37de1766.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/d0731ae8ade46425a88dd51800185f68.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt20_dk10/781d4e2033d9cdf11303c2115ee1f07f.joblib
