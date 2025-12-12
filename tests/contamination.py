@@ -60,7 +60,6 @@ def load_business_dataset_contamination(test_size=0.5, random_state=42):
     """
     X_train_normal, X_train_abnormal, X_test, y_test = load_business_dataset_for_contamination(
         test_size=test_size, 
-        random_state=random_state
     )
     
     y_train_normal = np.zeros(len(X_train_normal))
@@ -281,7 +280,8 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
     returns: dict entry for dataset with model name, score, auroc and auprc values for each run and contamination levels
 
     """
-    seed_list = [0,1,2,3,4]
+    #seed_list = [0,1,2,3,4]
+    seed_list = [0]
     all_results = {}
     all_contam_levels = {}
 
@@ -302,7 +302,7 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
         if dataset_name == "business_dataset":
             # Business dataset - already returns split data
             X_train_normal, y_train_normal, X_train_abnormal_full, X_test, y_test = load_business_dataset_contamination(
-                test_size=0.5, random_state=42
+                test_size=0.5
             )
 
         else:
@@ -629,8 +629,8 @@ def plot_score_models_comparison(all_results, score, metric, dataset_names, mode
     model_names = list(all_results[dataset_names[0]].keys())
 
     # For each model name a color
-    #colors = {"ForestFlow_nt20_dk10": "blue", "ForestFlow_nt20_dk20": "green", "ForestDiffusion_nt50_dk10": "red", "ForestDiffusion_nt50_dk20": "orange"}
-    colors = {"TCCM_nt50": "blue", "TCCM_nt100": "red", "TCCM_nt200": "green"}
+    colors = {"ForestFlow_nt20_dk10": "blue", "ForestDiffusion_nt50_dk10": "green", "TCCM_nt50": "red"}
+    #colors = {"TCCM_nt50": "blue", "TCCM_nt100": "red", "TCCM_nt200": "green"}
     for idx, dataset_name in enumerate(dataset_names):
         ax = axs[idx] if len(dataset_names) > 1 else axs
         
@@ -658,7 +658,7 @@ def plot_score_models_comparison(all_results, score, metric, dataset_names, mode
         ax.legend()
     
     plt.tight_layout()
-    plt.savefig(f"./results_ablation/all_models_{score}_{metric}.pdf")
+    plt.savefig(f"./results_business/all_models_{score}_{metric}.pdf")
     plt.show()
 
 
@@ -702,13 +702,14 @@ def plot_model_scores_comparison(all_results, model_name, metric, dataset_names)
         ax.legend()
     
     plt.tight_layout()
-    plt.savefig(f"./results_ablation/{model_name}_all_scores_{metric}.pdf")
+    plt.savefig(f"./results_business/{model_name}_all_scores_{metric}.pdf")
     plt.show()
 
 if __name__ == "__main__":
+    dataset_names = ["29_Pima.npz"]
 
     #dataset_names = ["5_campaign.npz"]
-    dataset_names = ["business_dataset"]
+    #dataset_names = ["business_dataset"]
     #MAX three models!
 #----------------------------------------------
     #Change names in plot_score_models_comparison!!
@@ -721,48 +722,55 @@ if __name__ == "__main__":
 
     models_to_run = {
 
-        # "ForestFlow_nt20_dk10": {
+        # "ForestFlow_nt10_dk10": {
         #     "type": "forest",
         #     "params": {
-        #         "n_t": 20,
-        #         "duplicate_K": 10,
-        #         "duplicate_K_test": 10,
+        #         "n_t": 5,
+        #         "duplicate_K": 2,
+        #         "duplicate_K_test": 2,
         #         "diffusion_type": "flow"
         #     },
         # },
-        # "ForestDiffusion_nt50_dk10": {
+        # "ForestDiffusion_nt10_dk10": {
         #     "type": "forest",
         #     "params": {
-        #         "n_t": 50,
-        #         "duplicate_K": 10,
-        #         "duplicate_K_test": 10,
+        #         "n_t": 5,
+        #         "duplicate_K": 2,
+        #         "duplicate_K_test": 2,
         #         "diffusion_type": "vp"
         #     },
         # },
-        # "ForestFlow_nt20_dk20": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 20,
-        #         "duplicate_K": 20,
-        #         "duplicate_K_test": 20,
-        #         "diffusion_type": "flow"
-        #     },
-        # },
-        # "ForestDiffusion_nt50_dk20": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 50,
-        #         "duplicate_K": 20,
-        #         "duplicate_K_test": 20,
-        #         "diffusion_type": "vp"
-        #     },
-        # },
+        "ForestFlow_nt20_dk10": {
+            "type": "forest",
+            "params": {
+                "n_t": 5,
+                "duplicate_K": 1,
+                "duplicate_K_test": 1,
+                "diffusion_type": "flow"
+            },
+        },
+        "ForestDiffusion_nt50_dk10": {
+            "type": "forest",
+            "params": {
+                "n_t": 5,
+                "duplicate_K": 1,
+                "duplicate_K_test": 1,
+                "diffusion_type": "vp"
+            },
+        },
          "TCCM_nt50": {
             "type": "tccm",
             "params": {
-                "n_t": 50
+                "n_t": 10
             },
         },
+        # "TCCM_nt4": {
+        #     "type": "tccm",
+        #     "params": {
+        #         "n_t": 4
+        #     },
+        # },
+
         #          "TCCM_nt100": {
         #     "type": "tccm",
         #     "params": {

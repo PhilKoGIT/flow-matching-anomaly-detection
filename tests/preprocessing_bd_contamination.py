@@ -1,269 +1,478 @@
-# preprocessing_bd_contamination.py
 """
-Preprocessing for business transaction dataset for contamination studies.
-Outputs data in same format as load_adbench_npz() for easy integration.
+Preprocessing Pipeline für Business Dataset - CONTAMINATION STUDIES (V5)
+OHNE DATA LEAKAGE - Chronologischer Split für ALLE Daten
 
-Returns: X_train_normal, X_train_abnormal, X_test, y_test (all numpy arrays, scaled)
+Änderungen gegenüber V4:
+- Chronologischer Split auch für Anomalien (basierend auf split_date der Normal-Daten)
+- Feature-Berechnung für alle Trainingsdaten GEMEINSAM
+- Trennung in Normal/Abnormal erst NACH Feature-Engineering
+- Klarere, einfachere Struktur
+
+Returns:
+    X_train_normal: Normale Trainingsdaten (scaled)
+    X_train_abnormal: Abnormale Trainingsdaten (scaled) - für kontrollierte Kontamination
+    X_test: Testdaten (scaled) - Normal + Abnormal
+    y_test: Test Labels
 """
 
 import numpy as np
 import pandas as pd
 from pathlib import Path
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
-import pickle
+from typing import Tuple, Dict, Set
+from collections import Counter
+import warnings
+warnings.filterwarnings('ignore')
 
 
-def load_business_dataset():
-    """Load the raw business transactions dataset."""
-    base_dir = Path(__file__).resolve().parent
-    file_path = base_dir.parent / "data" / "business_dataset.csv"
-    df = pd.read_csv(file_path)
-    return df
+# =============================================================================
+# FEATURE COLUMNS
+# =============================================================================
+FEATURE_COLS = [
+    'amount_zscore_series', 'amount_ratio_to_mean',
+    'day_deviation_from_usual',
+    'iban_mismatch', 'swift_mismatch', 'known_name_new_iban',
+    'method_mismatch', 'channel_mismatch', 'is_card_mobile',
+    'tx_count_this_month_so_far',
+    'is_new_series', 'is_new_ref_name', 'is_new_iban',
+    'series_tx_count_before_log', 'ref_name_count_before_log', 'iban_count_before_log',
+    'day_of_month', 'day_of_week', 'month', 'days_since_last_in_series',
+    'amount',
+]
 
 
-def create_features(df, is_training=True, encoding_maps=None):
+# =============================================================================
+# FEATURE ENGINEERING (ohne Data Leakage)
+# =============================================================================
+def compute_features_no_leakage(
+    df: pd.DataFrame,
+    known_series_stats: Dict = None,
+    known_ref_names: Set = None,
+    known_ibans: Set = None,
+    known_name_iban_pairs: Set = None,
+    fit: bool = True
+) -> Tuple[pd.DataFrame, Dict, Set, Set, Set]:
     """
-    Create features with proper categorical handling.
+    Berechnet Features für jede Transaktion NUR basierend auf vergangenen Daten.
     
-    Categorical variables:
-    - LOW CARDINALITY (One-Hot): pay_method, channel, currency, trns_type
-    - HIGH CARDINALITY (Frequency): ref_name, ref_iban, ref_swift, bank_account_uuid
+    Args:
+        df: DataFrame mit Transaktionen
+        known_*: Vorhandene Statistiken (für fit=False)
+        fit: True = Statistiken aufbauen, False = nur vorhandene nutzen
+    
+    Returns:
+        df_processed, series_stats, seen_ref_names, seen_ibans, seen_name_iban_pairs
     """
     df = df.copy()
-    df['date_post'] = pd.to_datetime(df['date_post'], format='%Y%m%d')
-    df = df.sort_values(['bank_account_uuid', 'ref_name', 'date_post']).reset_index(drop=True)
     
-    if encoding_maps is None:
-        encoding_maps = {}
+    # Datum parsen falls nötig
+    if df['date_post'].dtype == 'object' or df['date_post'].dtype == 'int64':
+        df['date_post'] = pd.to_datetime(df['date_post'], format='%Y%m%d')
     
-    series_cols = ['bank_account_uuid', 'ref_name']
+    # Chronologisch sortieren
+    df = df.sort_values('date_post').reset_index(drop=True)
     
-    # ===========================================
-    # 1. AMOUNT FEATURES
-    # ===========================================
-    df['amount_rolling_mean'] = df.groupby(series_cols)['amount'].transform(
-        lambda x: x.rolling(10, min_periods=1).mean()
-    )
-    df['amount_rolling_std'] = df.groupby(series_cols)['amount'].transform(
-        lambda x: x.rolling(10, min_periods=1).std().fillna(0)
-    )
-    df['amount_zscore'] = (df['amount'] - df['amount_rolling_mean']) / (df['amount_rolling_std'] + 1)
-    df['amount_ratio_to_mean'] = df['amount'] / (df['amount_rolling_mean'] + 1)
+    # Hilfs-Spalten
+    df['series_id'] = df['bank_account_uuid'] + '_' + df['ref_name']
+    df['year_month'] = df['date_post'].dt.to_period('M')
     
-    # ===========================================
-    # 2. TIMING FEATURES
-    # ===========================================
-    df['day_of_month'] = df['date_post'].dt.day
-    df['day_of_week'] = df['date_post'].dt.dayofweek
-    df['expected_dom'] = df.groupby(series_cols)['day_of_month'].transform('median')
-    df['dom_deviation'] = (df['day_of_month'] - df['expected_dom']).abs()
-    df['days_since_last'] = df.groupby(series_cols)['date_post'].diff().dt.days
-    df['days_since_last'] = df['days_since_last'].fillna(30)
+    # Statistiken initialisieren
+    if fit:
+        series_stats = {}
+        seen_ref_names = set()
+        seen_ibans = set()
+        seen_name_iban_pairs = set()
+    else:
+        # Deep copy der übergebenen Statistiken
+        series_stats = {}
+        for k, v in (known_series_stats or {}).items():
+            series_stats[k] = {
+                'amounts': list(v.get('amounts', [])),
+                'ibans': list(v.get('ibans', [])),
+                'swifts': list(v.get('swifts', [])),
+                'days': list(v.get('days', [])),
+                'methods': list(v.get('methods', [])),
+                'channels': list(v.get('channels', [])),
+                'year_months': list(v.get('year_months', []))
+            }
+        seen_ref_names = set(known_ref_names) if known_ref_names else set()
+        seen_ibans = set(known_ibans) if known_ibans else set()
+        seen_name_iban_pairs = set(known_name_iban_pairs) if known_name_iban_pairs else set()
     
-    df['year_month'] = df['date_post'].dt.to_period('M').astype(str)
-    df['tx_count_this_month'] = df.groupby(series_cols + ['year_month']).cumcount() + 1
-    df['is_duplicate_month'] = (df['tx_count_this_month'] > 1).astype(int)
+    # Feature Arrays initialisieren
+    n = len(df)
+    features = {
+        'amount_zscore_series': np.zeros(n),
+        'amount_ratio_to_mean': np.ones(n),
+        'day_deviation_from_usual': np.zeros(n),
+        'iban_mismatch': np.zeros(n),
+        'swift_mismatch': np.zeros(n),
+        'method_mismatch': np.zeros(n),
+        'channel_mismatch': np.zeros(n),
+        'is_card_mobile': np.zeros(n),
+        'tx_count_this_month_so_far': np.ones(n),
+        'is_new_series': np.zeros(n),
+        'is_new_ref_name': np.zeros(n),
+        'is_new_iban': np.zeros(n),
+        'known_name_new_iban': np.zeros(n),
+        'series_tx_count_before': np.zeros(n),
+        'ref_name_count_before': np.zeros(n),
+        'iban_count_before': np.zeros(n),
+        'day_of_month': np.zeros(n),
+        'day_of_week': np.zeros(n),
+        'month': np.zeros(n),
+        'days_since_last_in_series': np.full(n, 30.0),
+        'amount': np.zeros(n),
+    }
     
-    # ===========================================
-    # 3. HIGH CARDINALITY - Frequency Encoding
-    # ===========================================
-    high_card_cols = ['ref_name', 'ref_iban', 'ref_swift', 'bank_account_uuid']
+    # Zähler für Lookups
+    ref_name_counts = {}
+    iban_counts = {}
+    last_date_per_series = {}
     
-    for col in high_card_cols:
-        if is_training:
-            freq_map = df[col].value_counts(normalize=True).to_dict()
-            encoding_maps[f'{col}_freq'] = freq_map
-        else:
-            freq_map = encoding_maps.get(f'{col}_freq', {})
-        df[f'{col}_freq'] = df[col].map(freq_map).fillna(0)
-    
-    # ===========================================
-    # 4. LOW CARDINALITY - One-Hot Encoding
-    # ===========================================
-    low_card_cols = ['pay_method', 'channel', 'currency', 'trns_type']
-    
-    for col in low_card_cols:
-        if is_training:
-            unique_vals = df[col].unique().tolist()
-            encoding_maps[f'{col}_categories'] = unique_vals
-        else:
-            unique_vals = encoding_maps.get(f'{col}_categories', [])
+    # Sequentielle Feature-Berechnung
+    for idx, row in df.iterrows():
+        series_id = row['series_id']
+        ref_name = row['ref_name']
+        ref_iban = row['ref_iban']
+        ref_swift = row['ref_swift']
+        pay_method = row['pay_method']
+        channel = row['channel']
+        amount = row['amount']
+        tx_date = row['date_post']
+        day = tx_date.day
+        year_month = row['year_month']
         
-        for val in unique_vals:
-            df[f'{col}_{val}'] = (df[col] == val).astype(int)
-    
-    # ===========================================
-    # 5. REFERENCE CONSISTENCY FEATURES
-    # ===========================================
-    if is_training:
-        most_common_iban = df.groupby('ref_name')['ref_iban'].agg(
-            lambda x: x.value_counts().index[0] if len(x) > 0 else None
-        ).to_dict()
-        encoding_maps['ref_name_usual_iban'] = most_common_iban
+        # === FEATURES BERECHNEN (nur mit vergangenen Daten) ===
         
-        most_common_swift = df.groupby('ref_name')['ref_swift'].agg(
-            lambda x: x.value_counts().index[0] if len(x) > 0 else None
-        ).to_dict()
-        encoding_maps['ref_name_usual_swift'] = most_common_swift
+        # Basis-Features
+        features['amount'][idx] = amount
+        features['day_of_month'][idx] = day
+        features['day_of_week'][idx] = tx_date.dayofweek
+        features['month'][idx] = tx_date.month
+        features['is_card_mobile'][idx] = 1 if (pay_method == 'CARD' and channel == 'MOBILE_APP') else 0
         
-        most_common_method = df.groupby(series_cols)['pay_method'].agg(
-            lambda x: x.value_counts().index[0] if len(x) > 0 else None
-        ).to_dict()
-        encoding_maps['series_usual_method'] = most_common_method
+        # Neuheits-Features
+        features['is_new_series'][idx] = 0 if series_id in series_stats else 1
+        features['is_new_ref_name'][idx] = 0 if ref_name in seen_ref_names else 1
+        features['is_new_iban'][idx] = 0 if ref_iban in seen_ibans else 1
         
-        most_common_channel = df.groupby(series_cols)['channel'].agg(
-            lambda x: x.value_counts().index[0] if len(x) > 0 else None
-        ).to_dict()
-        encoding_maps['series_usual_channel'] = most_common_channel
+        # Bekannter Name mit neuer IBAN
+        name_iban_pair = (ref_name, ref_iban)
+        if ref_name in seen_ref_names and name_iban_pair not in seen_name_iban_pairs:
+            features['known_name_new_iban'][idx] = 1
+        
+        # Häufigkeits-Features
+        features['ref_name_count_before'][idx] = ref_name_counts.get(ref_name, 0)
+        features['iban_count_before'][idx] = iban_counts.get(ref_iban, 0)
+        
+        # Series-basierte Features (nur wenn Series bereits bekannt)
+        if series_id in series_stats:
+            stats = series_stats[series_id]
+            features['series_tx_count_before'][idx] = len(stats['amounts'])
+            
+            # Betrags-Statistiken
+            if len(stats['amounts']) > 0:
+                past_mean = np.mean(stats['amounts'])
+                past_std = np.std(stats['amounts']) if len(stats['amounts']) > 1 else past_mean * 0.1
+                if past_std > 0:
+                    features['amount_zscore_series'][idx] = (amount - past_mean) / past_std
+                features['amount_ratio_to_mean'][idx] = amount / past_mean if past_mean > 0 else 1.0
+            
+            # Tag-Abweichung
+            if len(stats['days']) > 0:
+                usual_day = np.median(stats['days'])
+                features['day_deviation_from_usual'][idx] = abs(day - usual_day)
+            
+            # Mismatch-Features
+            if len(stats['ibans']) > 0:
+                most_common = Counter(stats['ibans']).most_common(1)[0][0]
+                features['iban_mismatch'][idx] = 0 if ref_iban == most_common else 1
+            
+            if len(stats['swifts']) > 0:
+                most_common = Counter(stats['swifts']).most_common(1)[0][0]
+                features['swift_mismatch'][idx] = 0 if ref_swift == most_common else 1
+            
+            if len(stats['methods']) > 0:
+                most_common = Counter(stats['methods']).most_common(1)[0][0]
+                features['method_mismatch'][idx] = 0 if pay_method == most_common else 1
+            
+            if len(stats['channels']) > 0:
+                most_common = Counter(stats['channels']).most_common(1)[0][0]
+                features['channel_mismatch'][idx] = 0 if channel == most_common else 1
+            
+            # Transaktionen diesen Monat
+            features['tx_count_this_month_so_far'][idx] = sum(
+                1 for ym in stats['year_months'] if ym == year_month
+            ) + 1
+            
+            # Tage seit letzter Transaktion
+            if series_id in last_date_per_series:
+                days_diff = (tx_date - last_date_per_series[series_id]).days
+                features['days_since_last_in_series'][idx] = days_diff
+        
+        # === STATISTIKEN AKTUALISIEREN (für nächste Transaktionen) ===
+        
+        if series_id not in series_stats:
+            series_stats[series_id] = {
+                'amounts': [], 'ibans': [], 'swifts': [],
+                'days': [], 'methods': [], 'channels': [], 'year_months': []
+            }
+        
+        series_stats[series_id]['amounts'].append(amount)
+        series_stats[series_id]['ibans'].append(ref_iban)
+        series_stats[series_id]['swifts'].append(ref_swift)
+        series_stats[series_id]['days'].append(day)
+        series_stats[series_id]['methods'].append(pay_method)
+        series_stats[series_id]['channels'].append(channel)
+        series_stats[series_id]['year_months'].append(year_month)
+        
+        ref_name_counts[ref_name] = ref_name_counts.get(ref_name, 0) + 1
+        iban_counts[ref_iban] = iban_counts.get(ref_iban, 0) + 1
+        
+        seen_ref_names.add(ref_name)
+        seen_ibans.add(ref_iban)
+        seen_name_iban_pairs.add(name_iban_pair)
+        last_date_per_series[series_id] = tx_date
     
-    usual_iban_map = encoding_maps.get('ref_name_usual_iban', {})
-    usual_swift_map = encoding_maps.get('ref_name_usual_swift', {})
-    usual_method_map = encoding_maps.get('series_usual_method', {})
-    usual_channel_map = encoding_maps.get('series_usual_channel', {})
+    # Features zum DataFrame hinzufügen
+    for feat_name, feat_values in features.items():
+        df[feat_name] = feat_values
     
-    df['usual_iban'] = df['ref_name'].map(usual_iban_map)
-    df['is_usual_iban'] = (df['ref_iban'] == df['usual_iban']).astype(int)
-    df.loc[df['usual_iban'].isna(), 'is_usual_iban'] = 0
+    # Clipping und Log-Transformationen
+    df['amount_zscore_series'] = df['amount_zscore_series'].clip(-10, 10)
+    df['amount_ratio_to_mean'] = df['amount_ratio_to_mean'].clip(0, 10)
+    df['series_tx_count_before_log'] = np.log1p(df['series_tx_count_before'])
+    df['ref_name_count_before_log'] = np.log1p(df['ref_name_count_before'])
+    df['iban_count_before_log'] = np.log1p(df['iban_count_before'])
     
-    df['usual_swift'] = df['ref_name'].map(usual_swift_map)
-    df['is_usual_swift'] = (df['ref_swift'] == df['usual_swift']).astype(int)
-    df.loc[df['usual_swift'].isna(), 'is_usual_swift'] = 0
-    
-    df['series_key'] = list(zip(df['bank_account_uuid'], df['ref_name']))
-    
-    df['usual_method'] = df['series_key'].map(usual_method_map)
-    df['is_usual_method'] = (df['pay_method'] == df['usual_method']).astype(int)
-    df.loc[df['usual_method'].isna(), 'is_usual_method'] = 0
-    
-    df['usual_channel'] = df['series_key'].map(usual_channel_map)
-    df['is_usual_channel'] = (df['channel'] == df['usual_channel']).astype(int)
-    df.loc[df['usual_channel'].isna(), 'is_usual_channel'] = 0
-    
-    df['uses_usual_banking'] = (df['is_usual_iban'] & df['is_usual_swift']).astype(int)
-    df['uses_usual_method_channel'] = (df['is_usual_method'] & df['is_usual_channel']).astype(int)
-    
-    # ===========================================
-    # 6. SERIES-LEVEL FEATURES
-    # ===========================================
-    df['tx_count_in_series'] = df.groupby(series_cols).cumcount() + 1
-    df['is_first_tx'] = (df['tx_count_in_series'] == 1).astype(int)
-    df['ref_name_tx_count'] = df.groupby('ref_name')['ref_name'].transform('count')
-    df['is_regular_series'] = (df['ref_name_tx_count'] > 5).astype(int)
-    
-    return df, encoding_maps
+    return df, series_stats, seen_ref_names, seen_ibans, seen_name_iban_pairs
 
 
-def select_features(df, encoding_maps):
-    """Select final numeric feature columns."""
-    
-    feature_cols = [
-        'amount', 'amount_zscore', 'amount_ratio_to_mean',
-        'day_of_month', 'day_of_week', 'dom_deviation',
-        'days_since_last', 'is_duplicate_month',
-        'ref_name_freq', 'ref_iban_freq', 'ref_swift_freq', 'bank_account_uuid_freq',
-        'is_usual_iban', 'is_usual_swift', 'uses_usual_banking',
-        'is_usual_method', 'is_usual_channel', 'uses_usual_method_channel',
-        'tx_count_in_series', 'is_first_tx', 'is_regular_series',
-    ]
-    
-    # Add one-hot columns
-    low_card_cols = ['pay_method', 'channel', 'currency', 'trns_type']
-    for col in low_card_cols:
-        categories = encoding_maps.get(f'{col}_categories', [])
-        for cat in categories:
-            col_name = f'{col}_{cat}'
-            if col_name in df.columns:
-                feature_cols.append(col_name)
-    
-    available_cols = [c for c in feature_cols if c in df.columns]
-    return df[available_cols]
-
-
-def load_business_dataset_for_contamination(test_size=0.5, random_state=42):
+# =============================================================================
+# MAIN LOADING FUNCTION
+# =============================================================================
+def load_business_dataset_for_contamination(
+    test_size: float = 0.5,
+    scale_on_all_train: bool = False
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
-    Load and preprocess business dataset for contamination studies.
+    Lädt und preprocessed das Business Dataset für Contamination Studies.
     
-    Returns same format as load_adbench_npz():
-        X_train_normal: Normal training samples (scaled)
-        X_train_abnormal: Abnormal samples for contamination (scaled)  
-        X_test: Test set with normal + abnormal (scaled)
-        y_test: Labels for test set
-        
-    The split is:
-    1. All data → Features engineered on ALL data (to have consistent encodings)
-    2. Normal data → 50/50 split into train_normal / test_normal
-    3. Abnormal data → 50/50 split into train_abnormal (for contamination) / test_abnormal
-    4. Test = test_normal + test_abnormal
+    Ablauf:
+    1. Lade alle Daten, sortiere chronologisch
+    2. Bestimme split_date basierend auf test_size
+    3. Splitte ALLE Daten (normal + abnormal) chronologisch nach split_date
+    4. Berechne Features auf Trainingsdaten gemeinsam (fit=True)
+    5. Berechne Features auf Testdaten mit gelernten Stats (fit=False)
+    6. Trenne Train in Normal/Abnormal NACH Feature-Engineering
+    7. Scale die Daten
+    
+    Args:
+        test_size: Anteil der Daten für Test (chronologisch am Ende)
+        scale_on_all_train: True = Scaler auf allen Trainingsdaten fitten
+                           False = Scaler nur auf normalen Trainingsdaten fitten
+    
+    Returns:
+        X_train_normal: Normale Trainingsdaten (scaled)
+        X_train_abnormal: Abnormale Trainingsdaten (scaled) - für Kontamination
+        X_test: Testdaten (scaled)
+        y_test: Test Labels
     """
+    # =========================================================================
+    # 1. DATEN LADEN
+    # =========================================================================
+    base_dir = Path(__file__).resolve().parent
+    file_path = base_dir.parent / "data" / "business_dataset.csv"
     
-    # Load raw data
-    df_original = load_business_dataset()
-    df = df_original.copy()
+    # Alternative Pfade probieren
+    for alt_path in [
+        base_dir / "output" / "business_dataset.csv",
+        Path("output") / "business_dataset.csv",
+        Path("data") / "business_dataset.csv"
+    ]:
+        if not file_path.exists():
+            file_path = alt_path
     
-    # Parse date
+    print(f"Loading data from: {file_path}")
+    df = pd.read_csv(file_path)
+    
+    # Datum parsen und sortieren
     df['date_post'] = pd.to_datetime(df['date_post'], format='%Y%m%d')
+    df = df.sort_values('date_post').reset_index(drop=True)
     
-    # Create target
-    target_col = "anomaly_description"
-    df['target'] = df[target_col].notna().astype(int)
+    print(f"\nTotal transactions: {len(df)}")
+    print(f"Date range: {df['date_post'].min()} to {df['date_post'].max()}")
     
-    # ===========================================
-    # FEATURE ENGINEERING ON ALL DATA
-    # (to ensure consistent encodings)
-    # ===========================================
-    df_features, encoding_maps = create_features(df, is_training=True)
+    # =========================================================================
+    # 2. CHRONOLOGISCHER SPLIT
+    # =========================================================================
+    split_idx = int(len(df) * (1 - test_size))
+    split_date = df.iloc[split_idx]['date_post']
     
-    # Select features
-    X_df = select_features(df_features, encoding_maps)
-    y = df_features['target'].values
+    df_train = df[df['date_post'] <= split_date].copy()
+    df_test = df[df['date_post'] > split_date].copy()
     
-    # Convert to numpy
-    X = X_df.to_numpy(dtype=float)
+    print(f"\nChronological split at: {split_date}")
+    print(f"Train: {len(df_train)} transactions (until {split_date})")
+    print(f"Test: {len(df_test)} transactions (after {split_date})")
     
-    # ===========================================
-    # SPLIT NORMAL / ABNORMAL
-    # ===========================================
-    X_normal = X[y == 0]
-    X_abnormal = X[y == 1]
-    y_normal = y[y == 0]
-    y_abnormal = y[y == 1]
+    # =========================================================================
+    # 3. FEATURE ENGINEERING
+    # =========================================================================
+    print("\nComputing features on training data...")
+    df_train_processed, series_stats, seen_refs, seen_ibans, seen_pairs = \
+        compute_features_no_leakage(df_train, fit=True)
     
-    # 50/50 split for normal data
-    X_train_normal, X_test_normal = train_test_split(
-        X_normal, test_size=test_size, random_state=random_state
+    print("Computing features on test data...")
+    df_test_processed, _, _, _, _ = compute_features_no_leakage(
+        df_test,
+        known_series_stats=series_stats,
+        known_ref_names=seen_refs,
+        known_ibans=seen_ibans,
+        known_name_iban_pairs=seen_pairs,
+        fit=False
     )
     
-    # 50/50 split for abnormal data
-    X_train_abnormal, X_test_abnormal = train_test_split(
-        X_abnormal, test_size=test_size, random_state=random_state
-    )
+    # =========================================================================
+    # 4. TRAIN IN NORMAL/ABNORMAL TRENNEN (nach Feature-Engineering!)
+    # =========================================================================
+    y_train = df_train_processed['anomaly_description'].notna().astype(int).values
+    y_test = df_test_processed['anomaly_description'].notna().astype(int).values
     
-    # Test set = test_normal + test_abnormal
-    X_test = np.vstack([X_test_normal, X_test_abnormal])
-    y_test = np.concatenate([np.zeros(len(X_test_normal)), np.ones(len(X_test_abnormal))])
+    train_normal_mask = y_train == 0
+    train_abnormal_mask = y_train == 1
     
-    # ===========================================
-    # STANDARDIZATION
-    # Fit scaler on train_normal only (clean data)
-    # ===========================================
+    X_train_all = df_train_processed[FEATURE_COLS].values.astype(float)
+    X_train_normal = X_train_all[train_normal_mask]
+    X_train_abnormal = X_train_all[train_abnormal_mask]
+    X_test = df_test_processed[FEATURE_COLS].values.astype(float)
+    
+    print(f"\nTrain split:")
+    print(f"  Normal: {len(X_train_normal)}")
+    print(f"  Abnormal: {len(X_train_abnormal)}")
+    print(f"Test: {len(X_test)} (Normal: {(y_test==0).sum()}, Abnormal: {(y_test==1).sum()})")
+    
+    # =========================================================================
+    # 5. NaN HANDLING
+    # =========================================================================
+    X_train_normal = np.nan_to_num(X_train_normal, nan=0.0)
+    X_train_abnormal = np.nan_to_num(X_train_abnormal, nan=0.0)
+    X_test = np.nan_to_num(X_test, nan=0.0)
+    
+    # =========================================================================
+    # 6. SCALING
+    # =========================================================================
+    print("\nScaling data...")
     scaler = StandardScaler()
-    X_train_normal = scaler.fit_transform(X_train_normal)
-    X_train_abnormal = scaler.transform(X_train_abnormal)
+    
+    if scale_on_all_train:
+        # Scaler auf allen Trainingsdaten fitten
+        scaler.fit(X_train_all)
+        print("  Scaler fitted on ALL training data (normal + abnormal)")
+    else:
+        # Scaler nur auf normalen Daten fitten (Standard für Anomaly Detection)
+        scaler.fit(X_train_normal)
+        print("  Scaler fitted on NORMAL training data only")
+    
+    X_train_normal = scaler.transform(X_train_normal)
+    X_train_abnormal = scaler.transform(X_train_abnormal) if len(X_train_abnormal) > 0 else X_train_abnormal
     X_test = scaler.transform(X_test)
     
-    # Print info
-    print(f"\nBusiness Dataset loaded for contamination study:")
-    print(f"  X_train_normal: {X_train_normal.shape}")
-    print(f"  X_train_abnormal (for contamination): {X_train_abnormal.shape}")
-    print(f"  X_test: {X_test.shape} (Normal: {len(X_test_normal)}, Anomalies: {len(X_test_abnormal)})")
-    print(f"  Features: {X_df.columns.tolist()}")
+    # =========================================================================
+    # 7. SUMMARY
+    # =========================================================================
+    print(f"\n{'='*60}")
+    print("FINAL SHAPES")
+    print('='*60)
+    print(f"X_train_normal:  {X_train_normal.shape}")
+    print(f"X_train_abnormal: {X_train_abnormal.shape}")
+    print(f"X_test:          {X_test.shape}")
+    print(f"y_test:          {y_test.shape} (Anomaly rate: {y_test.mean()*100:.2f}%)")
+    
+    # Anomalie-Typen
+    print(f"\n{'='*60}")
+    print("ANOMALY TYPES IN DATASET")
+    print('='*60)
+    
+    all_anomalies = df[df['anomaly_description'].notna()]['anomaly_description']
+    anomaly_types = all_anomalies.apply(lambda x: x.split(':')[0]).value_counts()
+    
+    train_anomalies = df_train_processed[df_train_processed['anomaly_description'].notna()]['anomaly_description']
+    test_anomalies = df_test_processed[df_test_processed['anomaly_description'].notna()]['anomaly_description']
+    
+    print("\nTotal:")
+    print(anomaly_types)
+    print(f"\nIn Train: {len(train_anomalies)}")
+    print(f"In Test: {len(test_anomalies)}")
     
     return X_train_normal, X_train_abnormal, X_test, y_test
 
 
-# For quick testing
-if __name__ == "__main__":
-    X_train_normal, X_train_abnormal, X_test, y_test = load_business_dataset_for_contamination()
+# =============================================================================
+# HELPER: Kontaminiertes Training Set erstellen
+# =============================================================================
+def create_contaminated_training_set(
+    X_train_normal: np.ndarray,
+    X_train_abnormal: np.ndarray,
+    contamination_ratio: float
+) -> np.ndarray:
+    """
+    Erstellt ein kontaminiertes Training Set.
     
-    print(f"\nMax contamination ratio possible: {len(X_train_abnormal) / (len(X_train_abnormal) + len(X_train_normal)):.4f}")
+    Args:
+        X_train_normal: Normale Trainingsdaten
+        X_train_abnormal: Abnormale Trainingsdaten
+        contamination_ratio: Gewünschter Anteil an Anomalien (0.0 bis 1.0)
+    
+    Returns:
+        X_train_contaminated: Kombiniertes Training Set
+    """
+    if contamination_ratio <= 0:
+        return X_train_normal.copy()
+    
+    n_normal = len(X_train_normal)
+    # Formel: n_abnormal / (n_normal + n_abnormal) = ratio
+    # => n_abnormal = ratio * n_normal / (1 - ratio)
+    n_abnormal_needed = int(contamination_ratio * n_normal / (1 - contamination_ratio))
+    n_abnormal_available = len(X_train_abnormal)
+    n_abnormal_to_add = min(n_abnormal_needed, n_abnormal_available)
+    
+    if n_abnormal_to_add == 0:
+        print(f"Warning: No abnormal samples available for contamination")
+        return X_train_normal.copy()
+    
+    X_train_contaminated = np.vstack([
+        X_train_normal,
+        X_train_abnormal[:n_abnormal_to_add]
+    ])
+    
+    actual_ratio = n_abnormal_to_add / len(X_train_contaminated)
+    print(f"Contamination: Added {n_abnormal_to_add} abnormal samples")
+    print(f"  Requested ratio: {contamination_ratio*100:.1f}%")
+    print(f"  Actual ratio: {actual_ratio*100:.2f}%")
+    print(f"  Final training set size: {len(X_train_contaminated)}")
+    
+    return X_train_contaminated
+
+
+# =============================================================================
+# TEST
+# =============================================================================
+if __name__ == "__main__":
+    # Daten laden
+    X_train_normal, X_train_abnormal, X_test, y_test = load_business_dataset_for_contamination(
+        test_size=0.5,
+        scale_on_all_train=False  # Standard: nur auf Normal fitten
+    )
+    
+    print("\n" + "="*60)
+    print("CONTAMINATION EXAMPLES")
+    print("="*60)
+    
+    # Verschiedene Kontaminationsgrade testen
+    for ratio in [0.0, 0.05, 0.10, 0.20]:
+        print(f"\n--- {ratio*100:.0f}% Contamination ---")
+        X_train = create_contaminated_training_set(
+            X_train_normal, X_train_abnormal, ratio
+        )

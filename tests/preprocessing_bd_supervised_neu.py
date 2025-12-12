@@ -271,7 +271,7 @@ def prepare_data_supervised():
     # ===========================================
     # TIME-BASED SPLIT
     # ===========================================
-    split_date = df['date_post'].quantile(0.6)
+    split_date = df['date_post'].quantile(0.5)
     
     # SEMI-SUPERVISED: Training only normal data
     train_mask = (df['date_post'] <= split_date) & (df['target'] == 0)
