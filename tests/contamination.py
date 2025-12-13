@@ -33,7 +33,7 @@ MODEL_CACHE_DIR.mkdir(parents=True, exist_ok=True)
 from datetime import datetime
 
 
-percentiles = [20, 30, 40, 50, 70, 80, 90, 95, 97.5, 99]
+percentiles = [20, 30, 40, 50, 60, 70, 80, 90, 95, 97.5, 99, 99.9]
 
 
 """
@@ -44,7 +44,7 @@ File runs contamination studies for the given models and datasets.
 
 from preprocessing_bd_contamination import load_business_dataset_for_contamination
 
-results_dir = Path("./results_quick")
+results_dir = Path("./results_business")
 
 # 2. Add this new loading function (after load_adbench_npz):
 # ----------------------------------------------------------------------------
@@ -843,17 +843,17 @@ def plot_all_scores_percentile_comparison(all_extreme_cases, dataset_names, mode
 
 
 if __name__ == "__main__":
-    dataset_names = ["29_Pima.npz"]
+    #dataset_names = ["29_Pima.npz"]
 
     #dataset_names = ["5_campaign.npz"]
-    #dataset_names = ["business_dataset"]
+    dataset_names = ["business_dataset_middle.csv"]
     #MAX three models!
 #----------------------------------------------
     #Change names in plot_score_models_comparison!!
     #change resultfiles!!
 
 
-    colors = {"ForestDiffusion_nt50_dk20": "blue", "ForestFlow_nt20_dk10": "green", "TCCM_nt50": "red"}
+    colors = {"ForestDiffusion_nt50_dk10": "blue", "ForestFlow_nt20_dk10": "green", "TCCM_nt50": "red"}
     #define models to run
     #change names in plot_score_models_comparison accordingly
 
@@ -862,27 +862,45 @@ if __name__ == "__main__":
         "ForestDiffusion_nt50_dk10": {
             "type": "forest",
             "params": {
-                "n_t": 5,
-                "duplicate_K": 2,
-                "duplicate_K_test": 2,
+                "n_t": 50,
+                "duplicate_K": 10,
+                "duplicate_K_test": 10,
                 "diffusion_type": "vp"
             },
         },
+        # "ForestDiffusion_nt50_dk20": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 50,
+        #         "duplicate_K": 20,
+        #         "duplicate_K_test": 20,
+        #         "diffusion_type": "vp"
+        #     },
+        # },
 
         "ForestFlow_nt20_dk10": {
             "type": "forest",
             "params": {
-                "n_t": 5,
-                "duplicate_K": 2,
-                "duplicate_K_test": 2,
+                "n_t": 20,
+                "duplicate_K": 10,
+                "duplicate_K_test": 10,
                 "diffusion_type": "flow"
             },
         },
+        # "ForestFlow_nt20_dk20": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 20,
+        #         "duplicate_K": 20,
+        #         "duplicate_K_test": 20,
+        #         "diffusion_type": "flow"
+        #     },
+        # },
 
          "TCCM_nt50": {
             "type": "tccm",
             "params": {
-                "n_t": 5
+                "n_t": 50
             },
         },
 

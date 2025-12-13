@@ -283,7 +283,7 @@ def load_business_dataset_for_contamination(
     # 1. DATEN LADEN
     # =========================================================================
     base_dir = Path(__file__).resolve().parent
-    file_path = base_dir.parent / "data" / "business_dataset.csv"
+    file_path = base_dir.parent / "data" / "business_dataset_middle.csv"
     
     # Alternative Pfade probieren
     for alt_path in [
