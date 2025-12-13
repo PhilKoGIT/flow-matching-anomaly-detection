@@ -44,7 +44,7 @@ File runs contamination studies for the given models and datasets.
 
 from preprocessing_bd_contamination import load_business_dataset_for_contamination
 
-results_dir = Path("./back_up20df_sonst_richtig")
+results_dir = Path("./results_quick")
 
 # 2. Add this new loading function (after load_adbench_npz):
 # ----------------------------------------------------------------------------
@@ -843,9 +843,9 @@ def plot_all_scores_percentile_comparison(all_extreme_cases, dataset_names, mode
 
 
 if __name__ == "__main__":
-    #dataset_names = ["29_Pima.npz"]
+    dataset_names = ["29_Pima.npz"]
 
-    dataset_names = ["5_campaign.npz"]
+    #dataset_names = ["5_campaign.npz"]
     #dataset_names = ["business_dataset"]
     #MAX three models!
 #----------------------------------------------
@@ -859,69 +859,33 @@ if __name__ == "__main__":
 
     models_to_run = {
 
-        # "ForestFlow_nt10_dk10": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 5,
-        #         "duplicate_K": 2,
-        #         "duplicate_K_test": 2,
-        #         "diffusion_type": "flow"
-        #     },
-        # },
-        # "ForestDiffusion_nt50_dk10": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 50,
-        #         "duplicate_K": 10,
-        #         "duplicate_K_test": 10,
-        #         "diffusion_type": "vp"
-        #     },
-        # },
-        "ForestDiffusion_nt50_dk20": {
-             "type": "forest",
+        "ForestDiffusion_nt50_dk10": {
+            "type": "forest",
             "params": {
-                "n_t": 50,
-                "duplicate_K": 20,
-                "duplicate_K_test": 20,
+                "n_t": 5,
+                "duplicate_K": 2,
+                "duplicate_K_test": 2,
                 "diffusion_type": "vp"
             },
         },
+
         "ForestFlow_nt20_dk10": {
             "type": "forest",
             "params": {
-                "n_t": 20,
-                "duplicate_K": 10,
-                "duplicate_K_test": 10,
+                "n_t": 5,
+                "duplicate_K": 2,
+                "duplicate_K_test": 2,
                 "diffusion_type": "flow"
             },
         },
-        # "ForestDiffusion_nt40_dk10": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 40,
-        #         "duplicate_K": 10,
-        #         "duplicate_K_test": 10,
-        #         "diffusion_type": "vp"
-        #     },
-        # },
+
          "TCCM_nt50": {
             "type": "tccm",
             "params": {
-                "n_t": 50
+                "n_t": 5
             },
         },
-        #          "TCCM_nt100": {
-        #     "type": "tccm",
-        #     "params": {
-        #         "n_t": 100
-        #     },
-        # },
-        #          "TCCM_nt200": {
-        #     "type": "tccm",
-        #     "params": {
-        #         "n_t": 200
-        #     },
-        # },
+
      }
     
     all_results_combined = {}
@@ -969,19 +933,19 @@ if __name__ == "__main__":
 
     # # Nach den bestehenden Plots hinzufügen:
     
-    # # Percentile-Kurven für jeden Score/Modell
-    # plot_percentile_curves(all_extreme_cases, dataset_names)
+    # Percentile-Kurven für jeden Score/Modell
+    plot_percentile_curves(all_extreme_cases, dataset_names)
     
-    # # F1-Vergleich aller Scores pro Modell
-    # for model_name in models_to_run.keys():
-    #     plot_all_scores_percentile_comparison(
-    #         all_extreme_cases, dataset_names, model_name, 
-    #         case_key="no_contamination"
-    #     )
-    #     plot_all_scores_percentile_comparison(
-    #         all_extreme_cases, dataset_names, model_name, 
-    #         case_key="full_contamination"
-    #     )
+    # F1-Vergleich aller Scores pro Modell
+    for model_name in models_to_run.keys():
+        plot_all_scores_percentile_comparison(
+            all_extreme_cases, dataset_names, model_name, 
+            case_key="no_contamination"
+        )
+        plot_all_scores_percentile_comparison(
+            all_extreme_cases, dataset_names, model_name, 
+            case_key="full_contamination"
+        )
     # Printing extreme cases summary
     print("\n" + "="*80)
     print("EXTREME CASES SUMMARY")
@@ -1025,6 +989,7 @@ if __name__ == "__main__":
     
     # Alles zusammenfassen was für Plots gebraucht wird
     save_data = {
+        "all_results_combined": all_results_combined,
         "all_extreme_cases": all_extreme_cases,
         "dataset_names": dataset_names,
         "models_to_run": models_to_run,

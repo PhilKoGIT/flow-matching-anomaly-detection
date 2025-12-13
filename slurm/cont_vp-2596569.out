@@ -8,3 +8,13 @@ Dataset loaded successfully!
 Training data: (18274, 62), Normal: 18274
 Test data: (22914, 62), Normal: 18274, Anomalies: 4640
 [*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestDiffusion_nt50_dk20/8c08fb0280d25d916bb121ef7bd7f8b8.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestDiffusion_nt50_dk20/f2c7ce1890d4ab47af212a4375aabdb0.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestDiffusion_nt50_dk20/32d816252a812bd4942b5282dcc1a18e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestDiffusion_nt50_dk20/5bc67ae5be7256e82178a890038f0934.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestDiffusion_nt50_dk20/98aca9f761c0e5cd2ae4854de0d7487f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestDiffusion_nt50_dk20/223040df63d27bd0080194c1e18d553e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestDiffusion_nt50_dk20/21e60810040d00708485fa57e18554f7.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestDiffusion_nt50_dk20/f6754984cecc3eff015540bf917e60a6.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestDiffusion_nt50_dk20/4e01171818f71bc01ab520679d80027b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestDiffusion_nt50_dk20/ebdfa3524b5b905e5054822256837847.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestDiffusion_nt50_dk20/c143f523931039c213d0a2339fdc785a.joblib
