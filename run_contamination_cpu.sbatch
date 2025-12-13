@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH -J cont_vp
 #SBATCH -p cpu_il
-#SBATCH --cpus-per-task=16
-#SBATCH --mem=32G
-#SBATCH --time=50:00:00
+#SBATCH --cpus-per-task=16    
+#SBATCH --mem=32G         
+#SBATCH --time=70:00:00
 #SBATCH -o slurm/%x-%j.out
 #SBATCH -e slurm/%x-%j.err
 

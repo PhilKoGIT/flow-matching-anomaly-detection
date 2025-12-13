@@ -7,8 +7,8 @@ import uuid
 import os
 
 
-NUM_CUSTOMERS = 9
-START_DATE = date(2018, 1, 1)
+NUM_CUSTOMERS = 4
+START_DATE = date(2022, 1, 1)
 END_DATE = date(2023, 12, 31)
 OUTPUT_DIR = "output"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -303,7 +303,7 @@ if __name__ == "__main__":
             #day_jitter=1
         )
         # Inject an anomaly
-        how_many_anomalies = random.randint(0, 5)
+        how_many_anomalies = random.randint(0, 20)
         which_anomaly = random.randint(0, len(anomaly_injectors)-1)
         for x in range(how_many_anomalies):
             clean_series = anomaly_injectors[which_anomaly](clean_series)

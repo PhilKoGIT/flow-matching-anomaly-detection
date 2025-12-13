@@ -1,0 +1,315 @@
+== Job Start: Fri Dec 12 05:59:09 PM CET 2025 ==
+Python: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/bin/python
+Imports dauern ~2-3 Minuten, bitte warten...
+
+ Dataset: 5_campaign.npz with model: TCCM_nt50 and score: deviation
+ 
+Dataset loaded successfully!
+Training data: (18274, 62), Normal: 18274
+Test data: (22914, 62), Normal: 18274, Anomalies: 4640
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/711fd7a1f2cb7a94c6f617e330d1d4d9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/bb0a439ff794096bde85bb7611a1b925.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b7aeb744e302832c45609c3260afbf8f.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/6fc97d5c4ae589bc6622e1bc2da80154.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/5fc4abb142b86a3de756933bed57f8b9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/a3642471377775554ea8efde32ed2455.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/259fbba974ffe355f62de2240a5d2b99.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/71ba51236cb419ed634fe26992676785.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b64e1f701cf408a83790450f2918c64d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/7cd60f5e5de7be0eb176f13f9ed8b574.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/2e0f34a59a0da55676977b2c7b5320e2.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/6258eba61236d8a969efd446e2d3eb95.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/27391344c22f6beeadaa1b5cf03a8b31.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/4ea4699901f1d53c1a362eae30054951.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/0c048732d55eabb16b2d3f6de3746563.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b1533f5f7d1f4c8115917aa024d7cfce.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/59b5513feffc55972e9abc98c5c68afd.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/e8cc9f4f4f028fe5dacd12930c4a5830.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/38c57ea83c5399dd8086778b7737539b.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/4e9c5ceb5feb099266e1e5c8857ae3ed.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/f3ca5255df32acd3e1479d0def364fd7.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/ec94b49dbec92ec508f39a02777b542c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/98b46fc44d701e253347d4c27044bc1c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/e52de2fe585bca2db6a9e5f6ebc60bea.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b3dc1fa94e3f3d879f819a5e03cc1620.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/fd077685b833566b865b6233c6f1f1db.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/606817ea5ada64111ffdbf808ce9ad6b.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/a6fea58856ff387a98a51bd03f6795f9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/0158536f3370f9fed34c964cb962b4b0.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b59e499fe8e765201e8af5d0c5464295.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/072c811ba0de55c7a6700535f029f5a4.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/34af66ceafaf6011d704ec162faa6c2c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/e1ca644c8c7d6d80c1c97e0d160c3af4.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/99fc9ea736a3ce790f776a6b15fa4f93.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/c0c5ea364c42607de532ac5d05f7601f.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/a8c56c8f5d78bd38105c6e316ff67ffd.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/a1f957cfc2c964c8d0bff60bc55af8c6.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/4a534f877fd232484389e6bc18d38665.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/2c8df9a872a091231f3b4b4712692d4e.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/4f3908c11fd0ee2932e92ef7c016722a.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b588d2c424c03cde7974a74aa2ad4d14.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/2f23cc44271c78c891fff15890a2a54e.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/ceab36ad801d778e6e4dfb79b31ddba3.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/a41a9f0c5bc5cbdd293b43346a9056cb.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/c4bf0b897ffdde282851fb0253d00df9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/5214eedd21f07eb90e22c0afe9e28081.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b66c8e17dfa195c993d470f273a3af72.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/e1731f58e47249034803fad58fd6db0a.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/73ca4b738bd91a076b3319df7a03fb54.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/32d87099aa5e01f361336b0a0dd16641.joblib
+
+ Dataset: 5_campaign.npz with model: TCCM_nt50 and score: reconstruction
+ 
+Dataset loaded successfully!
+Training data: (18274, 62), Normal: 18274
+Test data: (22914, 62), Normal: 18274, Anomalies: 4640
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/711fd7a1f2cb7a94c6f617e330d1d4d9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/bb0a439ff794096bde85bb7611a1b925.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b7aeb744e302832c45609c3260afbf8f.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/6fc97d5c4ae589bc6622e1bc2da80154.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/5fc4abb142b86a3de756933bed57f8b9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/a3642471377775554ea8efde32ed2455.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/259fbba974ffe355f62de2240a5d2b99.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/71ba51236cb419ed634fe26992676785.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b64e1f701cf408a83790450f2918c64d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/7cd60f5e5de7be0eb176f13f9ed8b574.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/2e0f34a59a0da55676977b2c7b5320e2.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/6258eba61236d8a969efd446e2d3eb95.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/27391344c22f6beeadaa1b5cf03a8b31.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/4ea4699901f1d53c1a362eae30054951.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/0c048732d55eabb16b2d3f6de3746563.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b1533f5f7d1f4c8115917aa024d7cfce.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/59b5513feffc55972e9abc98c5c68afd.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/e8cc9f4f4f028fe5dacd12930c4a5830.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/38c57ea83c5399dd8086778b7737539b.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/4e9c5ceb5feb099266e1e5c8857ae3ed.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/f3ca5255df32acd3e1479d0def364fd7.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/ec94b49dbec92ec508f39a02777b542c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/98b46fc44d701e253347d4c27044bc1c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/e52de2fe585bca2db6a9e5f6ebc60bea.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b3dc1fa94e3f3d879f819a5e03cc1620.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/fd077685b833566b865b6233c6f1f1db.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/606817ea5ada64111ffdbf808ce9ad6b.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/a6fea58856ff387a98a51bd03f6795f9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/0158536f3370f9fed34c964cb962b4b0.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b59e499fe8e765201e8af5d0c5464295.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/072c811ba0de55c7a6700535f029f5a4.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/34af66ceafaf6011d704ec162faa6c2c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/e1ca644c8c7d6d80c1c97e0d160c3af4.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/99fc9ea736a3ce790f776a6b15fa4f93.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/c0c5ea364c42607de532ac5d05f7601f.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/a8c56c8f5d78bd38105c6e316ff67ffd.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/a1f957cfc2c964c8d0bff60bc55af8c6.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/4a534f877fd232484389e6bc18d38665.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/2c8df9a872a091231f3b4b4712692d4e.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/4f3908c11fd0ee2932e92ef7c016722a.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b588d2c424c03cde7974a74aa2ad4d14.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/2f23cc44271c78c891fff15890a2a54e.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/ceab36ad801d778e6e4dfb79b31ddba3.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/a41a9f0c5bc5cbdd293b43346a9056cb.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/c4bf0b897ffdde282851fb0253d00df9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/5214eedd21f07eb90e22c0afe9e28081.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b66c8e17dfa195c993d470f273a3af72.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/e1731f58e47249034803fad58fd6db0a.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/73ca4b738bd91a076b3319df7a03fb54.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/32d87099aa5e01f361336b0a0dd16641.joblib
+
+ Dataset: 5_campaign.npz with model: TCCM_nt50 and score: decision
+ 
+Dataset loaded successfully!
+Training data: (18274, 62), Normal: 18274
+Test data: (22914, 62), Normal: 18274, Anomalies: 4640
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/711fd7a1f2cb7a94c6f617e330d1d4d9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/bb0a439ff794096bde85bb7611a1b925.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b7aeb744e302832c45609c3260afbf8f.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/6fc97d5c4ae589bc6622e1bc2da80154.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/5fc4abb142b86a3de756933bed57f8b9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/a3642471377775554ea8efde32ed2455.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/259fbba974ffe355f62de2240a5d2b99.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/71ba51236cb419ed634fe26992676785.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b64e1f701cf408a83790450f2918c64d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/7cd60f5e5de7be0eb176f13f9ed8b574.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/2e0f34a59a0da55676977b2c7b5320e2.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/6258eba61236d8a969efd446e2d3eb95.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/27391344c22f6beeadaa1b5cf03a8b31.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/4ea4699901f1d53c1a362eae30054951.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/0c048732d55eabb16b2d3f6de3746563.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b1533f5f7d1f4c8115917aa024d7cfce.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/59b5513feffc55972e9abc98c5c68afd.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/e8cc9f4f4f028fe5dacd12930c4a5830.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/38c57ea83c5399dd8086778b7737539b.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/4e9c5ceb5feb099266e1e5c8857ae3ed.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/f3ca5255df32acd3e1479d0def364fd7.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/ec94b49dbec92ec508f39a02777b542c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/98b46fc44d701e253347d4c27044bc1c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/e52de2fe585bca2db6a9e5f6ebc60bea.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b3dc1fa94e3f3d879f819a5e03cc1620.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/fd077685b833566b865b6233c6f1f1db.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/606817ea5ada64111ffdbf808ce9ad6b.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/a6fea58856ff387a98a51bd03f6795f9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/0158536f3370f9fed34c964cb962b4b0.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b59e499fe8e765201e8af5d0c5464295.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/072c811ba0de55c7a6700535f029f5a4.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/34af66ceafaf6011d704ec162faa6c2c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/e1ca644c8c7d6d80c1c97e0d160c3af4.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/99fc9ea736a3ce790f776a6b15fa4f93.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/c0c5ea364c42607de532ac5d05f7601f.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/a8c56c8f5d78bd38105c6e316ff67ffd.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/a1f957cfc2c964c8d0bff60bc55af8c6.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/4a534f877fd232484389e6bc18d38665.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/2c8df9a872a091231f3b4b4712692d4e.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/4f3908c11fd0ee2932e92ef7c016722a.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b588d2c424c03cde7974a74aa2ad4d14.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/2f23cc44271c78c891fff15890a2a54e.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/ceab36ad801d778e6e4dfb79b31ddba3.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/a41a9f0c5bc5cbdd293b43346a9056cb.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/c4bf0b897ffdde282851fb0253d00df9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/5214eedd21f07eb90e22c0afe9e28081.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/b66c8e17dfa195c993d470f273a3af72.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/e1731f58e47249034803fad58fd6db0a.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/73ca4b738bd91a076b3319df7a03fb54.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt50/32d87099aa5e01f361336b0a0dd16641.joblib
+
+================================================================================
+EXTREME CASES SUMMARY
+================================================================================
+
+TCCM_nt50 - deviation:
+  5_campaign.npz [no_contamination]:
+    AUC: 0.7375 ± 0.0451
+    AUPRC: 0.3236 ± 0.0401
+
+    Threshold Percentile Metrics:
+    Percentile   Precision            Recall               F1                  
+    ------------------------------------------------------------------------
+    20           0.1295 ± 0.0073      0.9198 ± 0.0519      0.2271 ± 0.0128     
+    30           0.1414 ± 0.0101      0.8789 ± 0.0626      0.2437 ± 0.0174     
+    40           0.1559 ± 0.0122      0.8303 ± 0.0652      0.2625 ± 0.0206     
+    50           0.1742 ± 0.0137      0.7731 ± 0.0609      0.2843 ± 0.0224     
+    70           0.2330 ± 0.0195      0.6204 ± 0.0519      0.3388 ± 0.0284     
+    80           0.2919 ± 0.0286      0.5182 ± 0.0508      0.3734 ± 0.0366     
+    90           0.4103 ± 0.0315      0.3643 ± 0.0280      0.3859 ± 0.0297     
+    95           0.5064 ± 0.0464      0.2248 ± 0.0206      0.3114 ± 0.0285     
+    97.5         0.5177 ± 0.0757      0.1149 ± 0.0168      0.1881 ± 0.0275     
+    99           0.5039 ± 0.0440      0.0447 ± 0.0039      0.0822 ± 0.0072     
+
+    ✓ Best F1: 0.3859 @ 90th percentile
+  5_campaign.npz [full_contamination]:
+    AUC: 0.6865 ± 0.0502
+    AUPRC: 0.2761 ± 0.0342
+
+    Threshold Percentile Metrics:
+    Percentile   Precision            Recall               F1                  
+    ------------------------------------------------------------------------
+    20           0.1228 ± 0.0080      0.8718 ± 0.0568      0.2152 ± 0.0140     
+    30           0.1310 ± 0.0116      0.8141 ± 0.0719      0.2257 ± 0.0199     
+    40           0.1434 ± 0.0132      0.7638 ± 0.0701      0.2415 ± 0.0222     
+    50           0.1587 ± 0.0146      0.7042 ± 0.0650      0.2590 ± 0.0239     
+    70           0.2140 ± 0.0206      0.5697 ± 0.0549      0.3111 ± 0.0300     
+    80           0.2687 ± 0.0229      0.4771 ± 0.0406      0.3438 ± 0.0293     
+    90           0.3776 ± 0.0561      0.3353 ± 0.0498      0.3552 ± 0.0528     
+    95           0.4351 ± 0.0578      0.1932 ± 0.0257      0.2676 ± 0.0355     
+    97.5         0.3984 ± 0.0595      0.0884 ± 0.0132      0.1448 ± 0.0216     
+    99           0.4485 ± 0.0606      0.0398 ± 0.0054      0.0732 ± 0.0099     
+
+    ✓ Best F1: 0.3552 @ 90th percentile
+
+TCCM_nt50 - reconstruction:
+  5_campaign.npz [no_contamination]:
+    AUC: 0.7579 ± 0.0104
+    AUPRC: 0.3338 ± 0.0048
+
+    Threshold Percentile Metrics:
+    Percentile   Precision            Recall               F1                  
+    ------------------------------------------------------------------------
+    20           0.1348 ± 0.0012      0.9574 ± 0.0087      0.2364 ± 0.0022     
+    30           0.1488 ± 0.0026      0.9249 ± 0.0161      0.2564 ± 0.0045     
+    40           0.1639 ± 0.0032      0.8727 ± 0.0170      0.2759 ± 0.0054     
+    50           0.1801 ± 0.0040      0.7992 ± 0.0177      0.2939 ± 0.0065     
+    70           0.2324 ± 0.0047      0.6190 ± 0.0124      0.3380 ± 0.0068     
+    80           0.2913 ± 0.0040      0.5172 ± 0.0071      0.3727 ± 0.0051     
+    90           0.4138 ± 0.0017      0.3674 ± 0.0015      0.3892 ± 0.0016     
+    95           0.5394 ± 0.0087      0.2395 ± 0.0039      0.3317 ± 0.0054     
+    97.5         0.5736 ± 0.0056      0.1273 ± 0.0012      0.2084 ± 0.0020     
+    99           0.4961 ± 0.0036      0.0441 ± 0.0003      0.0809 ± 0.0006     
+
+    ✓ Best F1: 0.3892 @ 90th percentile
+  5_campaign.npz [full_contamination]:
+    AUC: 0.7644 ± 0.0035
+    AUPRC: 0.3365 ± 0.0026
+
+    Threshold Percentile Metrics:
+    Percentile   Precision            Recall               F1                  
+    ------------------------------------------------------------------------
+    20           0.1353 ± 0.0003      0.9610 ± 0.0019      0.2373 ± 0.0005     
+    30           0.1503 ± 0.0006      0.9338 ± 0.0037      0.2589 ± 0.0010     
+    40           0.1660 ± 0.0011      0.8842 ± 0.0060      0.2796 ± 0.0019     
+    50           0.1821 ± 0.0014      0.8084 ± 0.0062      0.2973 ± 0.0023     
+    70           0.2348 ± 0.0026      0.6253 ± 0.0070      0.3414 ± 0.0038     
+    80           0.2938 ± 0.0011      0.5216 ± 0.0020      0.3758 ± 0.0014     
+    90           0.4131 ± 0.0025      0.3668 ± 0.0022      0.3886 ± 0.0024     
+    95           0.5404 ± 0.0098      0.2399 ± 0.0043      0.3323 ± 0.0060     
+    97.5         0.5705 ± 0.0031      0.1266 ± 0.0007      0.2073 ± 0.0011     
+    99           0.4951 ± 0.0053      0.0440 ± 0.0005      0.0808 ± 0.0009     
+
+    ✓ Best F1: 0.3886 @ 90th percentile
+
+TCCM_nt50 - decision:
+  5_campaign.npz [no_contamination]:
+    AUC: 0.7848 ± 0.0159
+    AUPRC: 0.3488 ± 0.0123
+
+    Threshold Percentile Metrics:
+    Percentile   Precision            Recall               F1                  
+    ------------------------------------------------------------------------
+    20           0.1360 ± 0.0009      0.9661 ± 0.0061      0.2385 ± 0.0015     
+    30           0.1505 ± 0.0014      0.9351 ± 0.0085      0.2592 ± 0.0023     
+    40           0.1671 ± 0.0027      0.8897 ± 0.0143      0.2813 ± 0.0045     
+    50           0.1877 ± 0.0043      0.8329 ± 0.0192      0.3063 ± 0.0071     
+    70           0.2530 ± 0.0117      0.6736 ± 0.0312      0.3678 ± 0.0171     
+    80           0.3140 ± 0.0162      0.5575 ± 0.0288      0.4017 ± 0.0208     
+    90           0.4238 ± 0.0172      0.3763 ± 0.0152      0.3986 ± 0.0162     
+    95           0.5052 ± 0.0168      0.2243 ± 0.0075      0.3107 ± 0.0103     
+    97.5         0.5406 ± 0.0204      0.1200 ± 0.0045      0.1964 ± 0.0074     
+    99           0.5087 ± 0.0592      0.0452 ± 0.0053      0.0830 ± 0.0097     
+
+    ✓ Best F1: 0.4017 @ 80th percentile
+  5_campaign.npz [full_contamination]:
+    AUC: 0.7592 ± 0.0206
+    AUPRC: 0.3060 ± 0.0186
+
+    Threshold Percentile Metrics:
+    Percentile   Precision            Recall               F1                  
+    ------------------------------------------------------------------------
+    20           0.1338 ± 0.0021      0.9500 ± 0.0146      0.2345 ± 0.0036     
+    30           0.1472 ± 0.0028      0.9144 ± 0.0176      0.2535 ± 0.0049     
+    40           0.1624 ± 0.0039      0.8647 ± 0.0208      0.2734 ± 0.0066     
+    50           0.1818 ± 0.0047      0.8068 ± 0.0208      0.2967 ± 0.0077     
+    70           0.2428 ± 0.0103      0.6466 ± 0.0274      0.3530 ± 0.0150     
+    80           0.2964 ± 0.0158      0.5262 ± 0.0281      0.3792 ± 0.0202     
+    90           0.3839 ± 0.0237      0.3409 ± 0.0210      0.3611 ± 0.0223     
+    95           0.4416 ± 0.0165      0.1960 ± 0.0073      0.2715 ± 0.0101     
+    97.5         0.4625 ± 0.0169      0.1027 ± 0.0038      0.1680 ± 0.0061     
+    99           0.4447 ± 0.0136      0.0395 ± 0.0012      0.0725 ± 0.0022     
+
+    ✓ Best F1: 0.3792 @ 80th percentile
+
+============================================================
+Ergebnisse gespeichert unter: results_tccm/results_data/extreme_cases_5_campaign_20251212_181415.joblib
+============================================================
+== Job Ende: Fri Dec 12 06:14:16 PM CET 2025 ==
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n776
+Job ID: 2595231
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 50
+CPU Utilized: 00:14:18
+CPU Efficiency: 1.85% of 12:53:20 core-walltime
+Job Wall-clock time: 00:15:28
+Memory Utilized: 1.08 GB
+Memory Efficiency: 3.38% of 32.00 GB (32.00 GB/node)

@@ -1,0 +1,10 @@
+== Job Start: Sat Dec 13 10:21:12 AM CET 2025 ==
+Python: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/bin/python
+Imports dauern ~2-3 Minuten, bitte warten...
+
+ Dataset: 5_campaign.npz with model: ForestDiffusion_nt50_dk10 and score: deviation
+ 
+Dataset loaded successfully!
+Training data: (18274, 62), Normal: 18274
+Test data: (22914, 62), Normal: 18274, Anomalies: 4640
+[*] No cached model found. Training model for 5_campaign.npz, ForestDiffusion_nt50_dk10, contam_idx=0, seed=0

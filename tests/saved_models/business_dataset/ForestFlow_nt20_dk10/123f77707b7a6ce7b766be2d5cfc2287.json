@@ -1,0 +1,13 @@
+{
+  "contam_idx": 0,
+  "dataset_name": "business_dataset",
+  "model_name": "ForestFlow_nt20_dk10",
+  "model_type": "forest",
+  "params": {
+    "diffusion_type": "flow",
+    "duplicate_K": 10,
+    "duplicate_K_test": 10,
+    "n_t": 20
+  },
+  "seed": 0
+}

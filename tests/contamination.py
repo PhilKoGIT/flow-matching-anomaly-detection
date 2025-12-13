@@ -30,6 +30,7 @@ from TCCM.functions import determine_FMAD_hyperparameters
 import hashlib
 MODEL_CACHE_DIR = Path(__file__).resolve().parent / "saved_models"
 MODEL_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+from datetime import datetime
 
 
 percentiles = [20, 30, 40, 50, 70, 80, 90, 95, 97.5, 99]
@@ -43,6 +44,7 @@ File runs contamination studies for the given models and datasets.
 
 from preprocessing_bd_contamination import load_business_dataset_for_contamination
 
+results_dir = Path("./back_up20df_sonst_richtig")
 
 # 2. Add this new loading function (after load_adbench_npz):
 # ----------------------------------------------------------------------------
@@ -172,14 +174,14 @@ def calculate_scores_ForestDiffusionModel(X_test, model, n_t, duplicate_K_test, 
                 test_samples=X_test,
                 diffusion_type=diffusion_type,
                 n_t=n_t, 
-                duplicate_K_test=duplicate_K_test
+                duplicate_K_test=(duplicate_K_test//2)
             )
         elif diffusion_type == "vp": 
             anomaly_scores_reconstruction = model.compute_reconstruction_score_vp(
                 test_samples=X_test,
                 diffusion_type=diffusion_type,
                 n_t=n_t, 
-                duplicate_K_test=duplicate_K_test
+                duplicate_K_test=(duplicate_K_test//2)
             )
         else:
             raise ValueError(f"Unknown diffusion type: {diffusion_type}")
@@ -280,8 +282,7 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
     returns: dict entry for dataset with model name, score, auroc and auprc values for each run and contamination levels
 
     """
-    #seed_list = [0,1,2,3,4]
-    seed_list = [0]
+    seed_list = [0,1,2,3,4]
     all_results = {}
     all_contam_levels = {}
 
@@ -619,7 +620,7 @@ def aggregate_extreme_cases(extreme_cases_data):
 
 
 
-def plot_score_models_comparison(all_results, score, metric, dataset_names, model_names):
+def plot_score_models_comparison(all_results, score, metric, dataset_names, model_names, colors):
     """
     Shows for one scoretype all models comparison plot for all datasets and one metric
     metric: "auroc" or "auprc"
@@ -629,8 +630,8 @@ def plot_score_models_comparison(all_results, score, metric, dataset_names, mode
     model_names = list(all_results[dataset_names[0]].keys())
 
     # For each model name a color
-    colors = {"ForestFlow_nt20_dk10": "blue", "ForestDiffusion_nt50_dk10": "green", "TCCM_nt50": "red"}
-    #colors = {"TCCM_nt50": "blue", "TCCM_nt100": "red", "TCCM_nt200": "green"}
+    #colors = {"ForestFlow_nt20_dk10": "blue", "ForestDiffusion_nt40_dk10": "green", "TCCM_nt50": "red"}
+    colors = colors
     for idx, dataset_name in enumerate(dataset_names):
         ax = axs[idx] if len(dataset_names) > 1 else axs
         
@@ -658,7 +659,7 @@ def plot_score_models_comparison(all_results, score, metric, dataset_names, mode
         ax.legend()
     
     plt.tight_layout()
-    plt.savefig(f"./results_business/all_models_{score}_{metric}.pdf")
+    plt.savefig(f"./{results_dir}/all_models_{score}_{metric}.pdf")
     plt.show()
 
 
@@ -702,13 +703,149 @@ def plot_model_scores_comparison(all_results, model_name, metric, dataset_names)
         ax.legend()
     
     plt.tight_layout()
-    plt.savefig(f"./results_business/{model_name}_all_scores_{metric}.pdf")
+    plt.savefig(f"./{results_dir}/{model_name}_all_scores_{metric}.pdf")
     plt.show()
 
-if __name__ == "__main__":
-    dataset_names = ["29_Pima.npz"]
 
-    #dataset_names = ["5_campaign.npz"]
+def plot_percentile_curves(all_extreme_cases, dataset_names, output_dir=results_dir):
+    """
+    Plottet für jedes Modell, jeden Score und jeden Extremfall (no_contam/full_contam)
+    eine Kurve mit Precision, Recall und F1 über die Percentile.
+    """
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+    
+    for model_name, scores_data in all_extreme_cases.items():
+        for score, datasets in scores_data.items():
+            for dataset_name in dataset_names:
+                if dataset_name not in datasets:
+                    continue
+                    
+                cases = datasets[dataset_name]
+                
+                # Ein Plot mit 2 Subplots: no_contamination und full_contamination
+                fig, axs = plt.subplots(1, 2, figsize=(14, 5))
+                
+                for idx, case_key in enumerate(["no_contamination", "full_contamination"]):
+                    if case_key not in cases:
+                        continue
+                    
+                    ax = axs[idx]
+                    metrics = cases[case_key]["threshold_metrics"]
+                    
+                    # Daten extrahieren
+                    percs = sorted(metrics.keys())
+                    precision_means = [metrics[p]["precision_mean"] for p in percs]
+                    precision_stds = [metrics[p]["precision_std"] for p in percs]
+                    recall_means = [metrics[p]["recall_mean"] for p in percs]
+                    recall_stds = [metrics[p]["recall_std"] for p in percs]
+                    f1_means = [metrics[p]["f1_mean"] for p in percs]
+                    f1_stds = [metrics[p]["f1_std"] for p in percs]
+                    
+                    # Precision
+                    ax.plot(percs, precision_means, 'b-o', label='Precision', linewidth=2)
+                    ax.fill_between(percs, 
+                                   np.array(precision_means) - np.array(precision_stds),
+                                   np.array(precision_means) + np.array(precision_stds),
+                                   color='blue', alpha=0.2)
+                    
+                    # Recall
+                    ax.plot(percs, recall_means, 'g-s', label='Recall', linewidth=2)
+                    ax.fill_between(percs,
+                                   np.array(recall_means) - np.array(recall_stds),
+                                   np.array(recall_means) + np.array(recall_stds),
+                                   color='green', alpha=0.2)
+                    
+                    # F1
+                    ax.plot(percs, f1_means, 'r-^', label='F1', linewidth=2)
+                    ax.fill_between(percs,
+                                   np.array(f1_means) - np.array(f1_stds),
+                                   np.array(f1_means) + np.array(f1_stds),
+                                   color='red', alpha=0.2)
+                    
+                    # Bestes F1 markieren
+                    best_idx = np.argmax(f1_means)
+                    ax.axvline(x=percs[best_idx], color='red', linestyle='--', alpha=0.5)
+                    ax.scatter([percs[best_idx]], [f1_means[best_idx]], 
+                              color='red', s=150, zorder=5, marker='*')
+                    
+                    # AUC/AUPRC als Text
+                    auc = cases[case_key]["auc_mean"]
+                    auprc = cases[case_key]["auprc_mean"]
+                    ax.text(0.02, 0.98, f'AUC: {auc:.4f}\nAUPRC: {auprc:.4f}',
+                           transform=ax.transAxes, fontsize=10, verticalalignment='top',
+                           bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+                    
+                    title_suffix = "No Contamination" if case_key == "no_contamination" else "Full Contamination"
+                    ax.set_title(f"{title_suffix}")
+                    ax.set_xlabel("Threshold Percentile")
+                    ax.set_ylabel("Score")
+                    ax.set_ylim(0, 1.05)
+                    ax.set_xlim(min(percs) - 2, max(percs) + 2)
+                    ax.grid(True, alpha=0.3)
+                    ax.legend(loc='lower left')
+                
+                fig.suptitle(f"{model_name} - {score} - {dataset_name}", fontsize=14, fontweight='bold')
+                plt.tight_layout()
+                
+                filename = f"{output_dir}/percentile_curve_{model_name}_{score}_{dataset_name.replace('.npz', '')}.pdf"
+                plt.savefig(filename)
+                plt.close()
+                print(f"Saved: {filename}")
+
+
+def plot_all_scores_percentile_comparison(all_extreme_cases, dataset_names, model_name, case_key="no_contamination", output_dir=results_dir):
+    """
+    Vergleicht alle 3 Scores (deviation, reconstruction, decision) für ein Modell
+    in einem Plot - nur F1 für bessere Übersichtlichkeit.
+    """
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+    
+    colors = {"deviation": "blue", "reconstruction": "green", "decision": "red"}
+    
+    for dataset_name in dataset_names:
+        fig, ax = plt.subplots(figsize=(10, 6))
+        
+        for score in ["deviation", "reconstruction", "decision"]:
+            if score not in all_extreme_cases.get(model_name, {}):
+                continue
+            if dataset_name not in all_extreme_cases[model_name][score]:
+                continue
+            if case_key not in all_extreme_cases[model_name][score][dataset_name]:
+                continue
+                
+            metrics = all_extreme_cases[model_name][score][dataset_name][case_key]["threshold_metrics"]
+            
+            percs = sorted(metrics.keys())
+            f1_means = [metrics[p]["f1_mean"] for p in percs]
+            f1_stds = [metrics[p]["f1_std"] for p in percs]
+            
+            ax.plot(percs, f1_means, '-o', label=f'{score}', 
+                   color=colors[score], linewidth=2)
+            ax.fill_between(percs,
+                           np.array(f1_means) - np.array(f1_stds),
+                           np.array(f1_means) + np.array(f1_stds),
+                           color=colors[score], alpha=0.2)
+        
+        case_title = "No Contamination" if case_key == "no_contamination" else "Full Contamination"
+        ax.set_title(f"{model_name} - {dataset_name} - {case_title}\nF1 Score vs Threshold Percentile")
+        ax.set_xlabel("Threshold Percentile")
+        ax.set_ylabel("F1 Score")
+        ax.set_ylim(0, 1.05)
+        ax.grid(True, alpha=0.3)
+        ax.legend()
+        
+        plt.tight_layout()
+        filename = f"{output_dir}/f1_comparison_{model_name}_{dataset_name.replace('.npz', '')}_{case_key}.pdf"
+        plt.savefig(filename)
+        plt.close()
+        print(f"Saved: {filename}")
+
+
+
+if __name__ == "__main__":
+    #dataset_names = ["29_Pima.npz"]
+
+    dataset_names = ["5_campaign.npz"]
     #dataset_names = ["business_dataset"]
     #MAX three models!
 #----------------------------------------------
@@ -716,7 +853,7 @@ if __name__ == "__main__":
     #change resultfiles!!
 
 
-
+    colors = {"ForestDiffusion_nt50_dk20": "blue", "ForestFlow_nt20_dk10": "green", "TCCM_nt50": "red"}
     #define models to run
     #change names in plot_score_models_comparison accordingly
 
@@ -731,46 +868,48 @@ if __name__ == "__main__":
         #         "diffusion_type": "flow"
         #     },
         # },
-        # "ForestDiffusion_nt10_dk10": {
+        # "ForestDiffusion_nt50_dk10": {
         #     "type": "forest",
         #     "params": {
-        #         "n_t": 5,
-        #         "duplicate_K": 2,
-        #         "duplicate_K_test": 2,
+        #         "n_t": 50,
+        #         "duplicate_K": 10,
+        #         "duplicate_K_test": 10,
         #         "diffusion_type": "vp"
         #     },
         # },
-        "ForestFlow_nt20_dk10": {
-            "type": "forest",
+        "ForestDiffusion_nt50_dk20": {
+             "type": "forest",
             "params": {
-                "n_t": 5,
-                "duplicate_K": 1,
-                "duplicate_K_test": 1,
-                "diffusion_type": "flow"
-            },
-        },
-        "ForestDiffusion_nt50_dk10": {
-            "type": "forest",
-            "params": {
-                "n_t": 5,
-                "duplicate_K": 1,
-                "duplicate_K_test": 1,
+                "n_t": 50,
+                "duplicate_K": 20,
+                "duplicate_K_test": 20,
                 "diffusion_type": "vp"
             },
         },
+        "ForestFlow_nt20_dk10": {
+            "type": "forest",
+            "params": {
+                "n_t": 20,
+                "duplicate_K": 10,
+                "duplicate_K_test": 10,
+                "diffusion_type": "flow"
+            },
+        },
+        # "ForestDiffusion_nt40_dk10": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 40,
+        #         "duplicate_K": 10,
+        #         "duplicate_K_test": 10,
+        #         "diffusion_type": "vp"
+        #     },
+        # },
          "TCCM_nt50": {
             "type": "tccm",
             "params": {
-                "n_t": 10
+                "n_t": 50
             },
         },
-        # "TCCM_nt4": {
-        #     "type": "tccm",
-        #     "params": {
-        #         "n_t": 4
-        #     },
-        # },
-
         #          "TCCM_nt100": {
         #     "type": "tccm",
         #     "params": {
@@ -825,9 +964,24 @@ if __name__ == "__main__":
         plot_model_scores_comparison(all_results_combined, model_name, metric="auprc", dataset_names=dataset_names)
 
     for score in ["deviation", "reconstruction", "decision"]:
-        plot_score_models_comparison(all_results_combined,  score, metric="auroc", dataset_names=dataset_names, model_names=list(models_to_run.keys()))
-        plot_score_models_comparison(all_results_combined, score, metric="auprc", dataset_names=dataset_names, model_names=list(models_to_run.keys()))
+        plot_score_models_comparison(all_results_combined,  score, metric="auroc", dataset_names=dataset_names, model_names=list(models_to_run.keys()), colors = colors)
+        plot_score_models_comparison(all_results_combined, score, metric="auprc", dataset_names=dataset_names, model_names=list(models_to_run.keys()), colors = colors)
 
+    # # Nach den bestehenden Plots hinzufügen:
+    
+    # # Percentile-Kurven für jeden Score/Modell
+    # plot_percentile_curves(all_extreme_cases, dataset_names)
+    
+    # # F1-Vergleich aller Scores pro Modell
+    # for model_name in models_to_run.keys():
+    #     plot_all_scores_percentile_comparison(
+    #         all_extreme_cases, dataset_names, model_name, 
+    #         case_key="no_contamination"
+    #     )
+    #     plot_all_scores_percentile_comparison(
+    #         all_extreme_cases, dataset_names, model_name, 
+    #         case_key="full_contamination"
+    #     )
     # Printing extreme cases summary
     print("\n" + "="*80)
     print("EXTREME CASES SUMMARY")
@@ -856,4 +1010,30 @@ if __name__ == "__main__":
                                 key=lambda x: x[1]['f1_mean'])
                     print(f"\n    ✓ Best F1: {best_p[1]['f1_mean']:.4f} @ {best_p[0]}th percentile")
 
-
+         # ============================================================================
+        # ERGEBNISSE SPEICHERN
+        # ============================================================================
+        
+    results_dir = Path(f"./{results_dir}/results_data")
+    results_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Timestamp für eindeutige Dateinamen
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    
+    # Dataset-Name für Dateinamen aufbereiten
+    dataset_str = "_".join([d.replace(".npz", "") for d in dataset_names])
+    
+    # Alles zusammenfassen was für Plots gebraucht wird
+    save_data = {
+        "all_extreme_cases": all_extreme_cases,
+        "dataset_names": dataset_names,
+        "models_to_run": models_to_run,
+        "percentiles": percentiles,  # Falls du die Percentile-Liste brauchst
+    }
+    
+    # Speichern
+    save_path = results_dir / f"extreme_cases_{dataset_str}_{timestamp}.joblib"
+    joblib.dump(save_data, save_path)
+    print(f"\n{'='*60}")
+    print(f"Ergebnisse gespeichert unter: {save_path}")
+    print(f"{'='*60}")

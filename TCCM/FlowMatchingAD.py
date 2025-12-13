@@ -77,7 +77,7 @@ class TCCM:
             # for i, t_val in enumerate(t_levels[n_t//2:]):
             #     t = torch.full((X.shape[0], 1), t_val.item(), device=X.device)
             #     x_t_i = torch.tensor(x_t[i], dtype=torch.float32, device=X.device)
-            for i, t_val in enumerate(t_levels[n_t//2:]):
+            for i, t_val in enumerate(t_levels[n_t//2:-1]):
                 actual_time_idx = n_t // 2 + i
                 x_t_i = torch.tensor(x_t[actual_time_idx], dtype=torch.float32, device=X.device)
                 t = torch.full((X.shape[0], 1), t_val.item(), device=X.device)
@@ -142,13 +142,6 @@ class TCCM:
         b = X_test.shape[0]
         anomaly_scores = np.zeros(b) 
         with torch.no_grad():
-            #only go to n_t-1 because starting from t=1 makes no sense
-            # for i, t_val in enumerate(t_values[n_t//2:-1]):
-            #     # x(t)s for this time point
-            #     x_t = torch.tensor(x_t_interpolations[i], dtype=torch.float32, device=device)  
-                
-            #     # Follow the flow from t to 1
-            #     steps_left = n_t - i - 1
             for i, t_val in enumerate(t_values[n_t//2:-1]):
                 actual_time_idx = n_t // 2 + i
                 x_t_i = torch.tensor(x_t[actual_time_idx], dtype=torch.float32, device=device)
