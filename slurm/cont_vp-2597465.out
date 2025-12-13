@@ -1,0 +1,21 @@
+== Job Start: Sat Dec 13 06:25:07 PM CET 2025 ==
+Python: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/bin/python
+Imports dauern ~2-3 Minuten, bitte warten...
+
+ Dataset: business_dataset_middle.csv with model: ForestDiffusion_nt50_dk10 and score: deviation
+== Job Ende: Sat Dec 13 06:25:13 PM CET 2025 ==
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n830
+Job ID: 2597465
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 16
+CPU Utilized: 00:00:10
+CPU Efficiency: 2.84% of 00:05:52 core-walltime
+Job Wall-clock time: 00:00:22
+Memory Utilized: 300.37 MB
+Memory Efficiency: 0.92% of 32.00 GB (32.00 GB/node)

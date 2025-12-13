@@ -1,0 +1,29 @@
+Traceback (most recent call last):
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/contamination.py", line 925, in <module>
+    results, contam_levels, extreme_cases = run_training_contamination_ablation_dynamic_fixed_split(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/contamination.py", line 305, in run_training_contamination_ablation_dynamic_fixed_split
+    X_train_normal, y_train_normal, X_train_abnormal_full, X_test, y_test = load_business_dataset_contamination(
+                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/contamination.py", line 63, in load_business_dataset_contamination
+    X_train_normal, X_train_abnormal, X_test, y_test = load_business_dataset_for_contamination(
+                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/preprocessing_bd_contamination.py", line 298, in load_business_dataset_for_contamination
+    df = pd.read_csv(file_path)
+         ^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/pandas/io/parsers/readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/pandas/io/parsers/readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/pandas/io/parsers/readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/pandas/io/parsers/readers.py", line 1880, in _make_engine
+    self.handles = get_handle(
+                   ^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/pandas/io/common.py", line 873, in get_handle
+    handle = open(
+             ^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/business_dataset.csv'

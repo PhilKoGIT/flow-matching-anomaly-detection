@@ -1,4 +1,12 @@
 Traceback (most recent call last):
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/numpy/lib/npyio.py", line 441, in load
+    return pickle.load(fid, **pickle_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_pickle.UnpicklingError: unpickling stack underflow
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
   File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/contamination.py", line 925, in <module>
     results, contam_levels, extreme_cases = run_training_contamination_ablation_dynamic_fixed_split(
                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -8,7 +16,6 @@ Traceback (most recent call last):
   File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/contamination.py", line 86, in load_adbench_npz
     data = np.load(file_path, allow_pickle=True)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/numpy/lib/npyio.py", line 405, in load
-    fid = stack.enter_context(open(os_fspath(file), "rb"))
-                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: '/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset_middle'
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/numpy/lib/npyio.py", line 443, in load
+    raise pickle.UnpicklingError(
+_pickle.UnpicklingError: Failed to interpret file PosixPath('/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset_middle.csv') as a pickle

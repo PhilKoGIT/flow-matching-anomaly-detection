@@ -283,7 +283,7 @@ def load_business_dataset_for_contamination(
     # 1. DATEN LADEN
     # =========================================================================
     base_dir = Path(__file__).resolve().parent
-    file_path = base_dir.parent / "data" / "business_dataset_middle.csv"
+    file_path = base_dir.parent / "data_contamination" / "business_dataset_middle.csv"
     
     # Alternative Pfade probieren
     for alt_path in [
@@ -305,7 +305,7 @@ def load_business_dataset_for_contamination(
     print(f"Date range: {df['date_post'].min()} to {df['date_post'].max()}")
     
     # =========================================================================
-    # 2. CHRONOLOGISCHER SPLIT
+    # 2. chronological split
     # =========================================================================
     split_idx = int(len(df) * (1 - test_size))
     split_date = df.iloc[split_idx]['date_post']
@@ -318,7 +318,7 @@ def load_business_dataset_for_contamination(
     print(f"Test: {len(df_test)} transactions (after {split_date})")
     
     # =========================================================================
-    # 3. FEATURE ENGINEERING
+    # 3. feature engineering without data leakage
     # =========================================================================
     print("\nComputing features on training data...")
     df_train_processed, series_stats, seen_refs, seen_ibans, seen_pairs = \
@@ -367,7 +367,7 @@ def load_business_dataset_for_contamination(
     scaler = StandardScaler()
     
     if scale_on_all_train:
-        # Scaler auf allen Trainingsdaten fitten
+        # fit scaler only on training data
         scaler.fit(X_train_all)
         print("  Scaler fitted on ALL training data (normal + abnormal)")
     else:

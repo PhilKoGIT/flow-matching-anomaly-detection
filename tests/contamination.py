@@ -44,7 +44,7 @@ File runs contamination studies for the given models and datasets.
 
 from preprocessing_bd_contamination import load_business_dataset_for_contamination
 
-results_dir = Path("./results_business")
+results_dir = Path("./diffusion_einzeln")
 
 # 2. Add this new loading function (after load_adbench_npz):
 # ----------------------------------------------------------------------------
@@ -300,7 +300,7 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
         # ============================
         # Split normal / anomaly using fixed random seed 42
         # ============================
-        if dataset_name == "business_dataset":
+        if dataset_name.startswith("business_dataset"):
             # Business dataset - already returns split data
             X_train_normal, y_train_normal, X_train_abnormal_full, X_test, y_test = load_business_dataset_contamination(
                 test_size=0.5
@@ -845,8 +845,8 @@ def plot_all_scores_percentile_comparison(all_extreme_cases, dataset_names, mode
 if __name__ == "__main__":
     #dataset_names = ["29_Pima.npz"]
 
-    #dataset_names = ["5_campaign.npz"]
-    dataset_names = ["business_dataset_middle.csv"]
+    dataset_names = ["5_campaign.npz"]
+    #dataset_names = ["business_dataset_middle.csv"]
     #MAX three models!
 #----------------------------------------------
     #Change names in plot_score_models_comparison!!
@@ -878,15 +878,15 @@ if __name__ == "__main__":
         #     },
         # },
 
-        "ForestFlow_nt20_dk10": {
-            "type": "forest",
-            "params": {
-                "n_t": 20,
-                "duplicate_K": 10,
-                "duplicate_K_test": 10,
-                "diffusion_type": "flow"
-            },
-        },
+        # "ForestFlow_nt20_dk10": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 20,
+        #         "duplicate_K": 10,
+        #         "duplicate_K_test": 10,
+        #         "diffusion_type": "flow"
+        #     },
+        # },
         # "ForestFlow_nt20_dk20": {
         #     "type": "forest",
         #     "params": {
@@ -897,12 +897,12 @@ if __name__ == "__main__":
         #     },
         # },
 
-         "TCCM_nt50": {
-            "type": "tccm",
-            "params": {
-                "n_t": 50
-            },
-        },
+        #  "TCCM_nt50": {
+        #     "type": "tccm",
+        #     "params": {
+        #         "n_t": 50
+        #     },
+        # },
 
      }
     

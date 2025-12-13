@@ -45,7 +45,6 @@ class ForestDiffusionModel():
                beta_min=0.1, 
                beta_max=8, 
                n_jobs=-1, # cpus used (feel free to limit it to something small, this will leave more cpus per model; for lgbm you have to use n_jobs=1, otherwise it will never finish)
-               #n_jobs = 8,
                n_batch=1, # If >0 use the data iterator with the specified number of batches
                seed=666,
                **xgboost_kwargs): # you can pass extra parameter for xgboost
