@@ -73,9 +73,9 @@ def train_flow_matching(model, train_loader, epochs=50, lr=0.001):
 def determine_FMAD_hyperparameters(dataset_name_raw):
     dataset_name = dataset_name_raw.lower()
     if "business_dataset" in dataset_name:
-        epoch_size = 10
-        batch_size = 512
-        learning_rate = 0.005
+        epoch_size = 100
+        batch_size = 64
+        learning_rate = 0.001
     elif "census" in dataset_name:
         epoch_size = 5
         batch_size = 1024

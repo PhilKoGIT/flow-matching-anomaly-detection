@@ -1,0 +1,26 @@
+Traceback (most recent call last):
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/contamination.py", line 945, in <module>
+    plot_model_scores_comparison(all_results_combined, model_name, metric="auroc", dataset_names=dataset_names)
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/contamination.py", line 706, in plot_model_scores_comparison
+    plt.savefig(f"./{results_dir}/{model_name}_all_scores_{metric}.pdf")
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/matplotlib/pyplot.py", line 1250, in savefig
+    res = fig.savefig(*args, **kwargs)  # type: ignore[func-returns-value]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/matplotlib/figure.py", line 3490, in savefig
+    self.canvas.print_figure(fname, **kwargs)
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/matplotlib/backend_bases.py", line 2186, in print_figure
+    result = print_method(
+             ^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/matplotlib/backend_bases.py", line 2042, in <lambda>
+    print_method = functools.wraps(meth)(lambda *args, **kwargs: meth(
+                                                                 ^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/matplotlib/backends/backend_pdf.py", line 2779, in print_pdf
+    file = PdfFile(filename, metadata=metadata)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/matplotlib/backends/backend_pdf.py", line 687, in __init__
+    fh, opened = cbook.to_filehandle(filename, "wb", return_opened=True)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/lib64/python3.11/site-packages/matplotlib/cbook.py", line 546, in to_filehandle
+    fh = open(fname, flag, encoding=encoding)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: './diffusion_einzeln/ForestDiffusion_nt50_dk10_all_scores_auroc.pdf'

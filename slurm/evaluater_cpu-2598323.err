@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/evaluater.py", line 564, in <module>
+    model, time_train = create_trained_tccm_model(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/evaluater.py", line 302, in create_trained_tccm_model
+    hyperparams = determine_FMAD_hyperparameters(dataset_name)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/TCCM/functions.py", line 265, in determine_FMAD_hyperparameters
+    "epochs": epoch_size,
+              ^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'epoch_size' where it is not associated with a value
