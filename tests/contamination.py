@@ -44,7 +44,7 @@ File runs contamination studies for the given models and datasets.
 
 from preprocessing_bd_contamination import load_business_dataset_for_contamination
 
-results_dir = Path("./flow_einzeln")
+results_dir = Path("./0_results_tccm_both")
 
 # 2. Add this new loading function (after load_adbench_npz):
 # ---------------------------------------------------------------------------
@@ -759,8 +759,8 @@ def plot_all_scores_percentile_comparison(all_extreme_cases, dataset_names, mode
 if __name__ == "__main__":
     #dataset_names = ["29_Pima.npz"]
 
-    #dataset_names = ["5_campaign.npz"]
-    dataset_names = ["business_dataset_middle.csv"]
+    dataset_names = ["5_campaign.npz"]
+    #dataset_names = ["business_dataset_middle.csv"]
     #MAX three models!
 #----------------------------------------------
     #Change names in plot_score_models_comparison!!
@@ -783,15 +783,15 @@ if __name__ == "__main__":
         #         "diffusion_type": "flow"
         #     },
         # },
-                "ForestFlow_nt20_dk10": {
-            "type": "forest",
-            "params": {
-                "n_t": 20,
-                "duplicate_K": 10,
-                "duplicate_K_test": 10,
-                "diffusion_type": "flow"
-            },
-        },
+        #         "ForestFlow_nt20_dk10": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 20,
+        #         "duplicate_K": 10,
+        #         "duplicate_K_test": 10,
+        #         "diffusion_type": "flow"
+        #     },
+        # },
         # "ForestFlow_nt20_dk20": {
         #     "type": "forest",
         #     "params": {
@@ -830,18 +830,18 @@ if __name__ == "__main__":
         #     },
         # },
 
-        #  "TCCM_nt50": {
-        #     "type": "tccm",
-        #     "params": {
-        #         "n_t": 50
-        #     },
-        # },
-        #          "TCCM_nt5": {
-        #     "type": "tccm",
-        #     "params": {
-        #         "n_t": 5
-        #     },
-        # },
+         "TCCM_nt50": {
+            "type": "tccm",
+            "params": {
+                "n_t": 50
+            },
+        },
+                 "TCCM_nt5": {
+            "type": "tccm",
+            "params": {
+                "n_t": 10
+            },
+        },
 
      }
     
@@ -857,7 +857,6 @@ if __name__ == "__main__":
         #check valid model type and assign score list
         if model_type == "forest" or model_type == "tccm":
             score_list =["deviation", "reconstruction", "decision"] 
-            #score_list = ["decision"]           
         else:
             raise ValueError(f"Unknown model type: {model_type}")
         #iterate over the score types

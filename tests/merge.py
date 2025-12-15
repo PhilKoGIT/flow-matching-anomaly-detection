@@ -13,7 +13,9 @@ from pathlib import Path
 COLORS_MODELS = {
     #"ForestDiffusion_nt50_dk10": "blue",
     "ForestFlow_nt20_dk10": "green",
-    "ForestFlow_nt20_dk10": "blue",
+    "ForestFlow_nt20_dk20": "blue",
+    "ForestDiffusion_nt50_dk10": "yellow",
+    "ForestDiffusion_nt50_dk20": "black",
 
     "TCCM_nt50": "red",
     "TCCM_nt10": "orange",
@@ -352,14 +354,17 @@ if __name__ == "__main__":
     # DATEIEN HIER EINTRAGEN
     # =========================================================================
     result_files = [
-        Path("./results_flow/results_data/extreme_cases_5_campaign_20251215_094322.joblib"),
+        #Path("./0_results_diff/results_data/extreme_cases_5_campaign_20251215_162517.joblib"),
+        Path("./0_results_flow/results_data/extreme_cases_5_campaign_20251215_094322.joblib"),
+        #Path("./0_results_flow/results_data/extreme_cases_5_campaign_20251215_094644.joblib"),
+
         #Path("./results_flow/results_data/extreme_cases_5_campaign_20251215_094644.joblib")
         #Path("./0_results_tccm_5/results_data/extreme_cases_5_campaign_20251215_000144.joblib"),
         #Path("./0_results_tccm_50/results_data/extreme_cases_5_campaign_20251215_000226.joblib"),
         #Path("./results_quick/results_data/extreme_cases_5_campaign_20251214_233222.joblib")
     ]
     
-    output_dir = Path("./plots_combined")
+    output_dir = Path("./mit_plot_alles")
     
 
     merged = load_and_merge_results(result_files)
