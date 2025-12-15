@@ -44,10 +44,10 @@ File runs contamination studies for the given models and datasets.
 
 from preprocessing_bd_contamination import load_business_dataset_for_contamination
 
-results_dir = Path("./business_dataset")
+results_dir = Path("./flow_einzeln")
 
 # 2. Add this new loading function (after load_adbench_npz):
-# ----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 def load_business_dataset_contamination(test_size=0.5, random_state=42):
     """
     Load business dataset for contamination studies.
@@ -369,46 +369,46 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
                     X_train=X_train,
                 )
 
-            #     p = model_cnf["params"]
-            #     if model_cnf["type"] == "forest":
-            #         scores = calculate_scores_ForestDiffusionModel(
-            #             X_test,
-            #             model,
-            #             n_t=p["n_t"],
-            #             duplicate_K_test=p["duplicate_K_test"],
-            #             diffusion_type=p["diffusion_type"],
-            #             score=score
-            #         )
-            #     elif model_cnf["type"] == "tccm":
-            #         scores = calculate_tccm_scores(
-            #             X_test,
-            #             model,
-            #             n_t=p["n_t"],
-            #             score=score
-            #         )
-            #     else:
-            #         raise ValueError(f"Unknown model type: {model_cnf['type']}")
+                p = model_cnf["params"]
+                if model_cnf["type"] == "forest":
+                    scores = calculate_scores_ForestDiffusionModel(
+                        X_test,
+                        model,
+                        n_t=p["n_t"],
+                        duplicate_K_test=p["duplicate_K_test"],
+                        diffusion_type=p["diffusion_type"],
+                        score=score
+                    )
+                elif model_cnf["type"] == "tccm":
+                    scores = calculate_tccm_scores(
+                        X_test,
+                        model,
+                        n_t=p["n_t"],
+                        score=score
+                    )
+                else:
+                    raise ValueError(f"Unknown model type: {model_cnf['type']}")
 
-            #     auc = roc_auc_score(y_test, scores)
-            #     pr = average_precision_score(y_test, scores)
-            #     aucs.append(auc)
-            #     prs.append(pr)
+                auc = roc_auc_score(y_test, scores)
+                pr = average_precision_score(y_test, scores)
+                aucs.append(auc)
+                prs.append(pr)
 
-            #     #Safes extreme cases
-            #     if is_no_contam or is_full_contam:
-            #         case_key = "no_contamination" if is_no_contam else "full_contamination"
-            #         extreme_cases_data[dataset_name][case_key]["scores_per_seed"].append({
-            #             "seed": seed,
-            #             "anomaly_scores": scores.copy(),
-            #             "auc": auc,
-            #             "auprc": pr
-            #         })   
-            #         # Calculate and save threshold metrics
-            #         threshold_metrics = compute_threshold_metrics(scores, y_test)
-            #         threshold_metrics["seed"] = seed
-            #         extreme_cases_data[dataset_name][case_key]["threshold_metrics_per_seed"].append(threshold_metrics)
-            # auroc_all.append((np.mean(aucs), np.std(aucs)))
-            # auprc_all.append((np.mean(prs), np.std(prs)))
+                #Safes extreme cases
+                if is_no_contam or is_full_contam:
+                    case_key = "no_contamination" if is_no_contam else "full_contamination"
+                    extreme_cases_data[dataset_name][case_key]["scores_per_seed"].append({
+                        "seed": seed,
+                        "anomaly_scores": scores.copy(),
+                        "auc": auc,
+                        "auprc": pr
+                    })   
+                    # Calculate and save threshold metrics
+                    threshold_metrics = compute_threshold_metrics(scores, y_test)
+                    threshold_metrics["seed"] = seed
+                    extreme_cases_data[dataset_name][case_key]["threshold_metrics_per_seed"].append(threshold_metrics)
+            auroc_all.append((np.mean(aucs), np.std(aucs)))
+            auprc_all.append((np.mean(prs), np.std(prs)))
 
         all_results[dataset_name] = {
             "score": score,
@@ -767,37 +767,28 @@ if __name__ == "__main__":
     #change resultfiles!!
 
 
-    colors = {"ForestDiffusion_nt50_dk20": "blue", "ForestFlow_nt20_dk20": "green", "TCCM_nt50": "red"}
+    colors = {"ForestDiffusion_nt50_dk10": "blue", "ForestFlow_nt20_dk10": "green", "TCCM_nt50": "red", "TCCM_nt5": "orange"}
+    #colors = {"ForestFlow_nt100_dk20": "red", "ForestFlow_nt50_dk20": "blue", "ForestFlow_nt20_dk20": "green"}
     #define models to run
     #change names in plot_score_models_comparison accordingly
 
     models_to_run = {
 
-        "ForestDiffusion_nt50_dk20": {
-            "type": "forest",
-            "params": {
-                "n_t": 50,
-                "duplicate_K": 20,
-                "duplicate_K_test": 20,
-                "diffusion_type": "vp"
-            },
-        },
-        # "ForestDiffusion_nt50_dk20": {
+        # "ForestFlow_nt100_dk20": {
         #     "type": "forest",
         #     "params": {
-        #         "n_t": 50,
+        #         "n_t": 100,
         #         "duplicate_K": 20,
         #         "duplicate_K_test": 20,
-        #         "diffusion_type": "vp"
+        #         "diffusion_type": "flow"
         #     },
         # },
-
-        "ForestFlow_nt20_dk20": {
+                "ForestFlow_nt20_dk10": {
             "type": "forest",
             "params": {
                 "n_t": 20,
-                "duplicate_K": 20,
-                "duplicate_K_test": 20,
+                "duplicate_K": 10,
+                "duplicate_K_test": 10,
                 "diffusion_type": "flow"
             },
         },
@@ -810,13 +801,47 @@ if __name__ == "__main__":
         #         "diffusion_type": "flow"
         #     },
         # },
+        # "ForestDiffusion_nt50_dk20": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 50,
+        #         "duplicate_K": 20,
+        #         "duplicate_K_test": 20,
+        #         "diffusion_type": "vp"
+        #     },
+        # },
 
-         "TCCM_nt50": {
-            "type": "tccm",
-            "params": {
-                "n_t": 50
-            },
-        },
+        # "ForestFlow_nt20_dk10": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 20,
+        #         "duplicate_K": 10,
+        #         "duplicate_K_test": 10,
+        #         "diffusion_type": "flow"
+        #     },
+        # },
+        # "ForestFlow_nt20_dk20": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 20,
+        #         "duplicate_K": 20,
+        #         "duplicate_K_test": 20,
+        #         "diffusion_type": "flow"
+        #     },
+        # },
+
+        #  "TCCM_nt50": {
+        #     "type": "tccm",
+        #     "params": {
+        #         "n_t": 50
+        #     },
+        # },
+        #          "TCCM_nt5": {
+        #     "type": "tccm",
+        #     "params": {
+        #         "n_t": 5
+        #     },
+        # },
 
      }
     
@@ -831,7 +856,8 @@ if __name__ == "__main__":
         assert params.get("duplicate_K") == params.get("duplicate_K_test"), "duplicate_K and duplicate_K_test must be the same, for simplicity"
         #check valid model type and assign score list
         if model_type == "forest" or model_type == "tccm":
-            score_list =["deviation", "reconstruction", "decision"]            
+            score_list =["deviation", "reconstruction", "decision"] 
+            #score_list = ["decision"]           
         else:
             raise ValueError(f"Unknown model type: {model_type}")
         #iterate over the score types

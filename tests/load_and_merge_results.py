@@ -502,8 +502,9 @@ if __name__ == "__main__":
     # DATEIEN HIER EINTRAGEN
     # =========================================================================
     result_files = [
-        Path("./results_quick/results_data/extreme_cases_29_Pima_20251213_155846.joblib"),
-        # Weitere Dateien...
+        Path("./results_flow/results_data/extreme_cases_5_campaign_20251213_061401.joblib"),
+        Path("./results_diff_einzeln/results_data/extreme_cases_5_campaign_20251214_085059.joblib"),
+        Path("./results_tccm/results_data/extreme_cases_5_campaign_20251214_211153.joblib"),
     ]
     
     output_dir = Path("./plots_combined")

@@ -1,0 +1,63 @@
+== Job Start: Sun Dec 14 08:28:20 PM CET 2025 ==
+Python: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/bin/python
+Imports dauern ~2-3 Minuten, bitte warten...
+
+ Dataset: business_dataset_middle.csv with model: ForestDiffusion_nt50_dk10 and score: deviation
+Loading data from: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset_middle.csv
+
+Total transactions: 6088
+Date range: 2018-01-01 00:00:00 to 2024-02-26 00:00:00
+
+Chronological split at: 2021-02-05 00:00:00
+Train: 3048 transactions (until 2021-02-05 00:00:00)
+Test: 3040 transactions (after 2021-02-05 00:00:00)
+
+Computing features on training data...
+Computing features on test data...
+
+Train split:
+  Normal: 3032
+  Abnormal: 16
+Test: 3040 (Normal: 3029, Abnormal: 11)
+
+Scaling data...
+  Scaler fitted on NORMAL training data only
+
+============================================================
+FINAL SHAPES
+============================================================
+X_train_normal:  (3032, 21)
+X_train_abnormal: (16, 21)
+X_test:          (3040, 21)
+y_test:          (3040,) (Anomaly rate: 0.36%)
+
+============================================================
+ANOMALY TYPES IN DATASET
+============================================================
+
+Total:
+anomaly_description
+TIMING_ANOMALY           10
+CHANNEL_ANOMALY           6
+IBAN_MISMATCH_ANOMALY     6
+FREQUENCY_ANOMALY         5
+Name: count, dtype: int64
+
+In Train: 16
+In Test: 11
+[*] No cached model found. Training model for business_dataset_middle.csv, ForestDiffusion_nt50_dk10, contam_idx=0, seed=0
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n719
+Job ID: 2599133
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: CANCELLED (exit code 0)
+Nodes: 1
+Cores per node: 16
+CPU Utilized: 00:00:04
+CPU Efficiency: 0.02% of 06:45:04 core-walltime
+Job Wall-clock time: 00:25:19
+Memory Utilized: 2.76 GB
+Memory Efficiency: 8.62% of 32.00 GB (32.00 GB/node)

@@ -316,6 +316,9 @@ def load_business_dataset_for_contamination(
     print(f"\nChronological split at: {split_date}")
     print(f"Train: {len(df_train)} transactions (until {split_date})")
     print(f"Test: {len(df_test)} transactions (after {split_date})")
+    output_path = base_dir / "df_test_raw.csv"
+    df_test.to_csv(output_path, index=False)
+    print(f"Test DataFrame saved to: {output_path}")
     
     # =========================================================================
     # 3. feature engineering without data leakage

@@ -1,0 +1,868 @@
+== Job Start: Sun Dec 14 04:26:52 PM CET 2025 ==
+Python: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/bin/python
+Imports dauern ~2-3 Minuten, bitte warten...
+
+ Dataset: business_dataset_middle.csv with model: ForestDiffusion_nt50_dk20 and score: deviation
+Loading data from: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset_middle.csv
+
+Total transactions: 6088
+Date range: 2018-01-01 00:00:00 to 2024-02-26 00:00:00
+
+Chronological split at: 2021-02-05 00:00:00
+Train: 3048 transactions (until 2021-02-05 00:00:00)
+Test: 3040 transactions (after 2021-02-05 00:00:00)
+
+Computing features on training data...
+Computing features on test data...
+
+Train split:
+  Normal: 3032
+  Abnormal: 16
+Test: 3040 (Normal: 3029, Abnormal: 11)
+
+Scaling data...
+  Scaler fitted on NORMAL training data only
+
+============================================================
+FINAL SHAPES
+============================================================
+X_train_normal:  (3032, 21)
+X_train_abnormal: (16, 21)
+X_test:          (3040, 21)
+y_test:          (3040,) (Anomaly rate: 0.36%)
+
+============================================================
+ANOMALY TYPES IN DATASET
+============================================================
+
+Total:
+anomaly_description
+TIMING_ANOMALY           10
+CHANNEL_ANOMALY           6
+IBAN_MISMATCH_ANOMALY     6
+FREQUENCY_ANOMALY         5
+Name: count, dtype: int64
+
+In Train: 16
+In Test: 11
+[*] No cached model found. Training model for business_dataset_middle.csv, ForestDiffusion_nt50_dk20, contam_idx=0, seed=0
+
+Training ForestDiffusionModel (vp) on dataset: business_dataset_middle.csv_ForestDiffusion_nt50_dk20 with n_t=50, duplicate_K=20, seed=0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/b0664d0f4d6e2be47cffdaf02e4e90e5.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/783a2916c20afa4e32f940b5c2acc59e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/a5264ed4b4b5f57130df183102f4a25c.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/3684c58aa3de85e32e62eba5e008d5d8.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/3d7e49b8c4c1ddc83c50b49f921e5f32.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/a08ae8af333cb34890836c056e85089c.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/a306be81508101a293e2c998fce3fffc.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/7b7381c16c545eab8a5f50b63e8c3356.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/1d5a900dc8069451638fe0ad903fd3d6.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/44bd227964f5ced934823dd9943af8b9.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/1b6e42931dd0aa11d89c66d0991e0b7e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/148db239ac53a3e339090b9b84ef8a25.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/a2cde375d2d2ce412e722f25f3f11bd4.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/3459d691b7298d82ddf2e13ad3b836d5.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/00b9115211c8e064082a81007e84b186.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/328590813168f7d3ca0887ff2431ba6c.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/e9288beb9b1dfed1df3f91c07a75c6bd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/768bba1787384b88dda69745c064fb95.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/1f12fb36f3b7683950e3d3ff64e8b9ec.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/af343dd3cedcd3a5386f7d5fbf2e29d5.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/b9304a13015c9244d6588bf01add23e4.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/26bc07c1ceaf7c4f49a89fa0f69cde9b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/0766a48808dc65a340a7431bbea9c50a.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/d17172044586308dcbd39fc0c77bffd2.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/9214b100c68e0912cf3938d3878caac1.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/bd1939b072d35d921a54eace5f50325b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/39ca9752e2f5fc8bbc5cbb54fe4f0937.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/1e474411baad0ca3cea06d1ff5d3c7a6.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/ca665778c3175a403a5e90c883375499.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/8f10fd48696138030e2f3d1857795c0d.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/397e113f8e75ffcf15e86dc4754b7b85.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/228a5645d57ddf6f0e6cbc32426f22b3.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/3ef584c352e19c60955a1607f7fba83f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/ce53cd5de2d4e309c3273277c09a20d2.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/194dd1b2967d87959487cb18988b63c6.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/2e90027b560ff1995197459293db61f1.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/cea161e089e67b59fa48a5b2ffb14b14.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/bb271df5fd88f17f5f5134a7e71c2c2c.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/faa77ba759ef7946ab8832d54458d728.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/3ab07c5c1775f0bf566c5fc0e0971283.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/da4f041391a4d2a493029c865697af55.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/c5e3495ec661901bea31f9a313935631.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/6870ba54584e013e789a4a534eb55575.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/7a35dd284e9638d1104a1b9373d7b8bb.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/61bb7b9c1de4b7b4bd6b1a8ef0152c81.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/4a50fdb0d584540ac9bd122f7821466a.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/d691350d4b524d942f33b6e9c24bf351.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/0c05afbf03afc4a856c9dad3210c7735.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/1946d2a3f2fcf25e77e7b92c698977eb.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/9d43686fc5ca8fb5e4f55b8246424817.joblib
+
+ Dataset: business_dataset_middle.csv with model: ForestDiffusion_nt50_dk20 and score: reconstruction
+Loading data from: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset_middle.csv
+
+Total transactions: 6088
+Date range: 2018-01-01 00:00:00 to 2024-02-26 00:00:00
+
+Chronological split at: 2021-02-05 00:00:00
+Train: 3048 transactions (until 2021-02-05 00:00:00)
+Test: 3040 transactions (after 2021-02-05 00:00:00)
+
+Computing features on training data...
+Computing features on test data...
+
+Train split:
+  Normal: 3032
+  Abnormal: 16
+Test: 3040 (Normal: 3029, Abnormal: 11)
+
+Scaling data...
+  Scaler fitted on NORMAL training data only
+
+============================================================
+FINAL SHAPES
+============================================================
+X_train_normal:  (3032, 21)
+X_train_abnormal: (16, 21)
+X_test:          (3040, 21)
+y_test:          (3040,) (Anomaly rate: 0.36%)
+
+============================================================
+ANOMALY TYPES IN DATASET
+============================================================
+
+Total:
+anomaly_description
+TIMING_ANOMALY           10
+CHANNEL_ANOMALY           6
+IBAN_MISMATCH_ANOMALY     6
+FREQUENCY_ANOMALY         5
+Name: count, dtype: int64
+
+In Train: 16
+In Test: 11
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/b0664d0f4d6e2be47cffdaf02e4e90e5.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/783a2916c20afa4e32f940b5c2acc59e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/a5264ed4b4b5f57130df183102f4a25c.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/3684c58aa3de85e32e62eba5e008d5d8.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/3d7e49b8c4c1ddc83c50b49f921e5f32.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/a08ae8af333cb34890836c056e85089c.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/a306be81508101a293e2c998fce3fffc.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/7b7381c16c545eab8a5f50b63e8c3356.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/1d5a900dc8069451638fe0ad903fd3d6.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/44bd227964f5ced934823dd9943af8b9.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/1b6e42931dd0aa11d89c66d0991e0b7e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/148db239ac53a3e339090b9b84ef8a25.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/a2cde375d2d2ce412e722f25f3f11bd4.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/3459d691b7298d82ddf2e13ad3b836d5.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/00b9115211c8e064082a81007e84b186.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/328590813168f7d3ca0887ff2431ba6c.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/e9288beb9b1dfed1df3f91c07a75c6bd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/768bba1787384b88dda69745c064fb95.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/1f12fb36f3b7683950e3d3ff64e8b9ec.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/af343dd3cedcd3a5386f7d5fbf2e29d5.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/b9304a13015c9244d6588bf01add23e4.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/26bc07c1ceaf7c4f49a89fa0f69cde9b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/0766a48808dc65a340a7431bbea9c50a.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/d17172044586308dcbd39fc0c77bffd2.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/9214b100c68e0912cf3938d3878caac1.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/bd1939b072d35d921a54eace5f50325b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/39ca9752e2f5fc8bbc5cbb54fe4f0937.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/1e474411baad0ca3cea06d1ff5d3c7a6.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/ca665778c3175a403a5e90c883375499.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/8f10fd48696138030e2f3d1857795c0d.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/397e113f8e75ffcf15e86dc4754b7b85.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/228a5645d57ddf6f0e6cbc32426f22b3.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/3ef584c352e19c60955a1607f7fba83f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/ce53cd5de2d4e309c3273277c09a20d2.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/194dd1b2967d87959487cb18988b63c6.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/2e90027b560ff1995197459293db61f1.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/cea161e089e67b59fa48a5b2ffb14b14.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/bb271df5fd88f17f5f5134a7e71c2c2c.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/faa77ba759ef7946ab8832d54458d728.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/3ab07c5c1775f0bf566c5fc0e0971283.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/da4f041391a4d2a493029c865697af55.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/c5e3495ec661901bea31f9a313935631.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/6870ba54584e013e789a4a534eb55575.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/7a35dd284e9638d1104a1b9373d7b8bb.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/61bb7b9c1de4b7b4bd6b1a8ef0152c81.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/4a50fdb0d584540ac9bd122f7821466a.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/d691350d4b524d942f33b6e9c24bf351.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/0c05afbf03afc4a856c9dad3210c7735.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/1946d2a3f2fcf25e77e7b92c698977eb.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/9d43686fc5ca8fb5e4f55b8246424817.joblib
+
+ Dataset: business_dataset_middle.csv with model: ForestDiffusion_nt50_dk20 and score: decision
+Loading data from: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset_middle.csv
+
+Total transactions: 6088
+Date range: 2018-01-01 00:00:00 to 2024-02-26 00:00:00
+
+Chronological split at: 2021-02-05 00:00:00
+Train: 3048 transactions (until 2021-02-05 00:00:00)
+Test: 3040 transactions (after 2021-02-05 00:00:00)
+
+Computing features on training data...
+Computing features on test data...
+
+Train split:
+  Normal: 3032
+  Abnormal: 16
+Test: 3040 (Normal: 3029, Abnormal: 11)
+
+Scaling data...
+  Scaler fitted on NORMAL training data only
+
+============================================================
+FINAL SHAPES
+============================================================
+X_train_normal:  (3032, 21)
+X_train_abnormal: (16, 21)
+X_test:          (3040, 21)
+y_test:          (3040,) (Anomaly rate: 0.36%)
+
+============================================================
+ANOMALY TYPES IN DATASET
+============================================================
+
+Total:
+anomaly_description
+TIMING_ANOMALY           10
+CHANNEL_ANOMALY           6
+IBAN_MISMATCH_ANOMALY     6
+FREQUENCY_ANOMALY         5
+Name: count, dtype: int64
+
+In Train: 16
+In Test: 11
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/b0664d0f4d6e2be47cffdaf02e4e90e5.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/783a2916c20afa4e32f940b5c2acc59e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/a5264ed4b4b5f57130df183102f4a25c.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/3684c58aa3de85e32e62eba5e008d5d8.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/3d7e49b8c4c1ddc83c50b49f921e5f32.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/a08ae8af333cb34890836c056e85089c.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/a306be81508101a293e2c998fce3fffc.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/7b7381c16c545eab8a5f50b63e8c3356.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/1d5a900dc8069451638fe0ad903fd3d6.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/44bd227964f5ced934823dd9943af8b9.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/1b6e42931dd0aa11d89c66d0991e0b7e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/148db239ac53a3e339090b9b84ef8a25.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/a2cde375d2d2ce412e722f25f3f11bd4.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/3459d691b7298d82ddf2e13ad3b836d5.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/00b9115211c8e064082a81007e84b186.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/328590813168f7d3ca0887ff2431ba6c.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/e9288beb9b1dfed1df3f91c07a75c6bd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/768bba1787384b88dda69745c064fb95.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/1f12fb36f3b7683950e3d3ff64e8b9ec.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/af343dd3cedcd3a5386f7d5fbf2e29d5.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/b9304a13015c9244d6588bf01add23e4.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/26bc07c1ceaf7c4f49a89fa0f69cde9b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/0766a48808dc65a340a7431bbea9c50a.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/d17172044586308dcbd39fc0c77bffd2.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/9214b100c68e0912cf3938d3878caac1.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/bd1939b072d35d921a54eace5f50325b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/39ca9752e2f5fc8bbc5cbb54fe4f0937.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/1e474411baad0ca3cea06d1ff5d3c7a6.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/ca665778c3175a403a5e90c883375499.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/8f10fd48696138030e2f3d1857795c0d.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/397e113f8e75ffcf15e86dc4754b7b85.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/228a5645d57ddf6f0e6cbc32426f22b3.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/3ef584c352e19c60955a1607f7fba83f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/ce53cd5de2d4e309c3273277c09a20d2.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/194dd1b2967d87959487cb18988b63c6.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/2e90027b560ff1995197459293db61f1.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/cea161e089e67b59fa48a5b2ffb14b14.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/bb271df5fd88f17f5f5134a7e71c2c2c.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/faa77ba759ef7946ab8832d54458d728.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/3ab07c5c1775f0bf566c5fc0e0971283.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/da4f041391a4d2a493029c865697af55.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/c5e3495ec661901bea31f9a313935631.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/6870ba54584e013e789a4a534eb55575.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/7a35dd284e9638d1104a1b9373d7b8bb.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/61bb7b9c1de4b7b4bd6b1a8ef0152c81.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/4a50fdb0d584540ac9bd122f7821466a.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/d691350d4b524d942f33b6e9c24bf351.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/0c05afbf03afc4a856c9dad3210c7735.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/1946d2a3f2fcf25e77e7b92c698977eb.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/9d43686fc5ca8fb5e4f55b8246424817.joblib
+
+ Dataset: business_dataset_middle.csv with model: ForestFlow_nt20_dk20 and score: deviation
+Loading data from: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset_middle.csv
+
+Total transactions: 6088
+Date range: 2018-01-01 00:00:00 to 2024-02-26 00:00:00
+
+Chronological split at: 2021-02-05 00:00:00
+Train: 3048 transactions (until 2021-02-05 00:00:00)
+Test: 3040 transactions (after 2021-02-05 00:00:00)
+
+Computing features on training data...
+Computing features on test data...
+
+Train split:
+  Normal: 3032
+  Abnormal: 16
+Test: 3040 (Normal: 3029, Abnormal: 11)
+
+Scaling data...
+  Scaler fitted on NORMAL training data only
+
+============================================================
+FINAL SHAPES
+============================================================
+X_train_normal:  (3032, 21)
+X_train_abnormal: (16, 21)
+X_test:          (3040, 21)
+y_test:          (3040,) (Anomaly rate: 0.36%)
+
+============================================================
+ANOMALY TYPES IN DATASET
+============================================================
+
+Total:
+anomaly_description
+TIMING_ANOMALY           10
+CHANNEL_ANOMALY           6
+IBAN_MISMATCH_ANOMALY     6
+FREQUENCY_ANOMALY         5
+Name: count, dtype: int64
+
+In Train: 16
+In Test: 11
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/e1c430c0a5a855ff7e9899afe019ac16.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/36e03048d47965f35013ee2485bad344.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/458895cd0abcfb23feb51f181a7ec51a.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/30e5eaee980df5346f1fb5a9e6b8ee52.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/9ade9290e84be4ea1ebcfabfa607b95e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/4be95bbc46f1eda483857cbe464c21ec.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/a8243263181b4adf0df273916a50d70a.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/4f60054c35108d8a305af69b8dcb227b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/ffdfeb4790c5cbdecfed00fc7980ce24.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/4005d5850198b9bf5f6f9638115c703b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/00b0e71e23dbc9fc1711e1ee924098a9.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/d42a5e47dfe52225c1f20420bf965f76.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/d0c8acec05c910f58aeb02df66a336af.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/fe9e405636f46ccf3336d0ec8afc9f5a.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/4f2d6dd7c4071e914a537151c7310193.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/a1b44ccd1ec8cace77c29d26a25e0243.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/8b2d9ccb54368296184912eef58f63ba.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/6b7c4e7e4e5945a8e4cf937f9ef3cd36.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/3e025ea267d63fa6e5e9565c55b41c7d.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/537a6d1a5cf5e8cdebf91bea6d997f5c.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/0ce1338fc6f77ab41550556c91f9e13f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/0637eebc63f35cfae702bc57fb09b8fd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/50878731eae3a141d5e196af9c8b0b99.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/a480356446d5e10659c4760453b9d5b0.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/742e337e7d2cf92fb2b907043af7f1ea.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/5ecdfed444a24c5efe5d37b71d18adbb.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/126594546c1d502ff5ee331999adfc83.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/7a9f5139696b9b1417b419747d0b22f0.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/073912ed592c3b13d9b35e41c3f68d75.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/d6a026fdfd7e16a37807de031d1a4b23.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/32f32c9c76829513157674c272547dd2.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/6b36bcfe2a932302496508363ba80cc8.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/8d47f5e42afd8cc069913c90ca6a42fd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/c62dd50796ef3a7eed0bbe405debe08d.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/5dda891cad629626fe23cdf732017134.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/c9f26da650e73c139a3ff54ae689a32b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/3b1b2c437ce7da54e94c63a1ac2de815.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/1fd60fcacb9a8690f050a5b670da0243.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/40826972ed4b97724fef5df5ab597a33.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/aa80dcd126a8983d426a2311a57b496b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/576deb7179417243004eaa81ce8efa56.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/2a299f31b7d5f54ed49f4258b3f32409.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/5f8d47a3a500c75d5bd1b79dd82ceeb7.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/5b0457996e8bcc2c4a7c56d27da2a45f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/82c1e9a03af3f7fe766f2a081a48457f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/954dd07b828a35048c03908163ef8a33.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/c62187624d057d8f8b7855789da50dbe.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/6f79dcff2f732fb8ba7116f31437f489.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/ee23b0298c85e808a0721d248d011cfb.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/97d9d9bfe862cd3d998ed8f6adc33132.joblib
+
+ Dataset: business_dataset_middle.csv with model: ForestFlow_nt20_dk20 and score: reconstruction
+Loading data from: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset_middle.csv
+
+Total transactions: 6088
+Date range: 2018-01-01 00:00:00 to 2024-02-26 00:00:00
+
+Chronological split at: 2021-02-05 00:00:00
+Train: 3048 transactions (until 2021-02-05 00:00:00)
+Test: 3040 transactions (after 2021-02-05 00:00:00)
+
+Computing features on training data...
+Computing features on test data...
+
+Train split:
+  Normal: 3032
+  Abnormal: 16
+Test: 3040 (Normal: 3029, Abnormal: 11)
+
+Scaling data...
+  Scaler fitted on NORMAL training data only
+
+============================================================
+FINAL SHAPES
+============================================================
+X_train_normal:  (3032, 21)
+X_train_abnormal: (16, 21)
+X_test:          (3040, 21)
+y_test:          (3040,) (Anomaly rate: 0.36%)
+
+============================================================
+ANOMALY TYPES IN DATASET
+============================================================
+
+Total:
+anomaly_description
+TIMING_ANOMALY           10
+CHANNEL_ANOMALY           6
+IBAN_MISMATCH_ANOMALY     6
+FREQUENCY_ANOMALY         5
+Name: count, dtype: int64
+
+In Train: 16
+In Test: 11
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/e1c430c0a5a855ff7e9899afe019ac16.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/36e03048d47965f35013ee2485bad344.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/458895cd0abcfb23feb51f181a7ec51a.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/30e5eaee980df5346f1fb5a9e6b8ee52.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/9ade9290e84be4ea1ebcfabfa607b95e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/4be95bbc46f1eda483857cbe464c21ec.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/a8243263181b4adf0df273916a50d70a.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/4f60054c35108d8a305af69b8dcb227b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/ffdfeb4790c5cbdecfed00fc7980ce24.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/4005d5850198b9bf5f6f9638115c703b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/00b0e71e23dbc9fc1711e1ee924098a9.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/d42a5e47dfe52225c1f20420bf965f76.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/d0c8acec05c910f58aeb02df66a336af.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/fe9e405636f46ccf3336d0ec8afc9f5a.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/4f2d6dd7c4071e914a537151c7310193.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/a1b44ccd1ec8cace77c29d26a25e0243.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/8b2d9ccb54368296184912eef58f63ba.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/6b7c4e7e4e5945a8e4cf937f9ef3cd36.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/3e025ea267d63fa6e5e9565c55b41c7d.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/537a6d1a5cf5e8cdebf91bea6d997f5c.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/0ce1338fc6f77ab41550556c91f9e13f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/0637eebc63f35cfae702bc57fb09b8fd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/50878731eae3a141d5e196af9c8b0b99.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/a480356446d5e10659c4760453b9d5b0.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/742e337e7d2cf92fb2b907043af7f1ea.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/5ecdfed444a24c5efe5d37b71d18adbb.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/126594546c1d502ff5ee331999adfc83.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/7a9f5139696b9b1417b419747d0b22f0.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/073912ed592c3b13d9b35e41c3f68d75.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/d6a026fdfd7e16a37807de031d1a4b23.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/32f32c9c76829513157674c272547dd2.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/6b36bcfe2a932302496508363ba80cc8.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/8d47f5e42afd8cc069913c90ca6a42fd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/c62dd50796ef3a7eed0bbe405debe08d.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/5dda891cad629626fe23cdf732017134.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/c9f26da650e73c139a3ff54ae689a32b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/3b1b2c437ce7da54e94c63a1ac2de815.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/1fd60fcacb9a8690f050a5b670da0243.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/40826972ed4b97724fef5df5ab597a33.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/aa80dcd126a8983d426a2311a57b496b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/576deb7179417243004eaa81ce8efa56.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/2a299f31b7d5f54ed49f4258b3f32409.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/5f8d47a3a500c75d5bd1b79dd82ceeb7.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/5b0457996e8bcc2c4a7c56d27da2a45f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/82c1e9a03af3f7fe766f2a081a48457f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/954dd07b828a35048c03908163ef8a33.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/c62187624d057d8f8b7855789da50dbe.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/6f79dcff2f732fb8ba7116f31437f489.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/ee23b0298c85e808a0721d248d011cfb.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/97d9d9bfe862cd3d998ed8f6adc33132.joblib
+
+ Dataset: business_dataset_middle.csv with model: ForestFlow_nt20_dk20 and score: decision
+Loading data from: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset_middle.csv
+
+Total transactions: 6088
+Date range: 2018-01-01 00:00:00 to 2024-02-26 00:00:00
+
+Chronological split at: 2021-02-05 00:00:00
+Train: 3048 transactions (until 2021-02-05 00:00:00)
+Test: 3040 transactions (after 2021-02-05 00:00:00)
+
+Computing features on training data...
+Computing features on test data...
+
+Train split:
+  Normal: 3032
+  Abnormal: 16
+Test: 3040 (Normal: 3029, Abnormal: 11)
+
+Scaling data...
+  Scaler fitted on NORMAL training data only
+
+============================================================
+FINAL SHAPES
+============================================================
+X_train_normal:  (3032, 21)
+X_train_abnormal: (16, 21)
+X_test:          (3040, 21)
+y_test:          (3040,) (Anomaly rate: 0.36%)
+
+============================================================
+ANOMALY TYPES IN DATASET
+============================================================
+
+Total:
+anomaly_description
+TIMING_ANOMALY           10
+CHANNEL_ANOMALY           6
+IBAN_MISMATCH_ANOMALY     6
+FREQUENCY_ANOMALY         5
+Name: count, dtype: int64
+
+In Train: 16
+In Test: 11
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/e1c430c0a5a855ff7e9899afe019ac16.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/36e03048d47965f35013ee2485bad344.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/458895cd0abcfb23feb51f181a7ec51a.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/30e5eaee980df5346f1fb5a9e6b8ee52.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/9ade9290e84be4ea1ebcfabfa607b95e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/4be95bbc46f1eda483857cbe464c21ec.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/a8243263181b4adf0df273916a50d70a.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/4f60054c35108d8a305af69b8dcb227b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/ffdfeb4790c5cbdecfed00fc7980ce24.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/4005d5850198b9bf5f6f9638115c703b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/00b0e71e23dbc9fc1711e1ee924098a9.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/d42a5e47dfe52225c1f20420bf965f76.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/d0c8acec05c910f58aeb02df66a336af.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/fe9e405636f46ccf3336d0ec8afc9f5a.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/4f2d6dd7c4071e914a537151c7310193.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/a1b44ccd1ec8cace77c29d26a25e0243.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/8b2d9ccb54368296184912eef58f63ba.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/6b7c4e7e4e5945a8e4cf937f9ef3cd36.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/3e025ea267d63fa6e5e9565c55b41c7d.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/537a6d1a5cf5e8cdebf91bea6d997f5c.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/0ce1338fc6f77ab41550556c91f9e13f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/0637eebc63f35cfae702bc57fb09b8fd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/50878731eae3a141d5e196af9c8b0b99.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/a480356446d5e10659c4760453b9d5b0.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/742e337e7d2cf92fb2b907043af7f1ea.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/5ecdfed444a24c5efe5d37b71d18adbb.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/126594546c1d502ff5ee331999adfc83.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/7a9f5139696b9b1417b419747d0b22f0.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/073912ed592c3b13d9b35e41c3f68d75.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/d6a026fdfd7e16a37807de031d1a4b23.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/32f32c9c76829513157674c272547dd2.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/6b36bcfe2a932302496508363ba80cc8.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/8d47f5e42afd8cc069913c90ca6a42fd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/c62dd50796ef3a7eed0bbe405debe08d.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/5dda891cad629626fe23cdf732017134.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/c9f26da650e73c139a3ff54ae689a32b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/3b1b2c437ce7da54e94c63a1ac2de815.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/1fd60fcacb9a8690f050a5b670da0243.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/40826972ed4b97724fef5df5ab597a33.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/aa80dcd126a8983d426a2311a57b496b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/576deb7179417243004eaa81ce8efa56.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/2a299f31b7d5f54ed49f4258b3f32409.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/5f8d47a3a500c75d5bd1b79dd82ceeb7.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/5b0457996e8bcc2c4a7c56d27da2a45f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/82c1e9a03af3f7fe766f2a081a48457f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/954dd07b828a35048c03908163ef8a33.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/c62187624d057d8f8b7855789da50dbe.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/6f79dcff2f732fb8ba7116f31437f489.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/ee23b0298c85e808a0721d248d011cfb.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/97d9d9bfe862cd3d998ed8f6adc33132.joblib
+
+ Dataset: business_dataset_middle.csv with model: TCCM_nt50 and score: deviation
+Loading data from: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset_middle.csv
+
+Total transactions: 6088
+Date range: 2018-01-01 00:00:00 to 2024-02-26 00:00:00
+
+Chronological split at: 2021-02-05 00:00:00
+Train: 3048 transactions (until 2021-02-05 00:00:00)
+Test: 3040 transactions (after 2021-02-05 00:00:00)
+
+Computing features on training data...
+Computing features on test data...
+
+Train split:
+  Normal: 3032
+  Abnormal: 16
+Test: 3040 (Normal: 3029, Abnormal: 11)
+
+Scaling data...
+  Scaler fitted on NORMAL training data only
+
+============================================================
+FINAL SHAPES
+============================================================
+X_train_normal:  (3032, 21)
+X_train_abnormal: (16, 21)
+X_test:          (3040, 21)
+y_test:          (3040,) (Anomaly rate: 0.36%)
+
+============================================================
+ANOMALY TYPES IN DATASET
+============================================================
+
+Total:
+anomaly_description
+TIMING_ANOMALY           10
+CHANNEL_ANOMALY           6
+IBAN_MISMATCH_ANOMALY     6
+FREQUENCY_ANOMALY         5
+Name: count, dtype: int64
+
+In Train: 16
+In Test: 11
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/12b51daff94e3db6f89fbf068c981fcf.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/af7a8133385f42de2945704aaa08606f.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/e461f5adf3c12511354bf9722c98a5b7.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/91c98dfd84e68aae9e0aee2fcefea26e.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/50356fe1012909056171ddf330c70ec8.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/b0750be2423f408a85c7f17df4c70ea9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/74df0ba932cce69c683897010a392095.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/3cf9b9ac1f875ea9bf3211356959d83d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/b86e6240cde9489bc6a6187d7defaece.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/07ff28b1137115a1d59cec40d85f6eba.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/2464cae373c28d1159e2f191c1af5ca2.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/309fa802dfe33a4d1f65cc72d0b9eca6.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/bc6dd43bc047ccdbb5feb8381997b5fa.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/42c6451fe1121e82ff710598b0760f2d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/0c8201a6eee8e7c6ff466a84fd076977.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/ecb82f79f303606dc18108c54e25f838.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/9d9dc14e9204edb5d38011cbfd22431b.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/bce9d6b6f5b8fcd74f479127321dd3e9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/e190bf99daa2f0aeb89b9aaab83a5939.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/2521b1c7fd3d7123f9085eb35e6e5aec.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/6b394cf1a28eb6b4b9a324726d33755c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/365a4e37bf61502bd3c090f1bb3bb04c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/30acb07b61e054b94d07a3dd5465257d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/42e23586ac208259eebd14706c64ade6.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/8ac3e5b3b04bd93a084d7cb229801f54.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/230668d4ee49c20abeafb5b1959d38d4.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/d7c00860209d891fcc291f5b93d15254.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/7edf344bd6bdc48ff2aac17e366e754c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/4c92594d2a127014aa60ef2ec29d9516.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/00e7d24e42653d3251504652d52da5f5.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/1855fc9173722048c5ee687e0475f209.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/f41b070b8151aadee39add52567db71e.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/d811a44a00f958682603475bbc78148d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/d34378dbd338eeeae347f907f79c0f07.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/8a3c214909db71f1078a6ac63f4983db.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/eff0c69091e15c564ba5259eb8a53478.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/292af63f490b96c0a086d880dc8aed89.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/e2fbb14b8c56ef9f2aabf837c6eaa924.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/8413f43f5229460663a1841eda0295ec.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/f1e15ddb09cbb498f89c42f5d648bc5d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/f853062b74d96c9bff9e6b9a39038824.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/7c2627b0cd3e0c9e94483f92aede0f84.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/3b5fcd19dab730d3f303cbbf0dee4cc3.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/be20075cfe6eb92fc6ac9de0deb44b85.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/1390d9560818aa56c72de97292e015a2.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/14dae49d2272d12237c5a27009bcc08a.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/42c3da98f64357bc4a2fb5d1cf94c662.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/f03cc373433c2a5c1eb84b1464e82041.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/3fe7366a04548a3af4acc7713d0c4d2f.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/d48e092cdebf4d384e251340c66ebb93.joblib
+
+ Dataset: business_dataset_middle.csv with model: TCCM_nt50 and score: reconstruction
+Loading data from: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset_middle.csv
+
+Total transactions: 6088
+Date range: 2018-01-01 00:00:00 to 2024-02-26 00:00:00
+
+Chronological split at: 2021-02-05 00:00:00
+Train: 3048 transactions (until 2021-02-05 00:00:00)
+Test: 3040 transactions (after 2021-02-05 00:00:00)
+
+Computing features on training data...
+Computing features on test data...
+
+Train split:
+  Normal: 3032
+  Abnormal: 16
+Test: 3040 (Normal: 3029, Abnormal: 11)
+
+Scaling data...
+  Scaler fitted on NORMAL training data only
+
+============================================================
+FINAL SHAPES
+============================================================
+X_train_normal:  (3032, 21)
+X_train_abnormal: (16, 21)
+X_test:          (3040, 21)
+y_test:          (3040,) (Anomaly rate: 0.36%)
+
+============================================================
+ANOMALY TYPES IN DATASET
+============================================================
+
+Total:
+anomaly_description
+TIMING_ANOMALY           10
+CHANNEL_ANOMALY           6
+IBAN_MISMATCH_ANOMALY     6
+FREQUENCY_ANOMALY         5
+Name: count, dtype: int64
+
+In Train: 16
+In Test: 11
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/12b51daff94e3db6f89fbf068c981fcf.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/af7a8133385f42de2945704aaa08606f.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/e461f5adf3c12511354bf9722c98a5b7.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/91c98dfd84e68aae9e0aee2fcefea26e.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/50356fe1012909056171ddf330c70ec8.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/b0750be2423f408a85c7f17df4c70ea9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/74df0ba932cce69c683897010a392095.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/3cf9b9ac1f875ea9bf3211356959d83d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/b86e6240cde9489bc6a6187d7defaece.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/07ff28b1137115a1d59cec40d85f6eba.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/2464cae373c28d1159e2f191c1af5ca2.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/309fa802dfe33a4d1f65cc72d0b9eca6.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/bc6dd43bc047ccdbb5feb8381997b5fa.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/42c6451fe1121e82ff710598b0760f2d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/0c8201a6eee8e7c6ff466a84fd076977.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/ecb82f79f303606dc18108c54e25f838.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/9d9dc14e9204edb5d38011cbfd22431b.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/bce9d6b6f5b8fcd74f479127321dd3e9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/e190bf99daa2f0aeb89b9aaab83a5939.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/2521b1c7fd3d7123f9085eb35e6e5aec.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/6b394cf1a28eb6b4b9a324726d33755c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/365a4e37bf61502bd3c090f1bb3bb04c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/30acb07b61e054b94d07a3dd5465257d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/42e23586ac208259eebd14706c64ade6.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/8ac3e5b3b04bd93a084d7cb229801f54.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/230668d4ee49c20abeafb5b1959d38d4.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/d7c00860209d891fcc291f5b93d15254.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/7edf344bd6bdc48ff2aac17e366e754c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/4c92594d2a127014aa60ef2ec29d9516.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/00e7d24e42653d3251504652d52da5f5.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/1855fc9173722048c5ee687e0475f209.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/f41b070b8151aadee39add52567db71e.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/d811a44a00f958682603475bbc78148d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/d34378dbd338eeeae347f907f79c0f07.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/8a3c214909db71f1078a6ac63f4983db.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/eff0c69091e15c564ba5259eb8a53478.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/292af63f490b96c0a086d880dc8aed89.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/e2fbb14b8c56ef9f2aabf837c6eaa924.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/8413f43f5229460663a1841eda0295ec.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/f1e15ddb09cbb498f89c42f5d648bc5d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/f853062b74d96c9bff9e6b9a39038824.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/7c2627b0cd3e0c9e94483f92aede0f84.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/3b5fcd19dab730d3f303cbbf0dee4cc3.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/be20075cfe6eb92fc6ac9de0deb44b85.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/1390d9560818aa56c72de97292e015a2.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/14dae49d2272d12237c5a27009bcc08a.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/42c3da98f64357bc4a2fb5d1cf94c662.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/f03cc373433c2a5c1eb84b1464e82041.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/3fe7366a04548a3af4acc7713d0c4d2f.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/d48e092cdebf4d384e251340c66ebb93.joblib
+
+ Dataset: business_dataset_middle.csv with model: TCCM_nt50 and score: decision
+Loading data from: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset_middle.csv
+
+Total transactions: 6088
+Date range: 2018-01-01 00:00:00 to 2024-02-26 00:00:00
+
+Chronological split at: 2021-02-05 00:00:00
+Train: 3048 transactions (until 2021-02-05 00:00:00)
+Test: 3040 transactions (after 2021-02-05 00:00:00)
+
+Computing features on training data...
+Computing features on test data...
+
+Train split:
+  Normal: 3032
+  Abnormal: 16
+Test: 3040 (Normal: 3029, Abnormal: 11)
+
+Scaling data...
+  Scaler fitted on NORMAL training data only
+
+============================================================
+FINAL SHAPES
+============================================================
+X_train_normal:  (3032, 21)
+X_train_abnormal: (16, 21)
+X_test:          (3040, 21)
+y_test:          (3040,) (Anomaly rate: 0.36%)
+
+============================================================
+ANOMALY TYPES IN DATASET
+============================================================
+
+Total:
+anomaly_description
+TIMING_ANOMALY           10
+CHANNEL_ANOMALY           6
+IBAN_MISMATCH_ANOMALY     6
+FREQUENCY_ANOMALY         5
+Name: count, dtype: int64
+
+In Train: 16
+In Test: 11
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/12b51daff94e3db6f89fbf068c981fcf.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/af7a8133385f42de2945704aaa08606f.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/e461f5adf3c12511354bf9722c98a5b7.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/91c98dfd84e68aae9e0aee2fcefea26e.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/50356fe1012909056171ddf330c70ec8.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/b0750be2423f408a85c7f17df4c70ea9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/74df0ba932cce69c683897010a392095.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/3cf9b9ac1f875ea9bf3211356959d83d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/b86e6240cde9489bc6a6187d7defaece.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/07ff28b1137115a1d59cec40d85f6eba.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/2464cae373c28d1159e2f191c1af5ca2.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/309fa802dfe33a4d1f65cc72d0b9eca6.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/bc6dd43bc047ccdbb5feb8381997b5fa.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/42c6451fe1121e82ff710598b0760f2d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/0c8201a6eee8e7c6ff466a84fd076977.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/ecb82f79f303606dc18108c54e25f838.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/9d9dc14e9204edb5d38011cbfd22431b.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/bce9d6b6f5b8fcd74f479127321dd3e9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/e190bf99daa2f0aeb89b9aaab83a5939.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/2521b1c7fd3d7123f9085eb35e6e5aec.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/6b394cf1a28eb6b4b9a324726d33755c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/365a4e37bf61502bd3c090f1bb3bb04c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/30acb07b61e054b94d07a3dd5465257d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/42e23586ac208259eebd14706c64ade6.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/8ac3e5b3b04bd93a084d7cb229801f54.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/230668d4ee49c20abeafb5b1959d38d4.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/d7c00860209d891fcc291f5b93d15254.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/7edf344bd6bdc48ff2aac17e366e754c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/4c92594d2a127014aa60ef2ec29d9516.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/00e7d24e42653d3251504652d52da5f5.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/1855fc9173722048c5ee687e0475f209.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/f41b070b8151aadee39add52567db71e.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/d811a44a00f958682603475bbc78148d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/d34378dbd338eeeae347f907f79c0f07.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/8a3c214909db71f1078a6ac63f4983db.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/eff0c69091e15c564ba5259eb8a53478.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/292af63f490b96c0a086d880dc8aed89.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/e2fbb14b8c56ef9f2aabf837c6eaa924.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/8413f43f5229460663a1841eda0295ec.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/f1e15ddb09cbb498f89c42f5d648bc5d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/f853062b74d96c9bff9e6b9a39038824.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/7c2627b0cd3e0c9e94483f92aede0f84.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/3b5fcd19dab730d3f303cbbf0dee4cc3.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/be20075cfe6eb92fc6ac9de0deb44b85.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/1390d9560818aa56c72de97292e015a2.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/14dae49d2272d12237c5a27009bcc08a.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/42c3da98f64357bc4a2fb5d1cf94c662.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/f03cc373433c2a5c1eb84b1464e82041.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/3fe7366a04548a3af4acc7713d0c4d2f.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/TCCM_nt50/d48e092cdebf4d384e251340c66ebb93.joblib
+== Job Ende: Mon Dec 15 04:15:25 AM CET 2025 ==
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n871
+Job ID: 2598489
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 16
+CPU Utilized: 7-15:45:09
+CPU Efficiency: 97.21% of 7-21:01:20 core-walltime
+Job Wall-clock time: 11:48:50
+Memory Utilized: 5.61 GB
+Memory Efficiency: 17.53% of 32.00 GB (32.00 GB/node)

@@ -1,3 +1,76 @@
 == Job Start: Sun Dec 14 03:47:30 PM CET 2025 ==
 Python: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/bin/python
 Imports dauern ~2-3 Minuten, bitte warten...
+
+ Dataset: business_dataset_middle.csv with model: ForestDiffusion_nt50_dk20 and score: deviation
+Loading data from: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset_middle.csv
+
+Total transactions: 6088
+Date range: 2018-01-01 00:00:00 to 2024-02-26 00:00:00
+
+Chronological split at: 2021-02-05 00:00:00
+Train: 3048 transactions (until 2021-02-05 00:00:00)
+Test: 3040 transactions (after 2021-02-05 00:00:00)
+
+Computing features on training data...
+Computing features on test data...
+
+Train split:
+  Normal: 3032
+  Abnormal: 16
+Test: 3040 (Normal: 3029, Abnormal: 11)
+
+Scaling data...
+  Scaler fitted on NORMAL training data only
+
+============================================================
+FINAL SHAPES
+============================================================
+X_train_normal:  (3032, 21)
+X_train_abnormal: (16, 21)
+X_test:          (3040, 21)
+y_test:          (3040,) (Anomaly rate: 0.36%)
+
+============================================================
+ANOMALY TYPES IN DATASET
+============================================================
+
+Total:
+anomaly_description
+TIMING_ANOMALY           10
+CHANNEL_ANOMALY           6
+IBAN_MISMATCH_ANOMALY     6
+FREQUENCY_ANOMALY         5
+Name: count, dtype: int64
+
+In Train: 16
+In Test: 11
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/b0664d0f4d6e2be47cffdaf02e4e90e5.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/783a2916c20afa4e32f940b5c2acc59e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/a5264ed4b4b5f57130df183102f4a25c.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/3684c58aa3de85e32e62eba5e008d5d8.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/3d7e49b8c4c1ddc83c50b49f921e5f32.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/a08ae8af333cb34890836c056e85089c.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/a306be81508101a293e2c998fce3fffc.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/7b7381c16c545eab8a5f50b63e8c3356.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/1d5a900dc8069451638fe0ad903fd3d6.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/44bd227964f5ced934823dd9943af8b9.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/1b6e42931dd0aa11d89c66d0991e0b7e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/148db239ac53a3e339090b9b84ef8a25.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestDiffusion_nt50_dk20/a2cde375d2d2ce412e722f25f3f11bd4.joblib
+[*] No cached model found. Training model for business_dataset_middle.csv, ForestDiffusion_nt50_dk20, contam_idx=2, seed=3
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n871
+Job ID: 2598414
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: CANCELLED (exit code 0)
+Nodes: 1
+Cores per node: 16
+CPU Utilized: 00:00:03
+CPU Efficiency: 0.01% of 10:22:08 core-walltime
+Job Wall-clock time: 00:38:53
+Memory Utilized: 6.87 GB
+Memory Efficiency: 21.46% of 32.00 GB (32.00 GB/node)
