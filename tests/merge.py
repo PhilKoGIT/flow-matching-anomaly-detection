@@ -10,15 +10,23 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from pathlib import Path
 
-COLORS_MODELS = {
-    #"ForestDiffusion_nt50_dk10": "blue",
-    "ForestFlow_nt20_dk10": "green",
-    "ForestFlow_nt20_dk20": "blue",
-    "ForestDiffusion_nt50_dk10": "yellow",
-    "ForestDiffusion_nt50_dk20": "black",
+SHOW_ONLY_MODELS = [
+    #"ForestFlow_nt20_dk10",
+    "ForestFlow_nt20_dk20",
+    # "ForestDiffusion_nt50_dk10",
+    "ForestDiffusion_nt50_dk20",
+    # "TCCM_nt5",
+    "TCCM_nt50",
+]
 
-    "TCCM_nt50": "red",
-    "TCCM_nt10": "orange",
+COLORS_MODELS = {
+
+    # "ForestFlow_nt20_dk10": "blue",
+    "ForestFlow_nt20_dk20": "blue",
+    # "ForestDiffusion_nt50_dk10": "blue",
+    "ForestDiffusion_nt50_dk20": "red",
+    "TCCM_nt50": "green",
+    #"TCCM_nt5": "yellow",
 }
 
 COLORS_SCORES = {
@@ -77,13 +85,17 @@ def get_dataset_name(merged):
 
 
 def get_all_models(merged):
-    """Findet alle Modelle."""
+    """Findet alle Modelle (gefiltert falls SHOW_ONLY_MODELS gesetzt)."""
     models = set()
     for dataset_data in merged["all_results_combined"].values():
         models.update(dataset_data.keys())
     models.update(merged["all_extreme_cases"].keys())
+    
+    # Filter anwenden
+    if SHOW_ONLY_MODELS:
+        models = models & set(SHOW_ONLY_MODELS)
+    
     return sorted(models)
-
 
 # =============================================================================
 # CONTAMINATION PLOTS
@@ -97,6 +109,8 @@ def plot_contamination_models_ax(ax, all_results, dataset_name, score_type, metr
     
     has_data = False
     for model_name in all_results[dataset_name].keys():
+        if SHOW_ONLY_MODELS and model_name not in SHOW_ONLY_MODELS:
+            continue
         if score_type not in all_results[dataset_name][model_name]:
             continue
         
@@ -169,6 +183,8 @@ def plot_percentile_models_ax(ax, all_extreme_cases, dataset_name, score_type, m
     has_data = False
     
     for model_name in all_extreme_cases.keys():
+        if SHOW_ONLY_MODELS and model_name not in SHOW_ONLY_MODELS:
+            continue
         if score_type not in all_extreme_cases[model_name]:
             continue
         if dataset_name not in all_extreme_cases[model_name][score_type]:
@@ -268,7 +284,7 @@ def create_compact_pdfs(merged, output_dir):
             # Seite 1: Modellvergleich pro Score (2 Zeilen × 3 Spalten)
             # Zeilen: AUROC, AUPRC | Spalten: deviation, reconstruction, decision
             fig, axes = plt.subplots(2, 3, figsize=(15, 10))
-            fig.suptitle(f"{dataset_name} - Contamination: Modellvergleich", fontsize=14, fontweight='bold')
+            fig.suptitle(f"{dataset_name} - Contamination: model comparison", fontsize=14, fontweight='bold')
             
             for col, score_type in enumerate(["deviation", "reconstruction", "decision"]):
                 for row, metric in enumerate(["auroc", "auprc"]):
@@ -282,7 +298,7 @@ def create_compact_pdfs(merged, output_dir):
             n_models = len(models)
             if n_models > 0:
                 fig, axes = plt.subplots(2, n_models, figsize=(5*n_models, 10))
-                fig.suptitle(f"{dataset_name} - Contamination: Score-Vergleich", fontsize=14, fontweight='bold')
+                fig.suptitle(f"{dataset_name} - Contamination: score comparison", fontsize=14, fontweight='bold')
                 
                 if n_models == 1:
                     axes = axes.reshape(2, 1)
@@ -310,7 +326,7 @@ def create_compact_pdfs(merged, output_dir):
                 # Seite: Modellvergleich pro Score (3 Zeilen × 3 Spalten)
                 # Zeilen: F1, Precision, Recall | Spalten: deviation, reconstruction, decision
                 fig, axes = plt.subplots(3, 3, figsize=(15, 12))
-                fig.suptitle(f"{dataset_name} - Percentile ({case_title}): Modellvergleich", 
+                fig.suptitle(f"{dataset_name} - Percentile ({case_title}): model comparison", 
                             fontsize=14, fontweight='bold')
                 
                 for col, score_type in enumerate(["deviation", "reconstruction", "decision"]):
@@ -326,7 +342,7 @@ def create_compact_pdfs(merged, output_dir):
                 n_models = len(models)
                 if n_models > 0:
                     fig, axes = plt.subplots(3, n_models, figsize=(5*n_models, 12))
-                    fig.suptitle(f"{dataset_name} - Percentile ({case_title}): Score-Vergleich", 
+                    fig.suptitle(f"{dataset_name} - Percentile ({case_title}): score comparison", 
                                 fontsize=14, fontweight='bold')
                     
                     if n_models == 1:
@@ -354,20 +370,23 @@ if __name__ == "__main__":
     # DATEIEN HIER EINTRAGEN
     # =========================================================================
     result_files = [
-        #Path("./0_results_diff/results_data/extreme_cases_5_campaign_20251215_162517.joblib"),
-        Path("./0_results_flow/results_data/extreme_cases_5_campaign_20251215_094322.joblib"),
-        #Path("./0_results_flow/results_data/extreme_cases_5_campaign_20251215_094644.joblib"),
+        # Path("./0_results_diff/results_data/extreme_cases_5_campaign_20251215_162517.joblib"),
+        # Path("./0_results_flow/results_data/extreme_cases_5_campaign_20251215_094644.joblib"),
+        # Path("./0_results_tccm/results_data/extreme_cases_5_campaign_20251215_215245.joblib"),
 
-        #Path("./results_flow/results_data/extreme_cases_5_campaign_20251215_094644.joblib")
-        #Path("./0_results_tccm_5/results_data/extreme_cases_5_campaign_20251215_000144.joblib"),
-        #Path("./0_results_tccm_50/results_data/extreme_cases_5_campaign_20251215_000226.joblib"),
-        #Path("./results_quick/results_data/extreme_cases_5_campaign_20251214_233222.joblib")
+        #only for the business dataset experiment
+        Path("./results_business/results_data/extreme_cases_business_dataset_middle.csv_20251215_121230.joblib"),
     ]
     
-    output_dir = Path("./mit_plot_alles")
+    output_dir = Path("./1_results_business")
     
 
     merged = load_and_merge_results(result_files)
+    print("Gefundene Modelle in all_results_combined:")
+    for ds, models in merged["all_results_combined"].items():
+        print(f"  {ds}: {list(models.keys())}")
+    print("Gefundene Modelle in all_extreme_cases:")
+    print(f"  {list(merged['all_extreme_cases'].keys())}")
     
     print("\n" + "="*60)
     print("ERSTELLE KOMPAKTE PDFs")
