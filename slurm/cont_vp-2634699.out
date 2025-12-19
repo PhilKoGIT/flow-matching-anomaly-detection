@@ -1,0 +1,25 @@
+== Job Start: Thu Dec 18 02:18:49 PM CET 2025 ==
+Python: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/bin/python
+Imports dauern ~2-3 Minuten, bitte warten...
+
+ Dataset: 5_campaign.npz with model: ForestFlow_nt3_dk1 and score: deviation
+ 
+Dataset loaded successfully!
+Training data: (18274, 62), Normal: 18274
+Test data: (22914, 62), Normal: 18274, Anomalies: 4640
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt3_dk1, contam_idx=0, seed=0
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n809
+Job ID: 2634699
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: CANCELLED (exit code 0)
+Nodes: 1
+Cores per node: 50
+CPU Utilized: 00:00:02
+CPU Efficiency: 0.05% of 01:01:40 core-walltime
+Job Wall-clock time: 00:01:14
+Memory Utilized: 2.26 GB
+Memory Efficiency: 3.53% of 64.00 GB (64.00 GB/node)

@@ -17,8 +17,6 @@ import json
 import joblib
 from sklearn.metrics import average_precision_score
 import time
-from preprocessing_bd_unsupervised import prepare_data_unsupervised
-from preprocessing_bd_supervised import prepare_data_supervised
 import sys
 current_file_path = Path(__file__).resolve()
 parent_dir = current_file_path.parent
@@ -31,6 +29,7 @@ import hashlib
 MODEL_CACHE_DIR = Path(__file__).resolve().parent / "saved_models"
 MODEL_CACHE_DIR.mkdir(parents=True, exist_ok=True)
 from datetime import datetime
+SLURM_CPUS = int(os.environ.get("SLURM_CPUS_PER_TASK", "1"))
 
 
 percentiles = [20, 30, 40, 50, 60, 70, 80, 90, 95, 97.5, 99, 99.9]
@@ -44,7 +43,7 @@ File runs contamination studies for the given models and datasets.
 
 from preprocessing_bd_contamination import load_business_dataset_for_contamination
 
-results_dir = Path("./0_results_tccm_both")
+results_dir = Path("./0_results_forest_50")
 
 # 2. Add this new loading function (after load_adbench_npz):
 # ---------------------------------------------------------------------------
@@ -131,7 +130,8 @@ def create_ForestDiffusionModel(n_t, duplicate_K, seed, X_train, dataset_name, d
         gpu_hist=False,  
         n_batch=1,      
         seed=seed,
-        n_jobs=-1,
+        n_jobs=1,
+        #n_jobs=SLURM_CPUS,
         bin_indexes=[],      #no categorical, binary or integer features in the datasets used here, only floats
         cat_indexes=[],       
         int_indexes=[],
@@ -783,15 +783,15 @@ if __name__ == "__main__":
         #         "diffusion_type": "flow"
         #     },
         # },
-        #         "ForestFlow_nt20_dk10": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 20,
-        #         "duplicate_K": 10,
-        #         "duplicate_K_test": 10,
-        #         "diffusion_type": "flow"
-        #     },
-        # },
+                "ForestFlow_nt50_dk20": {
+            "type": "forest",
+            "params": {
+                "n_t": 50,
+                "duplicate_K": 20,
+                "duplicate_K_test": 20,
+                "diffusion_type": "flow"
+            },
+        },
         # "ForestFlow_nt20_dk20": {
         #     "type": "forest",
         #     "params": {
@@ -801,47 +801,47 @@ if __name__ == "__main__":
         #         "diffusion_type": "flow"
         #     },
         # },
-        # "ForestDiffusion_nt50_dk20": {
+        # "ForestDiffusion_nt20_dk20": {
         #     "type": "forest",
         #     "params": {
-        #         "n_t": 50,
+        #         "n_t": 20,
         #         "duplicate_K": 20,
         #         "duplicate_K_test": 20,
         #         "diffusion_type": "vp"
         #     },
         # },
 
-        # "ForestFlow_nt20_dk10": {
+        # "ForestFlow_nt3_dk1": {
         #     "type": "forest",
         #     "params": {
-        #         "n_t": 20,
-        #         "duplicate_K": 10,
-        #         "duplicate_K_test": 10,
+        #         "n_t": 3,
+        #         "duplicate_K": 1,
+        #         "duplicate_K_test": 1,
         #         "diffusion_type": "flow"
         #     },
         # },
-        # "ForestFlow_nt20_dk20": {
+        # "ForestFlow_nt50_dk20": {
         #     "type": "forest",
         #     "params": {
-        #         "n_t": 20,
+        #         "n_t": 50,
         #         "duplicate_K": 20,
         #         "duplicate_K_test": 20,
         #         "diffusion_type": "flow"
         #     },
         # },
 
-         "TCCM_nt50": {
-            "type": "tccm",
-            "params": {
-                "n_t": 50
-            },
-        },
-                 "TCCM_nt5": {
-            "type": "tccm",
-            "params": {
-                "n_t": 10
-            },
-        },
+        #  "TCCM_nt50": {
+        #     "type": "tccm",
+        #     "params": {
+        #         "n_t": 50
+        #     },
+        # },
+        # "TCCM_nt20": {
+        #     "type": "tccm",
+        #     "params": {
+        #         "n_t": 20
+        #     },
+        # },
 
      }
     

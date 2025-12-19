@@ -952,7 +952,7 @@ class ForestDiffusionModel():
     # Concatenate y label if needed
     if self.label_y is not None:
       solution = np.concatenate((solution, np.expand_dims(label_y, axis=1)), axis=1) 
-
+      
     return solution
 
   # Impute missing data by solving the reverse ODE while keeping the non-missing data intact

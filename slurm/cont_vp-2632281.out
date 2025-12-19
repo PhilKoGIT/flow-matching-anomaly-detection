@@ -1,0 +1,256 @@
+== Job Start: Thu Dec 18 01:20:20 PM CET 2025 ==
+Python: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/bin/python
+Imports dauern ~2-3 Minuten, bitte warten...
+
+ Dataset: 29_Pima.npz with model: ForestFlow_nt3_dk1 and score: deviation
+ 
+Dataset loaded successfully!
+Training data: (250, 8), Normal: 250
+Test data: (518, 8), Normal: 250, Anomalies: 268
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/9fd6a406f8c9d69cab26e539d5839053.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/a37895eabad1d55739f00b1b717888e7.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/0243af420f3fc8ba2f7e86f19fa504dd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/3c1736a76bf75ae71c0cdd0baa774a64.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/410a13c62f20ec5225ac1fc46b8e0ed4.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/89662a638866bb0a4288bf8d418a9324.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/ef647c82f7d302f7fea70030a884220d.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/0f3ccfc47a57b2e8838f80ae79251e51.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/cafd0e2940dc4d40819a425ea0350c8e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/f76ce6fc21b87af78e62fe90878ba1cd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/c34bf489ea51177a62329b57a8d739fa.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/1cdb2e7917ebfc78801da0740118be0b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/a560a1d3311c6aa64296d793b799af26.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/f6bb204d1202207071001fe47071d5ef.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/e6f0627f7b3d21ad9fbb10cd8d9eae76.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/af67f2b4d4ab7ef98839e5d0bc6f8ec6.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/5cb34517913cb9ea3815ec7e3a2599a1.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/7231247e75733b6576bec4cec39e1cfb.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/36ce55a7f45a81425dfec6f351621950.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/09e39ab6710e16e824f2b5c210669723.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/48cf77dbd280b01831b1ac835f43d80e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/36759923df6760dd8b4fd38422d4ec5d.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/e9ee452c3d19149694378ad6a7d088d1.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/66f0532be95c2be121b9101e7fa2956d.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/32d3a298180a0b3452cc7afbbe6e98ca.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/ac358ae9a864c25c9dfefe696b98b90e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/6ec6c0d00fedb80970148e808ed9640b.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=5, seed=2
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/fb43918da93a28ab30c309396bcc4248.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=5, seed=3
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/1f08576a55d249367841ffba9bc38e50.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=5, seed=4
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/79332534f09e7cece06a4d4b8c8446bc.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=6, seed=0
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/e05858c348be66e59a062799c054d1bd.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=6, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/72c66b135750a7aa17a616b498412457.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=6, seed=2
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/b3649e5682ce89a7c35bb5c7217f2ffd.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=6, seed=3
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/8a3758c9fe8a011093bc2dcfc25e111f.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=6, seed=4
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/77714aa12bf63a86b465fbc9f7fd5993.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=7, seed=0
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/d0a8df8ae405de197967a51c8b969620.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=7, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/9156eede637ba7f22e04beee94662303.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=7, seed=2
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/7b77396739c44b15986e0da8ca84de25.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=7, seed=3
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/c9e116552094c7bef15e993eb3853337.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=7, seed=4
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/001ee2fe4446bb0fa33f4e6e90555b76.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=8, seed=0
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/e09f40f99b99b1a2a6f313b58354a668.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=8, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/f5351eac167db7d81b4a366be4fde699.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=8, seed=2
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/b7e14fded851e4bda4bfb45f32b5d43b.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=8, seed=3
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/4656528bd60143d87ee7fa96975ec297.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=8, seed=4
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/439ed72619c5785325871c736b13cb33.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=9, seed=0
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/d8bdb0097ac63eac039b255bb41824ca.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=9, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/d3cc36ff54af7b170f721c3ddf62f7d4.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=9, seed=2
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/0c037ddd9d62308cf5703844c0d7a106.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=9, seed=3
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/4c80bf2af7d20391b0f2b618957d7867.joblib
+[*] No cached model found. Training model for 29_Pima.npz, ForestFlow_nt3_dk1, contam_idx=9, seed=4
+
+Training ForestDiffusionModel (flow) on dataset: 29_Pima.npz_ForestFlow_nt3_dk1 with n_t=3, duplicate_K=1, seed=4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/2979e925cf1635bd09cef78cb3f50483.joblib
+
+ Dataset: 29_Pima.npz with model: ForestFlow_nt3_dk1 and score: reconstruction
+ 
+Dataset loaded successfully!
+Training data: (250, 8), Normal: 250
+Test data: (518, 8), Normal: 250, Anomalies: 268
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/9fd6a406f8c9d69cab26e539d5839053.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/a37895eabad1d55739f00b1b717888e7.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/0243af420f3fc8ba2f7e86f19fa504dd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/3c1736a76bf75ae71c0cdd0baa774a64.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/410a13c62f20ec5225ac1fc46b8e0ed4.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/89662a638866bb0a4288bf8d418a9324.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/ef647c82f7d302f7fea70030a884220d.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/0f3ccfc47a57b2e8838f80ae79251e51.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/cafd0e2940dc4d40819a425ea0350c8e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/f76ce6fc21b87af78e62fe90878ba1cd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/c34bf489ea51177a62329b57a8d739fa.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/1cdb2e7917ebfc78801da0740118be0b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/a560a1d3311c6aa64296d793b799af26.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/f6bb204d1202207071001fe47071d5ef.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/e6f0627f7b3d21ad9fbb10cd8d9eae76.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/af67f2b4d4ab7ef98839e5d0bc6f8ec6.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/5cb34517913cb9ea3815ec7e3a2599a1.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/7231247e75733b6576bec4cec39e1cfb.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/36ce55a7f45a81425dfec6f351621950.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/09e39ab6710e16e824f2b5c210669723.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/48cf77dbd280b01831b1ac835f43d80e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/36759923df6760dd8b4fd38422d4ec5d.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/e9ee452c3d19149694378ad6a7d088d1.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/66f0532be95c2be121b9101e7fa2956d.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/32d3a298180a0b3452cc7afbbe6e98ca.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/ac358ae9a864c25c9dfefe696b98b90e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/6ec6c0d00fedb80970148e808ed9640b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/fb43918da93a28ab30c309396bcc4248.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/1f08576a55d249367841ffba9bc38e50.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/79332534f09e7cece06a4d4b8c8446bc.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/e05858c348be66e59a062799c054d1bd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/72c66b135750a7aa17a616b498412457.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/b3649e5682ce89a7c35bb5c7217f2ffd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/8a3758c9fe8a011093bc2dcfc25e111f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/77714aa12bf63a86b465fbc9f7fd5993.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/d0a8df8ae405de197967a51c8b969620.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/9156eede637ba7f22e04beee94662303.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/7b77396739c44b15986e0da8ca84de25.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/c9e116552094c7bef15e993eb3853337.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/001ee2fe4446bb0fa33f4e6e90555b76.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/e09f40f99b99b1a2a6f313b58354a668.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/f5351eac167db7d81b4a366be4fde699.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/b7e14fded851e4bda4bfb45f32b5d43b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/4656528bd60143d87ee7fa96975ec297.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/439ed72619c5785325871c736b13cb33.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/d8bdb0097ac63eac039b255bb41824ca.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/d3cc36ff54af7b170f721c3ddf62f7d4.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/0c037ddd9d62308cf5703844c0d7a106.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/4c80bf2af7d20391b0f2b618957d7867.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/2979e925cf1635bd09cef78cb3f50483.joblib
+
+ Dataset: 29_Pima.npz with model: ForestFlow_nt3_dk1 and score: decision
+ 
+Dataset loaded successfully!
+Training data: (250, 8), Normal: 250
+Test data: (518, 8), Normal: 250, Anomalies: 268
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/9fd6a406f8c9d69cab26e539d5839053.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/a37895eabad1d55739f00b1b717888e7.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/0243af420f3fc8ba2f7e86f19fa504dd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/3c1736a76bf75ae71c0cdd0baa774a64.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/410a13c62f20ec5225ac1fc46b8e0ed4.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/89662a638866bb0a4288bf8d418a9324.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/ef647c82f7d302f7fea70030a884220d.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/0f3ccfc47a57b2e8838f80ae79251e51.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/cafd0e2940dc4d40819a425ea0350c8e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/f76ce6fc21b87af78e62fe90878ba1cd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/c34bf489ea51177a62329b57a8d739fa.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/1cdb2e7917ebfc78801da0740118be0b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/a560a1d3311c6aa64296d793b799af26.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/f6bb204d1202207071001fe47071d5ef.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/e6f0627f7b3d21ad9fbb10cd8d9eae76.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/af67f2b4d4ab7ef98839e5d0bc6f8ec6.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/5cb34517913cb9ea3815ec7e3a2599a1.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/7231247e75733b6576bec4cec39e1cfb.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/36ce55a7f45a81425dfec6f351621950.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/09e39ab6710e16e824f2b5c210669723.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/48cf77dbd280b01831b1ac835f43d80e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/36759923df6760dd8b4fd38422d4ec5d.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/e9ee452c3d19149694378ad6a7d088d1.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/66f0532be95c2be121b9101e7fa2956d.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/32d3a298180a0b3452cc7afbbe6e98ca.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/ac358ae9a864c25c9dfefe696b98b90e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/6ec6c0d00fedb80970148e808ed9640b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/fb43918da93a28ab30c309396bcc4248.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/1f08576a55d249367841ffba9bc38e50.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/79332534f09e7cece06a4d4b8c8446bc.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/e05858c348be66e59a062799c054d1bd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/72c66b135750a7aa17a616b498412457.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/b3649e5682ce89a7c35bb5c7217f2ffd.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/8a3758c9fe8a011093bc2dcfc25e111f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/77714aa12bf63a86b465fbc9f7fd5993.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/d0a8df8ae405de197967a51c8b969620.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/9156eede637ba7f22e04beee94662303.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/7b77396739c44b15986e0da8ca84de25.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/c9e116552094c7bef15e993eb3853337.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/001ee2fe4446bb0fa33f4e6e90555b76.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/e09f40f99b99b1a2a6f313b58354a668.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/f5351eac167db7d81b4a366be4fde699.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/b7e14fded851e4bda4bfb45f32b5d43b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/4656528bd60143d87ee7fa96975ec297.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/439ed72619c5785325871c736b13cb33.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/d8bdb0097ac63eac039b255bb41824ca.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/d3cc36ff54af7b170f721c3ddf62f7d4.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/0c037ddd9d62308cf5703844c0d7a106.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/4c80bf2af7d20391b0f2b618957d7867.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt3_dk1/2979e925cf1635bd09cef78cb3f50483.joblib
+== Job Ende: Thu Dec 18 05:00:59 PM CET 2025 ==
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n767
+Job ID: 2632281
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 16
+CPU Utilized: 2-07:35:41
+CPU Efficiency: 94.29% of 2-10:57:52 core-walltime
+Job Wall-clock time: 03:41:07
+Memory Utilized: 1.24 GB
+Memory Efficiency: 1.93% of 64.00 GB (64.00 GB/node)

@@ -1,0 +1,78 @@
+== Job Start: Fri Dec 19 08:25:11 PM CET 2025 ==
+Python: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/bin/python
+Imports dauern ~2-3 Minuten, bitte warten...
+
+ Dataset: business_dataset_middle.csv with model: ForestFlow_nt20_dk20 and score: deviation
+Loading data from: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset_middle.csv
+
+Total transactions: 6088
+Date range: 2018-01-01 00:00:00 to 2024-02-26 00:00:00
+
+Chronological split at: 2021-02-05 00:00:00
+Train: 3048 transactions (until 2021-02-05 00:00:00)
+Test: 3040 transactions (after 2021-02-05 00:00:00)
+Test DataFrame saved to: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/df_test_raw.csv
+
+Computing features on training data...
+Computing features on test data...
+
+Train split:
+  Normal: 3032
+  Abnormal: 16
+Test: 3040 (Normal: 3029, Abnormal: 11)
+
+Scaling data...
+  Scaler fitted on NORMAL training data only
+
+============================================================
+FINAL SHAPES
+============================================================
+X_train_normal:  (3032, 21)
+X_train_abnormal: (16, 21)
+X_test:          (3040, 21)
+y_test:          (3040,) (Anomaly rate: 0.36%)
+
+============================================================
+ANOMALY TYPES IN DATASET
+============================================================
+
+Total:
+anomaly_description
+TIMING_ANOMALY           10
+CHANNEL_ANOMALY           6
+IBAN_MISMATCH_ANOMALY     6
+FREQUENCY_ANOMALY         5
+Name: count, dtype: int64
+
+In Train: 16
+In Test: 11
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/e1c430c0a5a855ff7e9899afe019ac16.joblib
+[*] No cached model found. Training model for business_dataset_middle.csv, ForestFlow_nt20_dk20, contam_idx=0, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: business_dataset_middle.csv_ForestFlow_nt20_dk20 with n_t=20, duplicate_K=20, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/36e03048d47965f35013ee2485bad344.joblib
+[*] No cached model found. Training model for business_dataset_middle.csv, ForestFlow_nt20_dk20, contam_idx=0, seed=2
+
+Training ForestDiffusionModel (flow) on dataset: business_dataset_middle.csv_ForestFlow_nt20_dk20 with n_t=20, duplicate_K=20, seed=2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/458895cd0abcfb23feb51f181a7ec51a.joblib
+[*] No cached model found. Training model for business_dataset_middle.csv, ForestFlow_nt20_dk20, contam_idx=0, seed=3
+
+Training ForestDiffusionModel (flow) on dataset: business_dataset_middle.csv_ForestFlow_nt20_dk20 with n_t=20, duplicate_K=20, seed=3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/30e5eaee980df5346f1fb5a9e6b8ee52.joblib
+[*] No cached model found. Training model for business_dataset_middle.csv, ForestFlow_nt20_dk20, contam_idx=0, seed=4
+
+Training ForestDiffusionModel (flow) on dataset: business_dataset_middle.csv_ForestFlow_nt20_dk20 with n_t=20, duplicate_K=20, seed=4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/9ade9290e84be4ea1ebcfabfa607b95e.joblib
+[*] No cached model found. Training model for business_dataset_middle.csv, ForestFlow_nt20_dk20, contam_idx=1, seed=0
+
+Training ForestDiffusionModel (flow) on dataset: business_dataset_middle.csv_ForestFlow_nt20_dk20 with n_t=20, duplicate_K=20, seed=0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/4be95bbc46f1eda483857cbe464c21ec.joblib
+[*] No cached model found. Training model for business_dataset_middle.csv, ForestFlow_nt20_dk20, contam_idx=1, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: business_dataset_middle.csv_ForestFlow_nt20_dk20 with n_t=20, duplicate_K=20, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/a8243263181b4adf0df273916a50d70a.joblib
+[*] No cached model found. Training model for business_dataset_middle.csv, ForestFlow_nt20_dk20, contam_idx=1, seed=2
+
+Training ForestDiffusionModel (flow) on dataset: business_dataset_middle.csv_ForestFlow_nt20_dk20 with n_t=20, duplicate_K=20, seed=2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/business_dataset_middle.csv/ForestFlow_nt20_dk20/4f60054c35108d8a305af69b8dcb227b.joblib
+[*] No cached model found. Training model for business_dataset_middle.csv, ForestFlow_nt20_dk20, contam_idx=1, seed=3

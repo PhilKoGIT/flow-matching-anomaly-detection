@@ -8,3 +8,18 @@ Dataset loaded successfully!
 Training data: (18274, 62), Normal: 18274
 Test data: (22914, 62), Normal: 18274, Anomalies: 4640
 [*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt100_dk20, contam_idx=0, seed=0
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n805
+Job ID: 2599379
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: TIMEOUT (exit code 0)
+Nodes: 1
+Cores per node: 16
+CPU Utilized: 00:00:05
+CPU Efficiency: 0.00% of 46-16:05:36 core-walltime
+Job Wall-clock time: 2-22:00:21
+Memory Utilized: 16.14 GB
+Memory Efficiency: 50.45% of 32.00 GB (32.00 GB/node)
