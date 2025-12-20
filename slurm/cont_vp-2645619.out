@@ -1,0 +1,55 @@
+== Job Start: Sat Dec 20 10:08:06 AM CET 2025 ==
+Python: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/bin/python
+Imports dauern ~2-3 Minuten, bitte warten...
+
+ Dataset: 5_campaign.npz with model: TCCM_nt20 and score: deviation
+ 
+Dataset loaded successfully!
+Training data: (18274, 62), Normal: 18274
+Test data: (22914, 62), Normal: 18274, Anomalies: 4640
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=0, seed=0
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/709995c980f565116cfd11fd0d847991.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=0, seed=1
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/18a8aa360de2b30a524478d04f54b27e.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=0, seed=2
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/057a6f7fb4d05476a6241fd0ff8880f6.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=0, seed=3
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/21973e84785216eb800efdc24962ff63.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=0, seed=4
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/8509faed281ff2ad111b4f61cc4923cc.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=1, seed=0
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024

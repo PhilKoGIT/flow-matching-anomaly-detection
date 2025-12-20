@@ -1,0 +1,29 @@
+== Job Start: Sat Dec 20 09:27:21 AM CET 2025 ==
+Python: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/bin/python
+Imports dauern ~2-3 Minuten, bitte warten...
+
+ Dataset: 5_campaign.npz with model: ForestDiffusion_nt50_dk20 and score: deviation
+ 
+Dataset loaded successfully!
+Training data: (18274, 62), Normal: 18274
+Test data: (22914, 62), Normal: 18274, Anomalies: 4640
+[*] No cached model found. Training model for 5_campaign.npz, ForestDiffusion_nt50_dk20, contam_idx=0, seed=0
+
+Training ForestDiffusionModel (vp) on dataset: 5_campaign.npz_ForestDiffusion_nt50_dk20 with n_t=50, duplicate_K=10, seed=0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestDiffusion_nt50_dk20/024d4d963a4d826bffebb76029a85a5c.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestDiffusion_nt50_dk20, contam_idx=0, seed=1
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n747
+Job ID: 2645021
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: CANCELLED (exit code 0)
+Nodes: 1
+Cores per node: 50
+CPU Utilized: 00:00:04
+CPU Efficiency: 0.00% of 1-08:15:50 core-walltime
+Job Wall-clock time: 00:38:43
+Memory Utilized: 7.79 GB
+Memory Efficiency: 12.17% of 64.00 GB (64.00 GB/node)

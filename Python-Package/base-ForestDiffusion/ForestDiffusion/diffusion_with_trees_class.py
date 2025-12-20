@@ -467,7 +467,6 @@ class ForestDiffusionModel():
         n_t=n_t, 
         diffusion_type=diffusion_type, 
         eps=self.eps, 
-    #    sde=self.sde
     )
     #x_t samples rep looks like this : [sample1_1_t1, sample1_2_t1, sample1_2_t1..., sample2_1_t1... sample1_1_t2...; c]
 
@@ -536,9 +535,9 @@ class ForestDiffusionModel():
     test_samples_rep = np.tile(test_samples, (duplicate_K_test, 1))
     n_samples_rep = test_samples_rep.shape[0]
 
-    #convert into data space to compare with reconstruction
-    test_samples_rep_scaled = test_samples_rep  # wie bisher
-    test_samples_rep_unscaled = self.unscale(test_samples_rep_scaled.copy())
+    #convert into data space after scaler to compare with reconstruction
+    #actually redundant here.. could just be compared with original samples
+    test_samples_rep_unscaled = self.unscale(test_samples_rep.copy())
     test_samples_rep_unscaled = self.clean_onehot_data(test_samples_rep_unscaled)
     test_samples_rep_unscaled = self.clip_extremes(test_samples_rep_unscaled)
 
@@ -733,6 +732,7 @@ class ForestDiffusionModel():
 
       for i, t in enumerate(t_levels[n_t//2:-1]):
           # Create x_t using VP forward process: x_t = mean + std * noise
+
           mean, std = self.sde.marginal_prob(test_samples_rep, t)
           X_t = mean + std * X0
           
@@ -760,7 +760,7 @@ class ForestDiffusionModel():
   # compute_decision_score_vp
   # ============================================================================
 
-  def compute_decision_score_vp(self, test_samples, n_t , duplicate_K_test, diffusion_type):
+  def compute_decision_score_vp(self, test_samples, n_t, diffusion_type, duplicate_K_test=1):
       """
       Decision Score for vp
 
@@ -855,6 +855,7 @@ class ForestDiffusionModel():
       n_samples_rep = test_samples_rep.shape[0]
 
       # Ground-Truth x0 im Datenraum zum Vergleich (unscaled + One-Hot-Cleaning + Clipping)
+      #actually redundant here.. could just be compared with original samples below
       test_samples_rep_unscaled = self.unscale(test_samples_rep.copy())
       test_samples_rep_unscaled = self.clean_onehot_data(test_samples_rep_unscaled)
       test_samples_rep_unscaled = self.clip_extremes(test_samples_rep_unscaled)
@@ -895,6 +896,7 @@ class ForestDiffusionModel():
 
           # Rekonstruktion x_hat0 im SCALED Space:
           # x_hat = (x_t + sigma^2 * score_pred) / alpha
+          #tweedi formula
           x_hat_scaled = (X_t + (sigma_ ** 2) * score_pred) / alpha_
 
           # Zurück in Datenraum bringen

@@ -10,3 +10,76 @@ Test data: (22914, 62), Normal: 18274, Anomalies: 4640
 [*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/4c60e5a67006d73baf9dc4b606963545.joblib
 [*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/c06cfacba21b11cd4fa43f40abdaee24.joblib
 [*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/242f121971d0296016d5625a0c2e5d5e.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=0, seed=3
+
+Training ForestDiffusionModel (flow) on dataset: 5_campaign.npz_ForestFlow_nt50_dk20 with n_t=50, duplicate_K=20, seed=3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/819565a8582dfc3435f0edc90eeb17be.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=0, seed=4
+
+Training ForestDiffusionModel (flow) on dataset: 5_campaign.npz_ForestFlow_nt50_dk20 with n_t=50, duplicate_K=20, seed=4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/8f6f8c847513c32ba82fc753f22ff112.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=1, seed=0
+
+Training ForestDiffusionModel (flow) on dataset: 5_campaign.npz_ForestFlow_nt50_dk20 with n_t=50, duplicate_K=20, seed=0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/fe7f6e491cddea7469a065c50c6b9334.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=1, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: 5_campaign.npz_ForestFlow_nt50_dk20 with n_t=50, duplicate_K=20, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/1518330f48dcebf96224f31fade0045f.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=1, seed=2
+
+Training ForestDiffusionModel (flow) on dataset: 5_campaign.npz_ForestFlow_nt50_dk20 with n_t=50, duplicate_K=20, seed=2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/b14d74eb0dc77b142e99d5199be0c445.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=1, seed=3
+
+Training ForestDiffusionModel (flow) on dataset: 5_campaign.npz_ForestFlow_nt50_dk20 with n_t=50, duplicate_K=20, seed=3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/3a2959f664be6e958c332c7ffe9c91f7.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=1, seed=4
+
+Training ForestDiffusionModel (flow) on dataset: 5_campaign.npz_ForestFlow_nt50_dk20 with n_t=50, duplicate_K=20, seed=4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/1d0e37a3e7c87f5a68e72d40f056abcc.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=2, seed=0
+
+Training ForestDiffusionModel (flow) on dataset: 5_campaign.npz_ForestFlow_nt50_dk20 with n_t=50, duplicate_K=20, seed=0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/cc95af930f95bbf88af3885818bcd94c.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=2, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: 5_campaign.npz_ForestFlow_nt50_dk20 with n_t=50, duplicate_K=20, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/5c7df815a0daaf66ae66e3c41a0fd3e3.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=2, seed=2
+
+Training ForestDiffusionModel (flow) on dataset: 5_campaign.npz_ForestFlow_nt50_dk20 with n_t=50, duplicate_K=20, seed=2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/03fe98840ea7013175b6f535fd19739d.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=2, seed=3
+
+Training ForestDiffusionModel (flow) on dataset: 5_campaign.npz_ForestFlow_nt50_dk20 with n_t=50, duplicate_K=20, seed=3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/ba17669cecbd3d1261641223261bff29.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=2, seed=4
+
+Training ForestDiffusionModel (flow) on dataset: 5_campaign.npz_ForestFlow_nt50_dk20 with n_t=50, duplicate_K=20, seed=4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/1a0e94ce34048dbda65657331bfc4382.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=3, seed=0
+
+Training ForestDiffusionModel (flow) on dataset: 5_campaign.npz_ForestFlow_nt50_dk20 with n_t=50, duplicate_K=20, seed=0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/bfb1b09e83a4addb72403024889b9d00.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=3, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: 5_campaign.npz_ForestFlow_nt50_dk20 with n_t=50, duplicate_K=20, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/dbb17cb7808b86ac9b94076f7d6e2a93.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=3, seed=2
+
+Training ForestDiffusionModel (flow) on dataset: 5_campaign.npz_ForestFlow_nt50_dk20 with n_t=50, duplicate_K=20, seed=2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/dd1ba9afb4f807a208c89a49eba8787d.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=3, seed=3
+
+Training ForestDiffusionModel (flow) on dataset: 5_campaign.npz_ForestFlow_nt50_dk20 with n_t=50, duplicate_K=20, seed=3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/52bcd8d7f731c6a19f39afa5e13b6b61.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=3, seed=4
+
+Training ForestDiffusionModel (flow) on dataset: 5_campaign.npz_ForestFlow_nt50_dk20 with n_t=50, duplicate_K=20, seed=4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/75a1ce2edaffc44066e55296668ba53a.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=4, seed=0
+
+Training ForestDiffusionModel (flow) on dataset: 5_campaign.npz_ForestFlow_nt50_dk20 with n_t=50, duplicate_K=20, seed=0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/ForestFlow_nt50_dk20/d19030344cdf015970e2a807c6a9f737.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestFlow_nt50_dk20, contam_idx=4, seed=1

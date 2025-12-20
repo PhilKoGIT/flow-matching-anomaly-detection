@@ -239,9 +239,11 @@ def compute_features_no_leakage(
     for feat_name, feat_values in features.items():
         df[feat_name] = feat_values
     
-    # Clipping und Log-Transformationen
+    # Clipping
     df['amount_zscore_series'] = df['amount_zscore_series'].clip(-10, 10)
     df['amount_ratio_to_mean'] = df['amount_ratio_to_mean'].clip(0, 10)
+
+    #use log to make counts more normal distributed
     df['series_tx_count_before_log'] = np.log1p(df['series_tx_count_before'])
     df['ref_name_count_before_log'] = np.log1p(df['ref_name_count_before'])
     df['iban_count_before_log'] = np.log1p(df['iban_count_before'])
@@ -463,19 +465,4 @@ def create_contaminated_training_set(
 # TEST
 # =============================================================================
 if __name__ == "__main__":
-    # Daten laden
-    X_train_normal, X_train_abnormal, X_test, y_test = load_business_dataset_for_contamination(
-        test_size=0.5,
-        scale_on_all_train=False  # Standard: nur auf Normal fitten
-    )
-    
-    print("\n" + "="*60)
-    print("CONTAMINATION EXAMPLES")
-    print("="*60)
-    
-    # Verschiedene Kontaminationsgrade testen
-    for ratio in [0.0, 0.05, 0.10, 0.20]:
-        print(f"\n--- {ratio*100:.0f}% Contamination ---")
-        X_train = create_contaminated_training_set(
-            X_train_normal, X_train_abnormal, ratio
-        )
+    print("Testing preprocessing pipeline for Business Dataset (Contamination)...")

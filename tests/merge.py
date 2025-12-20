@@ -12,11 +12,11 @@ from pathlib import Path
 
 SHOW_ONLY_MODELS = [
     #"ForestFlow_nt20_dk10",
-    "ForestFlow_nt20_dk20",
-    "ForestDiffusion_nt20_dk20",
-    # "ForestDiffusion_nt50_dk10",
-    "ForestDiffusion_nt50_dk20",
-    # "TCCM_nt5",
+    # "ForestFlow_nt20_dk20",
+    # "ForestDiffusion_nt20_dk20",
+    # # "ForestDiffusion_nt50_dk10",
+    # "ForestDiffusion_nt50_dk20",
+     "TCCM_nt5",
     "TCCM_nt20",
 ]
 
@@ -27,7 +27,7 @@ COLORS_MODELS = {
     # "ForestDiffusion_nt50_dk10": "blue",
     "ForestDiffusion_nt20_dk20": "red",
     "TCCM_nt20": "green",
-    #"TCCM_nt5": "yellow",
+    "TCCM_nt5": "yellow",
 }
 
 COLORS_SCORES = {
@@ -372,17 +372,17 @@ if __name__ == "__main__":
     # =========================================================================
     result_files = [
         # Path("./0_results_diff/results_data/extreme_cases_5_campaign_20251215_162517.joblib"),
-        Path("./0_results_flow/results_data/extreme_cases_5_campaign_20251215_094644.joblib"),
-        # Path("./0_results_tccm/results_data/extreme_cases_5_campaign_20251215_215245.joblib"),
-        Path("./0_results_diff_dk20/results_data/extreme_cases_5_campaign_20251219_193755.joblib"),
-        Path("./0_results_tccm_20/results_data/extreme_cases_5_campaign_20251219_193558.joblib"),
+        # Path("./0_results_flow/results_data/extreme_cases_5_campaign_20251215_094644.joblib"),
+        # # Path("./0_results_tccm/results_data/extreme_cases_5_campaign_20251215_215245.joblib"),
+        # Path("./0_results_diff_dk20/results_data/extreme_cases_5_campaign_20251219_193755.joblib"),
+        Path("./0_results_tccm/results_data/extreme_cases_5_campaign_20251219_232852.joblib"),
 
 
         #only for the business dataset experiment
         #Path("./results_business/results_data/extreme_cases_business_dataset_middle.csv_20251215_121230.joblib"),
     ]
     
-    output_dir = Path("./1_results_business")
+    output_dir = Path("./plots")
     
 
     merged = load_and_merge_results(result_files)

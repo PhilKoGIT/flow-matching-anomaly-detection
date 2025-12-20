@@ -32,7 +32,11 @@ from datetime import datetime
 SLURM_CPUS = int(os.environ.get("SLURM_CPUS_PER_TASK", "1"))
 
 
-percentiles = [20, 30, 40, 50, 60, 70, 80, 90, 95, 97.5, 99, 99.9]
+percentiles = [
+    20, 25, 30, 35, 40, 45, 50, 
+    60, 70, 80, 90, 
+    95, 97.5, 99, 99.5, 99.9, 99.95, 99.99
+]
 
 
 """
@@ -43,7 +47,7 @@ File runs contamination studies for the given models and datasets.
 
 from preprocessing_bd_contamination import load_business_dataset_for_contamination
 
-results_dir = Path("./0_results_forest_50")
+results_dir = Path("./0_results_tccm")
 
 # 2. Add this new loading function (after load_adbench_npz):
 # ---------------------------------------------------------------------------
@@ -174,14 +178,14 @@ def calculate_scores_ForestDiffusionModel(X_test, model, n_t, duplicate_K_test, 
                 test_samples=X_test,
                 diffusion_type=diffusion_type,
                 n_t=n_t, 
-                duplicate_K_test=(duplicate_K_test//2)
+                duplicate_K_test=(duplicate_K_test)
             )
         elif diffusion_type == "vp": 
             anomaly_scores_reconstruction = model.compute_reconstruction_score_vp(
                 test_samples=X_test,
                 diffusion_type=diffusion_type,
                 n_t=n_t, 
-                duplicate_K_test=(duplicate_K_test//2)
+                duplicate_K_test=(duplicate_K_test)
             )
         else:
             raise ValueError(f"Unknown diffusion type: {diffusion_type}")
@@ -434,11 +438,25 @@ def build_model_config_dict(dataset_name, model_name, model_cnf, contam_idx, see
     creats a unique config dict that contains everything that influences the trained model.
 
     """
+    if model_cnf["type"] == "tccm":
+        hyperparams = determine_FMAD_hyperparameters(dataset_name)
+        training_params = {
+            "epochs": hyperparams["epochs"],
+            "learning_rate": hyperparams["learning_rate"],
+            "batch_size": hyperparams["batch_size"],
+        }
+        cache_model_name = "tccm"
+    else:
+        training_params = model_cnf["params"]
+        cache_model_name = model_name
+
+
     return {
         "dataset_name": dataset_name,
+        #model_name is redundant to cache actually
         "model_name": model_name,
         "model_type": model_cnf["type"],
-        "params": model_cnf["params"],   
+        "params": training_params,   
         "contam_idx": int(contam_idx),   
         "seed": int(seed),
     }
@@ -511,7 +529,7 @@ def get_or_train_model(dataset_name, model_name, model_cnf, contam_idx, seed, X_
         # Create and train a TCCM model
         model = create_trained_tccm_model(
             X_train=X_train,
-            dataset_name=f"{dataset_name}_{model_name}",
+            dataset_name= dataset_name,
             seed=seed
         )
 
@@ -767,8 +785,8 @@ if __name__ == "__main__":
     #change resultfiles!!
 
 
-    colors = {"ForestDiffusion_nt50_dk10": "blue", "ForestFlow_nt20_dk10": "green", "TCCM_nt50": "red", "TCCM_nt5": "orange"}
-    #colors = {"ForestFlow_nt100_dk20": "red", "ForestFlow_nt50_dk20": "blue", "ForestFlow_nt20_dk20": "green"}
+    #colors = {"ForestDiffusion_nt50_dk20": "blue", "ForestDiffusion_nt20_dk20": "green", "ForestDiffusion_nt50_dk10": "red"}
+    colors = {"TCCM_nt20": "red", "TCCM_nt5": "blue", "ForestFlow_nt20_dk20": "green"}
     #define models to run
     #change names in plot_score_models_comparison accordingly
 
@@ -783,22 +801,32 @@ if __name__ == "__main__":
         #         "diffusion_type": "flow"
         #     },
         # },
-                "ForestFlow_nt50_dk20": {
-            "type": "forest",
-            "params": {
-                "n_t": 50,
-                "duplicate_K": 20,
-                "duplicate_K_test": 20,
-                "diffusion_type": "flow"
-            },
-        },
-        # "ForestFlow_nt20_dk20": {
+
+        # "ForestDiffusion_nt50_dk20": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 50,
+        #         "duplicate_K": 20,
+        #         "duplicate_K_test": 20,
+        #         "diffusion_type": "vp"
+        #     },
+        # },
+        # "ForestDiffusion_nt20_dk20": {
         #     "type": "forest",
         #     "params": {
         #         "n_t": 20,
         #         "duplicate_K": 20,
         #         "duplicate_K_test": 20,
-        #         "diffusion_type": "flow"
+        #         "diffusion_type": "vp"
+        #     },
+        # },
+        # "ForestDiffusion_nt50_dk10": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 50,
+        #         "duplicate_K": 10,
+        #         "duplicate_K_test": 10,
+        #         "diffusion_type": "vp"
         #     },
         # },
         # "ForestDiffusion_nt20_dk20": {
@@ -836,12 +864,18 @@ if __name__ == "__main__":
         #         "n_t": 50
         #     },
         # },
-        # "TCCM_nt20": {
-        #     "type": "tccm",
-        #     "params": {
-        #         "n_t": 20
-        #     },
-        # },
+        "TCCM_nt20": {
+            "type": "tccm",
+            "params": {
+                "n_t": 20
+            },
+        },
+                "TCCM_nt5": {
+            "type": "tccm",
+            "params": {
+                "n_t": 5
+            },
+        },
 
      }
     
@@ -864,7 +898,7 @@ if __name__ == "__main__":
             results, contam_levels, extreme_cases = run_training_contamination_ablation_dynamic_fixed_split(
                 score, dataset_names, (model_name, model_config)
             )
-            
+            #restructure results for easier plotting
             for dataset_name, data in results.items():
                 if dataset_name not in all_results_combined:
                     all_results_combined[dataset_name] = {}

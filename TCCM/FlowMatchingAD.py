@@ -79,6 +79,7 @@ class TCCM:
             #     x_t_i = torch.tensor(x_t[i], dtype=torch.float32, device=X.device)
             for i, t_val in enumerate(t_levels[n_t//2:-1]):
                 actual_time_idx = n_t // 2 + i
+                #only have one x_t_i per time step
                 x_t_i = torch.tensor(x_t[actual_time_idx], dtype=torch.float32, device=X.device)
                 t = torch.full((X.shape[0], 1), t_val.item(), device=X.device)
                 v_pred = self.model(x_t_i, t)
