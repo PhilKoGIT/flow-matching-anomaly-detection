@@ -77,8 +77,12 @@ class TCCM:
             # for i, t_val in enumerate(t_levels[n_t//2:]):
             #     t = torch.full((X.shape[0], 1), t_val.item(), device=X.device)
             #     x_t_i = torch.tensor(x_t[i], dtype=torch.float32, device=X.device)
-            for i, t_val in enumerate(t_levels[n_t//2:-1]):
-                actual_time_idx = n_t // 2 + i
+            #for i, t_val in enumerate(t_levels[n_t//2:-1]):
+            #for i, t_val in enumerate(t_levels[:-1]):
+
+            for i, t_val in enumerate(t_levels[:n_t//2]):
+                #actual_time_idx = n_t // 2 + i
+                actual_time_idx = i
                 #only have one x_t_i per time step
                 x_t_i = torch.tensor(x_t[actual_time_idx], dtype=torch.float32, device=X.device)
                 t = torch.full((X.shape[0], 1), t_val.item(), device=X.device)
@@ -143,8 +147,11 @@ class TCCM:
         b = X_test.shape[0]
         anomaly_scores = np.zeros(b) 
         with torch.no_grad():
-            for i, t_val in enumerate(t_values[n_t//2:-1]):
-                actual_time_idx = n_t // 2 + i
+            for i, t_val in enumerate(t_values[:n_t//2]):
+            #for i, t_val in enumerate(t_values[:-1]):
+            #for i, t_val in enumerate(t_values[n_t//2:-1]):
+                #actual_time_idx = n_t // 2 + i
+                actual_time_idx = i
                 x_t_i = torch.tensor(x_t[actual_time_idx], dtype=torch.float32, device=device)
                 steps_left = (n_t - 1) - actual_time_idx
                 x_endpos = self.euler_solve_from_x_t(x_t_i, t0=t_val, steps_left=steps_left, n_t=n_t)

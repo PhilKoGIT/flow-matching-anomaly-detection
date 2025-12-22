@@ -53,3 +53,600 @@ Training TCCM with hyperparameters:
   Epochs: 50
   Learning Rate: 0.005
   Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/bd57243d6f8d486f26b025a4c74dadd8.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=1, seed=1
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/62d91b510e9ae43e1ff15ac549748147.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=1, seed=2
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/1fac59d06f805a084dc544c15aedefd3.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=1, seed=3
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/eb7f56af35a5e01834a63681b6469873.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=1, seed=4
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/41d194cd8d12cca4976d651cf25bc80d.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=2, seed=0
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/4e3f8d3fbc375fefbb745358175807aa.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=2, seed=1
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/b970971346dd275f942abf66fff429b9.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=2, seed=2
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/9b3d512759d759217d0efab2b5d9e74c.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=2, seed=3
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/2012f8be4c8a7e95b1800592f592bfb7.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=2, seed=4
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/207ce20aab5d42aef648fbe5eb89c56a.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=3, seed=0
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/bb26fc8ddb6888aaf80cb0b6b525365b.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=3, seed=1
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/5adb75b7a7fb7cb263a732d4fff3272e.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=3, seed=2
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/bf52dc5fd80f18dccc47a14c55730ab7.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=3, seed=3
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/c88c8fab7beb1113057a4d1f1e91e8b6.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=3, seed=4
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/033dae741640ef4f1bf5576b4beb74ba.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=4, seed=0
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/bc97264d9d429254bd13a38ee7e5bc78.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=4, seed=1
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/d90fa6b3df7697a7b4e3ed4359150017.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=4, seed=2
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/8a57d231513e0208a45f7b9451c2d977.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=4, seed=3
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/53aee9eaed5ed178016de928a99bec3c.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=4, seed=4
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/17cd6f23d00ab3ecfb25bddb3cab11c8.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=5, seed=0
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/bc33a82aaf85115316b03a5edf83d1c9.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=5, seed=1
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/eaed8a6fb4c1897b8a76c55c57ecc37b.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=5, seed=2
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/ef5331c1111d707099687b64c8a7ae19.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=5, seed=3
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/92344fe3b2bd7aa9444668be379d72b5.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=5, seed=4
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/493e3efaa7b207c0f9780b1053b0f13b.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=6, seed=0
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/98174af443493b2db3459fd80c7b1ff8.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=6, seed=1
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/030616518dd0110db3e8e1b1ea8644c4.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=6, seed=2
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/493a4b414c110dba70b641c87044829d.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=6, seed=3
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/ce50a0b281650e20e6557ad937fbb67e.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=6, seed=4
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/9b6ac82ba856119a49e1be243b9a3314.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=7, seed=0
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/cc63fdfb07c90c8ed14de8784042a43f.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=7, seed=1
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/34631b84885e92e01cfb2f205acf3558.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=7, seed=2
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/b423e919d21bc52fe1966809d6be06be.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=7, seed=3
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/0857f1d80eae987a45591d51d98cfc1d.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=7, seed=4
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/bcc177677007b15b1d227592106299f4.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=8, seed=0
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/d241fca21af9dbecfa5df7c82506e34f.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=8, seed=1
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/35296a53159de727d0a265a5000fc572.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=8, seed=2
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/af5e65ddd31735f7fb82e7ade14d94c2.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=8, seed=3
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/9bfa779aa59c37830b2cd423d723a285.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=8, seed=4
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/79cbdb09452288ddf71dbea8aa81bdb3.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=9, seed=0
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/d6ab59af408968706d3dc2dcf80aeae0.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=9, seed=1
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/5657d81f8c36d080727e2945d05fc944.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=9, seed=2
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/e70b1040e32cf0803d67166221a303d5.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=9, seed=3
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/e445ca22276938dca42bc814c41504f0.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt20, contam_idx=9, seed=4
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/8274c10178f585552d4e51e506e41f35.joblib
+
+ Dataset: 5_campaign.npz with model: TCCM_nt20 and score: reconstruction
+ 
+Dataset loaded successfully!
+Training data: (18274, 62), Normal: 18274
+Test data: (22914, 62), Normal: 18274, Anomalies: 4640
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/709995c980f565116cfd11fd0d847991.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/18a8aa360de2b30a524478d04f54b27e.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/057a6f7fb4d05476a6241fd0ff8880f6.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/21973e84785216eb800efdc24962ff63.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/8509faed281ff2ad111b4f61cc4923cc.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/bd57243d6f8d486f26b025a4c74dadd8.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/62d91b510e9ae43e1ff15ac549748147.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/1fac59d06f805a084dc544c15aedefd3.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/eb7f56af35a5e01834a63681b6469873.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/41d194cd8d12cca4976d651cf25bc80d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/4e3f8d3fbc375fefbb745358175807aa.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/b970971346dd275f942abf66fff429b9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/9b3d512759d759217d0efab2b5d9e74c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/2012f8be4c8a7e95b1800592f592bfb7.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/207ce20aab5d42aef648fbe5eb89c56a.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/bb26fc8ddb6888aaf80cb0b6b525365b.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/5adb75b7a7fb7cb263a732d4fff3272e.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/bf52dc5fd80f18dccc47a14c55730ab7.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/c88c8fab7beb1113057a4d1f1e91e8b6.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/033dae741640ef4f1bf5576b4beb74ba.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/bc97264d9d429254bd13a38ee7e5bc78.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/d90fa6b3df7697a7b4e3ed4359150017.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/8a57d231513e0208a45f7b9451c2d977.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/53aee9eaed5ed178016de928a99bec3c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/17cd6f23d00ab3ecfb25bddb3cab11c8.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/bc33a82aaf85115316b03a5edf83d1c9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/eaed8a6fb4c1897b8a76c55c57ecc37b.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/ef5331c1111d707099687b64c8a7ae19.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/92344fe3b2bd7aa9444668be379d72b5.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/493e3efaa7b207c0f9780b1053b0f13b.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/98174af443493b2db3459fd80c7b1ff8.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/030616518dd0110db3e8e1b1ea8644c4.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/493a4b414c110dba70b641c87044829d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/ce50a0b281650e20e6557ad937fbb67e.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/9b6ac82ba856119a49e1be243b9a3314.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/cc63fdfb07c90c8ed14de8784042a43f.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/34631b84885e92e01cfb2f205acf3558.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/b423e919d21bc52fe1966809d6be06be.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/0857f1d80eae987a45591d51d98cfc1d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/bcc177677007b15b1d227592106299f4.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/d241fca21af9dbecfa5df7c82506e34f.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/35296a53159de727d0a265a5000fc572.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/af5e65ddd31735f7fb82e7ade14d94c2.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/9bfa779aa59c37830b2cd423d723a285.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/79cbdb09452288ddf71dbea8aa81bdb3.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/d6ab59af408968706d3dc2dcf80aeae0.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/5657d81f8c36d080727e2945d05fc944.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/e70b1040e32cf0803d67166221a303d5.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/e445ca22276938dca42bc814c41504f0.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/8274c10178f585552d4e51e506e41f35.joblib
+
+ Dataset: 5_campaign.npz with model: TCCM_nt20 and score: decision
+ 
+Dataset loaded successfully!
+Training data: (18274, 62), Normal: 18274
+Test data: (22914, 62), Normal: 18274, Anomalies: 4640
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/709995c980f565116cfd11fd0d847991.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/18a8aa360de2b30a524478d04f54b27e.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/057a6f7fb4d05476a6241fd0ff8880f6.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/21973e84785216eb800efdc24962ff63.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/8509faed281ff2ad111b4f61cc4923cc.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/bd57243d6f8d486f26b025a4c74dadd8.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/62d91b510e9ae43e1ff15ac549748147.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/1fac59d06f805a084dc544c15aedefd3.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/eb7f56af35a5e01834a63681b6469873.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/41d194cd8d12cca4976d651cf25bc80d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/4e3f8d3fbc375fefbb745358175807aa.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/b970971346dd275f942abf66fff429b9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/9b3d512759d759217d0efab2b5d9e74c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/2012f8be4c8a7e95b1800592f592bfb7.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/207ce20aab5d42aef648fbe5eb89c56a.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/bb26fc8ddb6888aaf80cb0b6b525365b.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/5adb75b7a7fb7cb263a732d4fff3272e.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/bf52dc5fd80f18dccc47a14c55730ab7.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/c88c8fab7beb1113057a4d1f1e91e8b6.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/033dae741640ef4f1bf5576b4beb74ba.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/bc97264d9d429254bd13a38ee7e5bc78.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/d90fa6b3df7697a7b4e3ed4359150017.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/8a57d231513e0208a45f7b9451c2d977.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/53aee9eaed5ed178016de928a99bec3c.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/17cd6f23d00ab3ecfb25bddb3cab11c8.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/bc33a82aaf85115316b03a5edf83d1c9.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/eaed8a6fb4c1897b8a76c55c57ecc37b.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/ef5331c1111d707099687b64c8a7ae19.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/92344fe3b2bd7aa9444668be379d72b5.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/493e3efaa7b207c0f9780b1053b0f13b.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/98174af443493b2db3459fd80c7b1ff8.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/030616518dd0110db3e8e1b1ea8644c4.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/493a4b414c110dba70b641c87044829d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/ce50a0b281650e20e6557ad937fbb67e.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/9b6ac82ba856119a49e1be243b9a3314.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/cc63fdfb07c90c8ed14de8784042a43f.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/34631b84885e92e01cfb2f205acf3558.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/b423e919d21bc52fe1966809d6be06be.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/0857f1d80eae987a45591d51d98cfc1d.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/bcc177677007b15b1d227592106299f4.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/d241fca21af9dbecfa5df7c82506e34f.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/35296a53159de727d0a265a5000fc572.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/af5e65ddd31735f7fb82e7ade14d94c2.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/9bfa779aa59c37830b2cd423d723a285.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/79cbdb09452288ddf71dbea8aa81bdb3.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/d6ab59af408968706d3dc2dcf80aeae0.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/5657d81f8c36d080727e2945d05fc944.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/e70b1040e32cf0803d67166221a303d5.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/e445ca22276938dca42bc814c41504f0.joblib
+[*] Loading cached tccm model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt20/8274c10178f585552d4e51e506e41f35.joblib
+
+ Dataset: 5_campaign.npz with model: TCCM_nt5 and score: deviation
+ 
+Dataset loaded successfully!
+Training data: (18274, 62), Normal: 18274
+Test data: (22914, 62), Normal: 18274, Anomalies: 4640
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt5, contam_idx=0, seed=0
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt5/7b9e6eb7a488588e298a0062a44de56b.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt5, contam_idx=0, seed=1
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt5/4b6d2fdf7490de530b8f32b8689ea162.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt5, contam_idx=0, seed=2
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt5/65c41c6cb3d77d05946f1a6e731aca29.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt5, contam_idx=0, seed=3
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt5/7e6062d9a4aea988c53c69e14651c291.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt5, contam_idx=0, seed=4
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt5/47b4798a87a86d7da3eb9d5115b31686.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt5, contam_idx=1, seed=0
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt5/7f119629e08fe4dea2133661c78df32b.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt5, contam_idx=1, seed=1
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt5/3d5086afec593953609a2f755391bf68.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt5, contam_idx=1, seed=2
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt5/14924730bc2eacb3d7cbbbf01f94346e.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt5, contam_idx=1, seed=3
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt5/21cb7c11118613d0dc98dd97fb3fa5b9.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt5, contam_idx=1, seed=4
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt5/a9a01207d412b354ee8d091a77265bd6.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt5, contam_idx=2, seed=0
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 0
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt5/fc5a5cf67714ecb0fbe30c87741b0b58.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt5, contam_idx=2, seed=1
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt5/58d0fbee6805d5045d993ef447aa4c39.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt5, contam_idx=2, seed=2
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+TCCM model trained on dataset: 5_campaign.npz with seed: 2
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/5_campaign.npz/TCCM_nt5/11a6088733d02683a5d0f6af77d13bf7.joblib
+[*] No cached model found. Training model for 5_campaign.npz, TCCM_nt5, contam_idx=2, seed=3
+
+Training TCCM with hyperparameters:
+  Epochs: 50
+  Learning Rate: 0.005
+  Batch Size: 1024
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n747
+Job ID: 2645619
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: CANCELLED (exit code 0)
+Nodes: 1
+Cores per node: 50
+CPU Utilized: 00:00:03
+CPU Efficiency: 0.00% of 3-21:24:10 core-walltime
+Job Wall-clock time: 01:52:05
+Memory Utilized: 1.00 GB
+Memory Efficiency: 1.57% of 64.00 GB (64.00 GB/node)

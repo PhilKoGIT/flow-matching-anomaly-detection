@@ -581,6 +581,7 @@ class ForestDiffusionModel():
         # Korrekte steps_left: von actual_time_idx bis zum letzten Index (n_t-1)
         steps_left = (n_t - 1) - actual_time_idx
         
+        #self implemented!!
         ode_solved = euler_solve_from_x_t(
             x_t=X_t.reshape(-1),
             t0=t,
@@ -730,7 +731,9 @@ class ForestDiffusionModel():
       anomaly_scores_rep = np.zeros(n_samples_rep)
       t_levels = np.linspace(self.eps, 1, n_t) 
 
-      for i, t in enumerate(t_levels[n_t//2:-1]):
+      #for i, t in enumerate(t_levels[n_t//2:-1]):
+      for i, t in enumerate(t_levels[1:(n_t//2)+1]):
+
           # Create x_t using VP forward process: x_t = mean + std * noise
 
           mean, std = self.sde.marginal_prob(test_samples_rep, t)
@@ -805,14 +808,14 @@ class ForestDiffusionModel():
       t_levels = np.linspace(self.eps, 1, n_t)
       
       # Create x_t using VP forward process
-      mean, std = self.sde.marginal_prob(test_samples_rep, t_levels[-2])
+      mean, std = self.sde.marginal_prob(test_samples_rep, t_levels[1])
       X_t = mean + std * X0
       
       # Model predicts score function
-      score_pred = model(t=t_levels[-2], y=X_t)
+      score_pred = model(t=t_levels[1], y=X_t)
       
       # True score function
-      _, sigma_ = self.sde.marginal_prob_coef(X_t, t_levels[-2])
+      _, sigma_ = self.sde.marginal_prob_coef(X_t, t_levels[1])
       score_true = -X0 / sigma_
       
       # Squared error between true and predicted score
@@ -878,7 +881,9 @@ class ForestDiffusionModel():
       anomaly_scores_rep = np.zeros(n_samples_rep)
       t_levels = np.linspace(self.eps, 1, n_t)
 
-      for t in t_levels[n_t//2:-1]:
+      #for t in t_levels[n_t//2:-1]:
+      for t in t_levels[1:(n_t//2)+1]:
+
           # Vorwärts-Diffusion: x_t = mean + std * z
           mean, std = self.sde.marginal_prob(test_samples_rep, t)
           X_t = mean + std * X0     # [n_samples_rep, n_features]

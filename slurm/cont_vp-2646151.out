@@ -1,0 +1,15 @@
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n715
+Job ID: 2646151
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: CANCELLED (exit code 0)
+Nodes: 1
+Cores per node: 50
+CPU Utilized: 00:00:01
+CPU Efficiency: 0.17% of 00:10:00 core-walltime
+Job Wall-clock time: 00:00:12
+Memory Utilized: 9.88 MB
+Memory Efficiency: 0.02% of 64.00 GB (64.00 GB/node)
