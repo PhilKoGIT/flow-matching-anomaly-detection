@@ -47,7 +47,7 @@ File runs contamination studies for the given models and datasets.
 
 from preprocessing_bd_contamination import load_business_dataset_for_contamination
 
-results_dir = Path("./0_results_diff")
+results_dir = Path("./0_results_tccm")
 
 # 2. Add this new loading function (after load_adbench_npz):
 # ---------------------------------------------------------------------------
@@ -785,8 +785,8 @@ if __name__ == "__main__":
     #change resultfiles!!
 
 
-    colors = {"ForestDiffusion_nt50_dk20": "blue", "ForestDiffusion_nt20_dk20": "green", "ForestDiffusion_nt50_dk10": "red"}
-    #colors = {"TCCM_nt10": "red", "TCCM_nt50": "blue", "ForestFlow_nt20_dk20": "green"}
+    #colors = {"TCCM_nt5": "blue", "TCCM_nt20": "green", "TCCM_nt20": "red"}
+    colors = {"TCCM_nt20": "red", "TCCM_nt5": "blue", "ForestFlow_nt20_dk20": "green"}
     #define models to run
     #change names in plot_score_models_comparison accordingly
 
@@ -811,33 +811,33 @@ if __name__ == "__main__":
         #         "diffusion_type": "vp"
         #     },
         # },
-        "ForestDiffusion_nt50_dk20": {
-            "type": "forest",
-            "params": {
-                "n_t": 50,
-                "duplicate_K": 20,
-                "duplicate_K_test": 20,
-                "diffusion_type": "vp"
-            },
-        },
-        "ForestDiffusion_nt50_dk10": {
-            "type": "forest",
-            "params": {
-                "n_t": 50,
-                "duplicate_K": 10,
-                "duplicate_K_test": 10,
-                "diffusion_type": "vp"
-            },
-        },
-        "ForestDiffusion_nt20_dk20": {
-            "type": "forest",
-            "params": {
-                "n_t": 20,
-                "duplicate_K": 20,
-                "duplicate_K_test": 20,
-                "diffusion_type": "vp"
-            },
-        },
+        # "ForestDiffusion_nt50_dk20": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 50,
+        #         "duplicate_K": 20,
+        #         "duplicate_K_test": 20,
+        #         "diffusion_type": "vp"
+        #     },
+        # },
+        # "ForestDiffusion_nt50_dk10": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 50,
+        #         "duplicate_K": 10,
+        #         "duplicate_K_test": 10,
+        #         "diffusion_type": "vp"
+        #     },
+        # },
+        # "ForestDiffusion_nt20_dk20": {
+        #     "type": "forest",
+        #     "params": {
+        #         "n_t": 20,
+        #         "duplicate_K": 20,
+        #         "duplicate_K_test": 20,
+        #         "diffusion_type": "vp"
+        #     },
+        # },
 
         # "ForestFlow_nt3_dk1": {
         #     "type": "forest",
@@ -848,10 +848,10 @@ if __name__ == "__main__":
         #         "diffusion_type": "flow"
         #     },
         # },
-        # "ForestFlow_nt50_dk20": {
+        # "ForestFlow_nt20_dk20": {
         #     "type": "forest",
         #     "params": {
-        #         "n_t": 50,
+        #         "n_t": 20,
         #         "duplicate_K": 20,
         #         "duplicate_K_test": 20,
         #         "diffusion_type": "flow"
@@ -864,18 +864,18 @@ if __name__ == "__main__":
         #         "n_t": 50
         #     },
         # },
-        # "TCCM_nt50": {
-        #     "type": "tccm",
-        #     "params": {
-        #         "n_t": 50
-        #     },
-        # },
-        #         "TCCM_nt10": {
-        #     "type": "tccm",
-        #     "params": {
-        #         "n_t": 10
-        #     },
-        # },
+        "TCCM_nt20": {
+            "type": "tccm",
+            "params": {
+                "n_t": 20
+            },
+        },
+                "TCCM_nt5": {
+            "type": "tccm",
+            "params": {
+                "n_t": 5
+            },
+        },
 
      }
     
