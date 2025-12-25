@@ -11,23 +11,25 @@ from matplotlib.backends.backend_pdf import PdfPages
 from pathlib import Path
 
 SHOW_ONLY_MODELS = [
-    #"ForestFlow_nt20_dk10",
+    # "ForestFlow_nt20_dk10",
     "ForestFlow_nt20_dk20",
-   # "ForestFlow_nt50_dk20",
+    # "ForestFlow_nt50_dk20",
     "ForestDiffusion_nt20_dk20",
-    # # "ForestDiffusion_nt50_dk10",
+    # "ForestDiffusion_nt50_dk10",
     # "ForestDiffusion_nt50_dk20",
     #  "TCCM_nt5",
-    # "TCCM_nt20",
+    "TCCM_nt20",
 ]
 
 COLORS_MODELS = {
 
-    # "ForestFlow_nt20_dk10": "blue",
-    "ForestFlow_nt20_dk20": "blue",
+    "ForestDiffusion_nt50_dk10": "green",
+    "ForestDiffusion_nt20_dk20": "blue",
+    "ForestDiffusion_nt50_dk20": "blue",
+
     # "ForestDiffusion_nt50_dk10": "blue",
-    "ForestDiffusion_nt20_dk20": "red",
-    "TCCM_nt20": "green",
+    "ForestFlow_nt20_dk20": "green",
+    "TCCM_nt20": "red",
     "TCCM_nt5": "yellow",
 }
 
@@ -99,6 +101,16 @@ def get_all_models(merged):
     
     return sorted(models)
 
+def get_display_name(dataset_name):
+    """Wandelt den Dataset-Namen in einen schönen Anzeigenamen um."""
+    name_lower = dataset_name.lower()
+    if "campaign" in name_lower:
+        return "Campaign Dataset"
+    elif "business" in name_lower:
+        return "Business Dataset"
+    else:
+        return dataset_name.replace('.npz', '').replace('_', ' ').title()
+
 # =============================================================================
 # CONTAMINATION PLOTS
 # =============================================================================
@@ -128,14 +140,14 @@ def plot_contamination_models_ax(ax, all_results, dataset_name, score_type, metr
                         values[:, 0] + values[:, 1],
                         alpha=0.2, color=color)
         has_data = True
-    
-    ax.set_xlabel("Contamination Level", fontsize=10)
-    ax.set_ylabel(metric.upper(), fontsize=10)
-    ax.set_title(f"{score_type.capitalize()} - {metric.upper()}", fontsize=11)
+    ax.tick_params(axis='both', labelsize=13)
+    ax.set_xlabel("Contamination Level", fontsize=13)
+    ax.set_ylabel(metric.upper(), fontsize=13)
+    ax.set_title(f"{score_type.capitalize()} - {metric.upper()}", fontsize=13)
     ax.set_ylim(0, 1.05)
-    ax.grid(True, alpha=0.3)
+    ax.grid(True, alpha=0.8)
     if has_data:
-        ax.legend(fontsize=8)
+        ax.legend(fontsize=13, framealpha=0.0, prop={'weight': 'semibold'})
     return has_data
 
 
@@ -165,14 +177,14 @@ def plot_contamination_scores_ax(ax, all_results, dataset_name, model_name, metr
                         values[:, 0] + values[:, 1],
                         alpha=0.2, color=color)
         has_data = True
-    
-    ax.set_xlabel("Contamination Level", fontsize=10)
-    ax.set_ylabel(metric.upper(), fontsize=10)
-    ax.set_title(f"{model_name}\n{metric.upper()}", fontsize=10)
+    ax.tick_params(axis='both', labelsize=13)
+    ax.set_xlabel("Contamination Level", fontsize=13)
+    ax.set_ylabel(metric.upper(), fontsize=13)
+    ax.set_title(f"{model_name}\n{metric.upper()}", fontsize=13)
     ax.set_ylim(0, 1.05)
-    ax.grid(True, alpha=0.3)
+    ax.grid(True, alpha=0.8)
     if has_data:
-        ax.legend(fontsize=8)
+        ax.legend(fontsize=13, framealpha=0.0, prop={'weight': 'semibold'})
     return has_data
 
 
@@ -208,14 +220,14 @@ def plot_percentile_models_ax(ax, all_extreme_cases, dataset_name, score_type, m
                         np.array(means) + np.array(stds),
                         alpha=0.2, color=color)
         has_data = True
-    
-    ax.set_xlabel("Threshold Percentile", fontsize=10)
-    ax.set_ylabel(metric.capitalize(), fontsize=10)
-    ax.set_title(f"{score_type.capitalize()} - {metric.capitalize()}", fontsize=11)
+    ax.tick_params(axis='both', labelsize=13)
+    ax.set_xlabel("Threshold Percentile", fontsize=13)
+    ax.set_ylabel(metric.capitalize(), fontsize=13)
+    ax.set_title(f"{score_type.capitalize()} - {metric.capitalize()}", fontsize=13)
     ax.set_ylim(0, 1.05)
-    ax.grid(True, alpha=0.3)
+    ax.grid(True, alpha=0.8)
     if has_data:
-        ax.legend(fontsize=8)
+        ax.legend(fontsize=13, framealpha=0.0, prop={'weight': 'semibold'})
     return has_data
 
 
@@ -248,14 +260,14 @@ def plot_percentile_scores_ax(ax, all_extreme_cases, dataset_name, model_name, m
                         np.array(means) + np.array(stds),
                         alpha=0.2, color=color)
         has_data = True
-    
-    ax.set_xlabel("Threshold Percentile", fontsize=10)
-    ax.set_ylabel(metric.capitalize(), fontsize=10)
-    ax.set_title(f"{model_name}\n{metric.capitalize()}", fontsize=10)
+    ax.tick_params(axis='both', labelsize=13)
+    ax.set_xlabel("Threshold Percentile", fontsize=13)
+    ax.set_ylabel(metric.capitalize(), fontsize=13)
+    ax.set_title(f"{model_name}\n{metric.capitalize()}", fontsize=13)
     ax.set_ylim(0, 1.05)
-    ax.grid(True, alpha=0.3)
+    ax.grid(True, alpha=0.8)
     if has_data:
-        ax.legend(fontsize=8)
+        ax.legend(fontsize=13, framealpha=0.0, prop={'weight': 'semibold'})
     return has_data
 
 
@@ -268,6 +280,7 @@ def create_compact_pdfs(merged, output_dir):
     all_results = merged["all_results_combined"]
     all_extreme = merged["all_extreme_cases"]
     dataset_name = get_dataset_name(merged)
+    display_name = get_display_name(dataset_name) 
     models = get_all_models(merged)
     
     print(f"\nDataset: {dataset_name}")
@@ -280,13 +293,13 @@ def create_compact_pdfs(merged, output_dir):
     # PDF 1: CONTAMINATION ANALYSIS
     # =========================================================================
     if all_results:
-        pdf_path = output_dir / f"contamination_analysis_{dataset_name.replace('.npz', '')}.pdf"
+        pdf_path = output_dir / f"contamination_analysis_{display_name}.pdf"
         with PdfPages(pdf_path) as pdf:
             
             # Seite 1: Modellvergleich pro Score (2 Zeilen × 3 Spalten)
             # Zeilen: AUROC, AUPRC | Spalten: deviation, reconstruction, decision
             fig, axes = plt.subplots(2, 3, figsize=(15, 10))
-            fig.suptitle(f"{dataset_name} - Contamination: model comparison", fontsize=14, fontweight='bold')
+            fig.suptitle(f"{display_name} - Contamination: model comparison", fontsize=17, fontweight='bold')
             
             for col, score_type in enumerate(["deviation", "reconstruction", "decision"]):
                 for row, metric in enumerate(["auroc", "auprc"]):
@@ -300,7 +313,7 @@ def create_compact_pdfs(merged, output_dir):
             n_models = len(models)
             if n_models > 0:
                 fig, axes = plt.subplots(2, n_models, figsize=(5*n_models, 10))
-                fig.suptitle(f"{dataset_name} - Contamination: score comparison", fontsize=14, fontweight='bold')
+                fig.suptitle(f"{display_name} - Contamination: score comparison", fontsize=17, fontweight='bold')
                 
                 if n_models == 1:
                     axes = axes.reshape(2, 1)
@@ -319,7 +332,7 @@ def create_compact_pdfs(merged, output_dir):
     # PDF 2: PERCENTILE ANALYSIS
     # =========================================================================
     if all_extreme:
-        pdf_path = output_dir / f"percentile_analysis_{dataset_name.replace('.npz', '')}.pdf"
+        pdf_path = output_dir / f"percentile_analysis_{display_name}.pdf"
         with PdfPages(pdf_path) as pdf:
             
             for case_key, case_title in [("no_contamination", "No Contamination"), 
@@ -328,8 +341,8 @@ def create_compact_pdfs(merged, output_dir):
                 # Seite: Modellvergleich pro Score (3 Zeilen × 3 Spalten)
                 # Zeilen: F1, Precision, Recall | Spalten: deviation, reconstruction, decision
                 fig, axes = plt.subplots(3, 3, figsize=(15, 12))
-                fig.suptitle(f"{dataset_name} - Percentile ({case_title}): model comparison", 
-                            fontsize=14, fontweight='bold')
+                fig.suptitle(f"{display_name} - Percentile ({case_title}): model comparison", 
+                            fontsize=17, fontweight='bold')
                 
                 for col, score_type in enumerate(["deviation", "reconstruction", "decision"]):
                     for row, metric in enumerate(["f1", "precision", "recall"]):
@@ -344,8 +357,8 @@ def create_compact_pdfs(merged, output_dir):
                 n_models = len(models)
                 if n_models > 0:
                     fig, axes = plt.subplots(3, n_models, figsize=(5*n_models, 12))
-                    fig.suptitle(f"{dataset_name} - Percentile ({case_title}): score comparison", 
-                                fontsize=14, fontweight='bold')
+                    fig.suptitle(f"{display_name} - Percentile ({case_title}): score comparison", 
+                                fontsize=17, fontweight='bold')
                     
                     if n_models == 1:
                         axes = axes.reshape(3, 1)
@@ -372,18 +385,14 @@ if __name__ == "__main__":
     # DATEIEN HIER EINTRAGEN
     # =========================================================================
     result_files = [
-        # Path("./0_results_diff/results_data/extreme_cases_5_campaign_20251215_162517.joblib"),
-        # Path("./0_results_flow/results_data/extreme_cases_5_campaign_20251215_094644.joblib"),
-        # # Path("./0_results_tccm/results_data/extreme_cases_5_campaign_20251215_215245.joblib"),
-        # Path("./0_results_diff_dk20/results_data/extreme_cases_5_campaign_20251219_193755.joblib"),
         Path("./0_results_diff/results_data/extreme_cases_5_campaign_20251221_233310.joblib"),
         Path("./0_results_flow/results_data/extreme_cases_5_campaign_20251221_201216.joblib"),
-
+        Path("./0_results_tccm/results_data/extreme_cases_5_campaign_20251223_093801.joblib"),
         #only for the business dataset experiment
-        #Path("./results_business/results_data/extreme_cases_business_dataset_middle.csv_20251215_121230.joblib"),
+        #Path("./0_results_business/results_data/extreme_cases_business_dataset_middle.csv_20251222_173347.joblib"),
     ]
     
-    output_dir = Path("./plots")
+    output_dir = Path("./1_results_main")
     
 
     merged = load_and_merge_results(result_files)

@@ -1,3 +1,13 @@
+
+
+##################################################
+
+#Generator for the SAP Fioneer business transaction dataset
+#not my own work, received from SAP Fioneer
+
+####################################################
+
+
 import pandas as pd
 import numpy as np
 from faker import Faker
@@ -197,18 +207,7 @@ def inject_timing_anomaly(transactions):
     transactions[idx]['anomaly_description'] = f"TIMING_ANOMALY: Payment date shifted from day ~{orig.day} to {new_day}"
     return transactions
 
-#drin... aufsplitten in kategorie und nummer! same payment note
-# def inject_remittance_mismatch_anomaly(transactions):
-#     if len(transactions)<2: return transactions
-#     i_target = random.randint(1,len(transactions)-1)
-#     i_src = random.randint(0,i_target-1)
-#     orig = transactions[i_target]['paym_note']
-#     rogue = transactions[i_src]['paym_note']
-#     transactions[i_target]['paym_note'] = rogue
-#     transactions[i_target]['anomaly_description'] = f"REMITTANCE_MISMATCH: Duplicate invoice in note (used {rogue} instead of {orig})"
-#     return transactions
 
-#drin
 def inject_channel_anomaly(transactions):
     if not transactions: return transactions
     idx = random.randint(0,len(transactions)-1)
@@ -229,26 +228,6 @@ def inject_iban_mismatch_anomaly(transactions):
     transactions[idx]['anomaly_description'] = f"IBAN_MISMATCH_ANOMALY: IBAN changed from {orig[:10]}... to {new[:10]}..."
     return transactions
 
-# def inject_reversal_and_repayment_anomaly(transactions):
-#     if len(transactions)<2: return transactions
-#     idx = random.randint(1,len(transactions)-1)
-#     failed = transactions.pop(idx)
-#     failed_note = failed['paym_note']
-#     failed_date = date.fromisoformat(f"{failed['date_post'][:4]}-{failed['date_post'][4:6]}-{failed['date_post'][6:]}")
-#     failed['anomaly_description'] = "REVERSAL_STORY: Part of a failed payment sequence. See re-issue."
-#     # Reversal
-#     rev = failed.copy()
-#     rev['date_post'] = (failed_date + timedelta(days=2)).strftime('%Y%m%d')
-#     rev['trns_type'] = 'REVERSAL'
-#     rev['paym_note'] = f"Reversal for: {failed_note}"
-#     rev['anomaly_description'] = "REVERSAL_STORY: Reversal of a failed transaction."
-#     # Re-issue
-#     rei = failed.copy()
-#     rei['date_post'] = (failed_date + timedelta(days=5)).strftime('%Y%m%d')
-#     rei['paym_note'] = f"RE-ISSUE of failed pmt: {failed_note}"
-#     rei['anomaly_description'] = "REVERSAL_STORY: Re-issued payment after reversal."
-#     transactions.extend([failed, rev, rei])
-#     return transactions
 
 def inject_subtle_payee_and_iban_anomaly(transactions):
     if not transactions: return transactions
@@ -271,10 +250,8 @@ if __name__ == "__main__":
     anomaly_injectors = [
         inject_amount_anomaly, inject_frequency_anomaly, 
         inject_payee_anomaly,
-        #inject_remittance_mismatch_anomaly
         inject_timing_anomaly, inject_channel_anomaly,
         inject_iban_mismatch_anomaly, 
-        # inject_reversal_and_repayment_anomaly,
         inject_subtle_payee_and_iban_anomaly
     ]
 
