@@ -47,7 +47,7 @@ File runs contamination studies for the given models and datasets.
 
 from preprocessing_bd_contamination import load_business_dataset_for_contamination
 
-results_dir = Path("./0_results_tccm")
+results_dir = Path("./0_results_tccm_business")
 
 # 2. Add this new loading function (after load_adbench_npz):
 # ---------------------------------------------------------------------------
@@ -777,8 +777,8 @@ def plot_all_scores_percentile_comparison(all_extreme_cases, dataset_names, mode
 if __name__ == "__main__":
     #dataset_names = ["29_Pima.npz"]
 
-    dataset_names = ["5_campaign.npz"]
-    #dataset_names = ["business_dataset_middle.csv"]
+    #dataset_names = ["5_campaign.npz"]
+    dataset_names = ["business_dataset_middle.csv"]
     #MAX three models!
 #----------------------------------------------
     #Change names in plot_score_models_comparison!!
@@ -864,12 +864,12 @@ if __name__ == "__main__":
         #         "n_t": 50
         #     },
         # },
-        "TCCM_nt20": {
-            "type": "tccm",
-            "params": {
-                "n_t": 20
-            },
-        },
+        # "TCCM_nt20": {
+        #     "type": "tccm",
+        #     "params": {
+        #         "n_t": 20
+        #     },
+        # },
                 "TCCM_nt5": {
             "type": "tccm",
             "params": {
