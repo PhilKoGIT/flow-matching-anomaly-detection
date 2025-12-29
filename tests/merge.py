@@ -35,7 +35,8 @@ COLORS_MODELS = {
     "ForestDiffusion_nt20_dk20": "green",
     "ForestFlow_nt20_dk20": "blue",
     "TCCM_nt20": "red",
-
+        
+    "TCCM_nt5": "orange",
     # "ForestDiffusion_nt50_dk10": "green",
     # "ForestDiffusion_nt20_dk20": "red",
     # "ForestDiffusion_nt50_dk20": "blue",
@@ -437,6 +438,7 @@ if __name__ == "__main__":
 
         #only for the business dataset experiment
         Path("./0_results_business/results_data/extreme_cases_business_dataset_middle.csv_20251222_173347.joblib"),
+        
     ]
     
     output_dir = Path("./1_results_business")

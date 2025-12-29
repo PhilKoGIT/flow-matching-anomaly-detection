@@ -347,7 +347,8 @@ def load_business_dataset_for_contamination(
     
     train_normal_mask = y_train == 0
     train_abnormal_mask = y_train == 1
-    
+
+
     X_train_all = df_train_processed[FEATURE_COLS].values.astype(float)
     X_train_normal = X_train_all[train_normal_mask]
     X_train_abnormal = X_train_all[train_abnormal_mask]
@@ -410,8 +411,27 @@ def load_business_dataset_for_contamination(
     print(anomaly_types)
     print(f"\nIn Train: {len(train_anomalies)}")
     print(f"In Test: {len(test_anomalies)}")
-    
-    return X_train_normal, X_train_abnormal, X_test, y_test
+
+
+
+    #LÖSCHEN
+    # =========================================================================
+# 8. ANOMALIEN IM TESTSET AUSGEBEN
+# =========================================================================
+    print(f"\n{'='*60}")
+    print("ANOMALIES IN TEST SET")
+    print('='*60)
+
+    test_anomalies_df = df_test_processed[df_test_processed['anomaly_description'].notna()]
+
+    for idx, row in test_anomalies_df.iterrows():
+        print(f"\nDate: {row['date_post']}")
+        print(f"Amount: {row['amount']}")
+        print(f"Ref Name: {row['ref_name']}")
+        print(f"Anomaly: {row['anomaly_description']}")
+        print("-" * 40)
+        
+        return X_train_normal, X_train_abnormal, X_test, y_test
 
 
 # =============================================================================
@@ -466,3 +486,4 @@ def create_contaminated_training_set(
 # =============================================================================
 if __name__ == "__main__":
     print("Testing preprocessing pipeline for Business Dataset (Contamination)...")
+    print()
