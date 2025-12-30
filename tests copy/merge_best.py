@@ -121,18 +121,18 @@ def plot_contamination_model_specific(ax, all_results, dataset_name, metric):
                         alpha=0.2, color=color)
         has_data = True
     
-    ax.tick_params(axis='both', labelsize=15)
-    ax.set_xlabel("Contamination Level", fontsize=16)
-    ax.set_ylabel(metric.upper(), fontsize=16)
+    ax.tick_params(axis='both', labelsize=14)
+    ax.set_xlabel("Contamination Level", fontsize=15)
+    ax.set_ylabel(metric.upper(), fontsize=15)
     ax.yaxis.set_major_locator(MultipleLocator(0.1))
     ax.yaxis.set_minor_locator(MultipleLocator(0.05))
     ax.grid(True, which='major', alpha=0.8)
     ax.grid(True, which='minor', alpha=0.4)
-    ax.set_title(f"{metric.upper()}", fontsize=18, fontweight='bold')
+    ax.set_title(f"{metric.upper()}", fontsize=16, fontweight='bold')
     ax.set_ylim(0, 1.05)
     
     if has_data:
-        ax.legend(framealpha=1.0, prop={'weight': 'normal', 'size': 14}, 
+        ax.legend(framealpha=1.0, prop={'weight': 'normal', 'size': 12}, 
                   labelspacing=0.3, loc='best')
     return has_data
 
@@ -168,19 +168,19 @@ def plot_percentile_model_specific(ax, all_extreme_cases, dataset_name, metric, 
                         alpha=0.2, color=color)
         has_data = True
     
-    ax.tick_params(axis='both', labelsize=15)
+    ax.tick_params(axis='both', labelsize=14)
     ax.yaxis.set_major_locator(MultipleLocator(0.1))
     ax.yaxis.set_minor_locator(MultipleLocator(0.05))
     ax.xaxis.set_major_locator(MultipleLocator(10))
     ax.grid(True, which='major', alpha=0.8)
     ax.grid(True, which='minor', alpha=0.4)
-    ax.set_xlabel("Threshold Percentile", fontsize=16)
-    ax.set_ylabel(metric.capitalize(), fontsize=16)
-    ax.set_title(f"{metric.capitalize()}", fontsize=18, fontweight='bold')
+    ax.set_xlabel("Threshold Percentile", fontsize=15)
+    ax.set_ylabel(metric.capitalize(), fontsize=15)
+    ax.set_title(f"{metric.capitalize()}", fontsize=16, fontweight='bold')
     ax.set_ylim(0, 1.05)
     
     if has_data:
-        ax.legend(framealpha=1.0, prop={'weight': 'normal', 'size': 14}, 
+        ax.legend(framealpha=1.0, prop={'weight': 'normal', 'size': 12}, 
                   labelspacing=0.3, loc='best')
     return has_data
 
@@ -205,10 +205,10 @@ def create_model_specific_pdfs(merged, output_dir):
         pdf_path = output_dir / f"model_specific_contamination_{display_name}.pdf"
         with PdfPages(pdf_path) as pdf:
             
-            # Eine Seite mit 1x2 Grid (AUROC, AUPRC) - GRÖSSERE FIGUR
-            fig, axes = plt.subplots(1, 2, figsize=(15, 8))
+            # Eine Seite mit 1x2 Grid (AUROC, AUPRC)
+            fig, axes = plt.subplots(1, 2, figsize=(14, 6))
             fig.suptitle(f"{display_name} - Model Comparison (Best Scores)", 
-                        fontsize=20, fontweight='semibold')
+                        fontsize=18, fontweight='semibold')
             
             for col, metric in enumerate(["auroc", "auprc"]):
                 plot_contamination_model_specific(axes[col], all_results, dataset_name, metric)
@@ -229,10 +229,10 @@ def create_model_specific_pdfs(merged, output_dir):
             for case_key, case_title in [("no_contamination", "No Contamination"), 
                                           ("full_contamination", "Full Contamination")]:
                 
-                # Eine Seite mit 1x3 Grid (F1, Precision, Recall) - GRÖSSERE FIGUR
-                fig, axes = plt.subplots(1, 3, figsize=(18, 8))
+                # Eine Seite mit 1x3 Grid (F1, Precision, Recall)
+                fig, axes = plt.subplots(1, 3, figsize=(18, 6))
                 fig.suptitle(f"{display_name} - Percentile ({case_title})", 
-                            fontsize=20, fontweight='semibold')
+                            fontsize=18, fontweight='semibold')
                 
                 for col, metric in enumerate(["f1", "precision", "recall"]):
                     plot_percentile_model_specific(axes[col], all_extreme, dataset_name, 
@@ -255,9 +255,6 @@ if __name__ == "__main__":
         Path("./0_results_diff/results_data/extreme_cases_5_campaign_20251221_233310.joblib"),
         Path("./0_results_flow/results_data/extreme_cases_5_campaign_20251221_201216.joblib"),
         Path("./0_results_tccm/results_data/extreme_cases_5_campaign_20251223_093801.joblib"),
-
-        #Path("./0_results_business/results_data/extreme_cases_business_dataset_middle.csv_20251222_173347.joblib"),
-
     ]
     
     output_dir = Path("./1_results_best")

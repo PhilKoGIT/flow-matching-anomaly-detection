@@ -1,0 +1,55 @@
+{
+  "Customer Overview": {
+    "prompt": "Provide a comprehensive overview of the transaction history for the customer \"{company}\".",
+    "reprompt": "This analysis is incomplete. Please provide a proper overview for the customer \"{company}\". Do not ask for clarification. Just do as you are asked please and use your own initiative."
+  },
+  "Recurring Payments": {
+    "prompt": "Perform a comprehensive analysis for monthly payments with sudden, significant changes in amount for the customer \"{company}\". Consider high payments that fall outside of the normal distribution as unusual, regardless of payment note. Note that recurring monthly payments do not typically fall on the exact same date each month. A 'recurring' recipient is defined as one with more than one transaction. If an SQL query does not return any results, it is because the query is incorrect, as this customer definitely has recurring payments.",
+    "reprompt": "This analysis is incomplete. Please conduct a deeper analysis for the customer \"{company}\". Do not ask for clarification. Just do as you are asked please and use your own initiative."
+  },
+  "Frequency of Payments": {
+    "prompt": "Perform a comprehensive analysis for changes in the frequency of recurring payments (eg duplicate payments close together in a single month) for the customer \"{company}\". Note that recurring monthly payments planned at the end of each month may be paid in the first few days of the next month, so do not flag these as anomalies. Instead, focus on payments that fall outside of the expected frequency, eg if the number of months does not match the number of payments.",
+    "reprompt": "This analysis is incomplete. Please conduct a deeper analysis for the customer \"{company}\". Do not ask for clarification. Just do as you are asked please and use your own initiative."
+  },
+  "Small Payments Analysis": {
+    "prompt": "Perform a comprehensive analysis for anomalous patterns in small (low-value) payments for the customer \"{company}\" that may indicate fraud. Identify recipients with: a) sudden surge in small payments, b) only small payments, c) sequential or repeated small amounts.",
+    "reprompt": "This analysis is incomplete. Deepen the investigation for the customer \"{company}\": refine thresholds, expand SQL to capture clustering, cumulative sums, splitting patterns, timing anomalies, and recipient novelty. Provide concrete evidence tables and specific flagged transactions with reasons."
+  },
+  "Payment Channels": {
+    "prompt": "Perform a comprehensive analysis for changes in payment channels (eg by comparing the number of transactions between payment channels to flag outliers) for the customer \"{company}\". Low frequency payment channels should be considered anomalies.",
+    "reprompt": "This analysis is incomplete. Please conduct a deeper analysis of this topic for the customer \"{company}\". Do not ask for clarification. Just do as you are asked please and use your own initiative."
+  },
+  "IBAN Changes": {
+    "prompt": "Perform a comprehensive analysis for changes in recipient IBAN for the customer \"{company}\". Focus on recipients with multiple transactions where the IBAN changes, especially if the new IBAN is not similar to the previous IBAN. It is worth pulling the list of distinct IBANs for each recipient to double check this.",
+    "reprompt": "This analysis is incomplete. Please provide a proper overview for the customer \"{company}\". Do not ask for clarification. Just do as you are asked please and use your own initiative."
+  },
+  "Recipient Analysis": {
+    "prompt": "Perform a comprehensive analysis for payments made to a new or unexpected recipient (especially one off payments to recipients with a similar name to an existing recipient, it is worth pulling the list of distinct recipients to double check this) for the customer \"{company}\".",
+    "reprompt": "This analysis is incomplete. Please conduct a deeper analysis of this topic for the customer \"{company}\". Do not ask for clarification. Just do as you are asked please and use your own initiative."
+  },
+  "Payment Date Analysis": {
+    "prompt": "Perform a comprehensive analysis for continued or one off changes in the payment date within the month for recurring transactions (eg a regular payment that typically occurs at the start of the month is suddenly made mid or end month) for the customer \"{company}\".",
+    "reprompt": "This analysis is incomplete. Please conduct a deeper analysis of this topic for the customer \"{company}\". Do not ask for clarification. Just do as you are asked please and use your own initiative."
+  },
+  "Invoice Analysis": {
+    "prompt": "Perform a comprehensive analysis for payment notes with invoice numbers or dates that do not match the payment period for the customer \"{company}\". For such an analysis, it is worth pulling all relevant data and viewing the results instead of slicing and filtering the data.",
+    "reprompt": "This analysis is incomplete. Please conduct a deeper analysis of this topic for the customer \"{company}\". Do not ask for clarification. Just do as you are asked please and use your own initiative."
+  },
+  "Further Analysis": {
+    "prompt": "The following analyses have been performed for the customer \"{company}\":\n\n{context}\n\nFor any unusual transactions discovered in these analyses, perform an in-depth analysis with further SQL queries to conclude whether or not the flagged transactions are in fact unusual. If one or more analyses failed, retry these analyses. If an analysis returned no results (particularly the recurring payments analysis, there are always recurring payments), assume the queries were incorrect and try again. DO NOT simply provide a summary.",
+    "reprompt": "This analysis is incomplete. Please conduct a deeper analysis of this topic for the customer \"{company}\". Do not ask for clarification. Just do as you are asked please and use your own initiative."
+  },
+  "Interim Conclusion": {
+    "prompt": "The following analyses have been performed for the customer \"{company}\":\n\n{context}\n\nIn one sentence or less, either highlight any unusual transactions that were found, or state that no unusual transactions were found. If any IBAN anomalies were found, please include these in the conclusion."
+  },
+  "Interim Conclusion Critique": {
+    "prompt": "The following analyses have been performed for the customer \"{company}\":\n\n{context}\n\nYour task is to critically and comprehensively assess the conclusion. If the conclusion states there is an unusual transaction(s), please verify this statement against the data. If the conclusion states there are no unusual transactions, please verify this conclusion against the analysis so far. Be sure to also flag unusual transactions that you think are missing from this conclusion.",
+    "reprompt": "This analysis is incomplete. Please conduct a deeper analysis of this topic for the customer \"{company}\". Do not ask for clarification. Just do as you are asked please and use your own initiative."
+  },
+  "Final Conclusion": {
+    "prompt": "The following analyses have been performed for the customer \"{company}\":\n\n{context}\n\nIn one sentence or less, summarise the above analyses by highlighting any unusual transactions that were found. Do not mention anything other than unusual transactions."
+  },
+  "Deep Dive": {
+    "prompt": "The following analyses have been performed for the customer \"{company}\":\n\n{context}\n\nExpand on the above final conclusion, providing supporting evidence and explanation for any unusual transactions found into 4 or 5 incredibly short and concise (using shorthand wherever possible) bullet points for each piece of evidence (do not add headers or titles). Make sure to note the time period analysed. Please only expand on the final conclusion and not the previous sub-analyses. Do not talk about normal transactions, only discuss unusual transactions. DO NOT brag about how good the analysis is, but instead provide context. If possible, display a table displaying the unusual transaction(s) with the header 'List of Suspicious Transactions'."
+  }
+}
