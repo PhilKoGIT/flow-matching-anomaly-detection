@@ -1,6 +1,4 @@
-== Job Start: Sat Jan  3 07:29:30 PM CET 2026 ==
-Python: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/bin/python
-Imports dauern ~2-3 Minuten, bitte warten...
+== Job Start: Sat Jan  3 08:39:57 PM CET 2026 ==
 
  Dataset: 29_Pima.npz with model: ForestFlow_nt5_dk1 and score: deviation
  
@@ -661,21 +659,21 @@ TCCM_nt5 - decision:
     ✓ Best F1: 0.5275 @ 45th percentile
 
 ============================================================
-Results saved at: test/results_data/extreme_cases_29_Pima_20260103_193123.joblib
+Results saved at: test/results_data/extreme_cases_29_Pima_20260103_204010.joblib
 ============================================================
-== Job Ende: Sat Jan  3 07:31:30 PM CET 2026 ==
+== Job Ende: Sat Jan  3 08:40:11 PM CET 2026 ==
 
 ============================= JOB FEEDBACK =============================
 
-NodeName=uc2n688
-Job ID: 2754827
+NodeName=uc2n809
+Job ID: 2757296
 Cluster: uc3
 User/Group: ma_pkonz/ma_ma
 State: COMPLETED (exit code 0)
 Nodes: 1
 Cores per node: 50
-CPU Utilized: 00:04:15
-CPU Efficiency: 3.54% of 02:00:00 core-walltime
-Job Wall-clock time: 00:02:24
-Memory Utilized: 489.84 MB
-Memory Efficiency: 0.75% of 64.00 GB (64.00 GB/node)
+CPU Utilized: 00:00:29
+CPU Efficiency: 2.00% of 00:24:10 core-walltime
+Job Wall-clock time: 00:00:29
+Memory Utilized: 318.20 MB
+Memory Efficiency: 0.49% of 64.00 GB (64.00 GB/node)

@@ -15,7 +15,7 @@ cd "$SLURM_SUBMIT_DIR"
 source .venv/bin/activate
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
-
+cd tests
 echo "== Job Start: $(date) =="
-python -u tests/contamination.py
+python -u contamination.py
 echo "== Job Ende: $(date) =="

@@ -48,6 +48,7 @@ File runs contamination studies for the given models and datasets.
 from preprocessing_bd_contamination import load_business_dataset_for_contamination
 
 results_dir = Path("./test")
+results_dir.mkdir(parents=True, exist_ok=True)  
 
 # 2. Add this new loading function (after load_adbench_npz):
 # ---------------------------------------------------------------------------

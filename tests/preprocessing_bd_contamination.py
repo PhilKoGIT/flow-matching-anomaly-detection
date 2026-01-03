@@ -12,9 +12,6 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-# =============================================================================
-# FEATURE COLUMNS
-# =============================================================================
 FEATURE_COLS = [
     'amount_zscore_series', 'amount_ratio_to_mean',
     'day_deviation_from_usual',
@@ -27,10 +24,6 @@ FEATURE_COLS = [
     'amount',
 ]
 
-
-# =============================================================================
-# FEATURE ENGINEERING (ohne Data Leakage)
-# =============================================================================
 def compute_features_no_leakage(
     df: pd.DataFrame,
     known_series_stats: Dict = None,
@@ -45,21 +38,17 @@ def compute_features_no_leakage(
     if df['date_post'].dtype == 'object' or df['date_post'].dtype == 'int64':
         df['date_post'] = pd.to_datetime(df['date_post'], format='%Y%m%d')
     
-    # Chronologisch sortieren
     df = df.sort_values('date_post').reset_index(drop=True)
     
-    # Hilfs-Spalten
     df['series_id'] = df['bank_account_uuid'] + '_' + df['ref_name']
     df['year_month'] = df['date_post'].dt.to_period('M')
     
-    # Statistiken initialisieren
     if fit:
         series_stats = {}
         seen_ref_names = set()
         seen_ibans = set()
         seen_name_iban_pairs = set()
     else:
-        # Deep copy der übergebenen Statistiken
         series_stats = {}
         for k, v in (known_series_stats or {}).items():
             series_stats[k] = {
@@ -75,7 +64,6 @@ def compute_features_no_leakage(
         seen_ibans = set(known_ibans) if known_ibans else set()
         seen_name_iban_pairs = set(known_name_iban_pairs) if known_name_iban_pairs else set()
     
-    # Feature Arrays initialisieren
     n = len(df)
     features = {
         'amount_zscore_series': np.zeros(n),
@@ -101,12 +89,10 @@ def compute_features_no_leakage(
         'amount': np.zeros(n),
     }
     
-    # Zähler für Lookups
     ref_name_counts = {}
     iban_counts = {}
     last_date_per_series = {}
     
-    # Sequentielle Feature-Berechnung
     for idx, row in df.iterrows():
         series_id = row['series_id']
         ref_name = row['ref_name']
@@ -119,35 +105,28 @@ def compute_features_no_leakage(
         day = tx_date.day
         year_month = row['year_month']
         
-        # === FEATURES BERECHNEN (nur mit vergangenen Daten) ===
         
-        # Basis-Features
         features['amount'][idx] = amount
         features['day_of_month'][idx] = day
         features['day_of_week'][idx] = tx_date.dayofweek
         features['month'][idx] = tx_date.month
         features['is_card_mobile'][idx] = 1 if (pay_method == 'CARD' and channel == 'MOBILE_APP') else 0
         
-        # Neuheits-Features
         features['is_new_series'][idx] = 0 if series_id in series_stats else 1
         features['is_new_ref_name'][idx] = 0 if ref_name in seen_ref_names else 1
         features['is_new_iban'][idx] = 0 if ref_iban in seen_ibans else 1
         
-        # Bekannter Name mit neuer IBAN
         name_iban_pair = (ref_name, ref_iban)
         if ref_name in seen_ref_names and name_iban_pair not in seen_name_iban_pairs:
             features['known_name_new_iban'][idx] = 1
         
-        # Häufigkeits-Features
         features['ref_name_count_before'][idx] = ref_name_counts.get(ref_name, 0)
         features['iban_count_before'][idx] = iban_counts.get(ref_iban, 0)
         
-        # Series-basierte Features (nur wenn Series bereits bekannt)
         if series_id in series_stats:
             stats = series_stats[series_id]
             features['series_tx_count_before'][idx] = len(stats['amounts'])
             
-            # Betrags-Statistiken
             if len(stats['amounts']) > 0:
                 past_mean = np.mean(stats['amounts'])
                 past_std = np.std(stats['amounts']) if len(stats['amounts']) > 1 else past_mean * 0.1
@@ -155,12 +134,10 @@ def compute_features_no_leakage(
                     features['amount_zscore_series'][idx] = (amount - past_mean) / past_std
                 features['amount_ratio_to_mean'][idx] = amount / past_mean if past_mean > 0 else 1.0
             
-            # Tag-Abweichung
             if len(stats['days']) > 0:
                 usual_day = np.median(stats['days'])
                 features['day_deviation_from_usual'][idx] = abs(day - usual_day)
             
-            # Mismatch-Features
             if len(stats['ibans']) > 0:
                 most_common = Counter(stats['ibans']).most_common(1)[0][0]
                 features['iban_mismatch'][idx] = 0 if ref_iban == most_common else 1
@@ -177,18 +154,14 @@ def compute_features_no_leakage(
                 most_common = Counter(stats['channels']).most_common(1)[0][0]
                 features['channel_mismatch'][idx] = 0 if channel == most_common else 1
             
-            # Transaktionen diesen Monat
             features['tx_count_this_month_so_far'][idx] = sum(
                 1 for ym in stats['year_months'] if ym == year_month
             ) + 1
             
-            # Tage seit letzter Transaktion
             if series_id in last_date_per_series:
                 days_diff = (tx_date - last_date_per_series[series_id]).days
                 features['days_since_last_in_series'][idx] = days_diff
-        
-        # === STATISTIKEN AKTUALISIEREN (für nächste Transaktionen) ===
-        
+                
         if series_id not in series_stats:
             series_stats[series_id] = {
                 'amounts': [], 'ibans': [], 'swifts': [],
@@ -211,15 +184,12 @@ def compute_features_no_leakage(
         seen_name_iban_pairs.add(name_iban_pair)
         last_date_per_series[series_id] = tx_date
     
-    # Features zum DataFrame hinzufügen
     for feat_name, feat_values in features.items():
         df[feat_name] = feat_values
     
-    # Clipping
     df['amount_zscore_series'] = df['amount_zscore_series'].clip(-10, 10)
     df['amount_ratio_to_mean'] = df['amount_ratio_to_mean'].clip(0, 10)
 
-    #use log to make counts more normal distributed
     df['series_tx_count_before_log'] = np.log1p(df['series_tx_count_before'])
     df['ref_name_count_before_log'] = np.log1p(df['ref_name_count_before'])
     df['iban_count_before_log'] = np.log1p(df['iban_count_before'])
@@ -227,43 +197,16 @@ def compute_features_no_leakage(
     return df, series_stats, seen_ref_names, seen_ibans, seen_name_iban_pairs
 
 
-# =============================================================================
-# MAIN LOADING FUNCTION
-# =============================================================================
+
 def load_business_dataset_for_contamination(
     test_size: float = 0.5,
     scale_on_all_train: bool = False
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    """
-    Lädt und preprocessed das Business Dataset für Contamination Studies.
-    
-    Ablauf:
-    1. Lade alle Daten, sortiere chronologisch
-    2. Bestimme split_date basierend auf test_size
-    3. Splitte ALLE Daten (normal + abnormal) chronologisch nach split_date
-    4. Berechne Features auf Trainingsdaten gemeinsam (fit=True)
-    5. Berechne Features auf Testdaten mit gelernten Stats (fit=False)
-    6. Trenne Train in Normal/Abnormal NACH Feature-Engineering
-    7. Scale die Daten
-    
-    Args:
-        test_size: Anteil der Daten für Test (chronologisch am Ende)
-        scale_on_all_train: True = Scaler auf allen Trainingsdaten fitten
-                           False = Scaler nur auf normalen Trainingsdaten fitten
-    
-    Returns:
-        X_train_normal: Normale Trainingsdaten (scaled)
-        X_train_abnormal: Abnormale Trainingsdaten (scaled) - für Kontamination
-        X_test: Testdaten (scaled)
-        y_test: Test Labels
-    """
-    # =========================================================================
-    # 1. DATEN LADEN
-    # =========================================================================
+
+
     base_dir = Path(__file__).resolve().parent
     file_path = base_dir.parent / "data_contamination" / "business_dataset_middle.csv"
     
-    # Alternative Pfade probieren
     for alt_path in [
         base_dir / "output" / "business_dataset.csv",
         Path("output") / "business_dataset.csv",
@@ -275,16 +218,12 @@ def load_business_dataset_for_contamination(
     print(f"Loading data from: {file_path}")
     df = pd.read_csv(file_path)
     
-    # Datum parsen und sortieren
     df['date_post'] = pd.to_datetime(df['date_post'], format='%Y%m%d')
     df = df.sort_values('date_post').reset_index(drop=True)
     
     print(f"\nTotal transactions: {len(df)}")
     print(f"Date range: {df['date_post'].min()} to {df['date_post'].max()}")
     
-    # =========================================================================
-    # 2. chronological split
-    # =========================================================================
     split_idx = int(len(df) * (1 - test_size))
     split_date = df.iloc[split_idx]['date_post']
     
@@ -298,9 +237,6 @@ def load_business_dataset_for_contamination(
     df_test.to_csv(output_path, index=False)
     print(f"Test DataFrame saved to: {output_path}")
     
-    # =========================================================================
-    # 3. feature engineering without data leakage
-    # =========================================================================
     print("\nComputing features on training data...")
     df_train_processed, series_stats, seen_refs, seen_ibans, seen_pairs = \
         compute_features_no_leakage(df_train, fit=True)
@@ -314,10 +250,7 @@ def load_business_dataset_for_contamination(
         known_name_iban_pairs=seen_pairs,
         fit=False
     )
-    
-    # =========================================================================
-    # 4. TRAIN IN NORMAL/ABNORMAL TRENNEN (nach Feature-Engineering!)
-    # =========================================================================
+
     y_train = df_train_processed['anomaly_description'].notna().astype(int).values
     y_test = df_test_processed['anomaly_description'].notna().astype(int).values
     
@@ -335,25 +268,17 @@ def load_business_dataset_for_contamination(
     print(f"  Abnormal: {len(X_train_abnormal)}")
     print(f"Test: {len(X_test)} (Normal: {(y_test==0).sum()}, Abnormal: {(y_test==1).sum()})")
     
-    # =========================================================================
-    # 5. NaN HANDLING
-    # =========================================================================
     X_train_normal = np.nan_to_num(X_train_normal, nan=0.0)
     X_train_abnormal = np.nan_to_num(X_train_abnormal, nan=0.0)
     X_test = np.nan_to_num(X_test, nan=0.0)
-    
-    # =========================================================================
-    # 6. SCALING
-    # =========================================================================
+
     print("\nScaling data...")
     scaler = StandardScaler()
     
     if scale_on_all_train:
-        # fit scaler only on training data
         scaler.fit(X_train_all)
         print("  Scaler fitted on ALL training data (normal + abnormal)")
     else:
-        # Scaler nur auf normalen Daten fitten (Standard für Anomaly Detection)
         scaler.fit(X_train_normal)
         print("  Scaler fitted on NORMAL training data only")
     
@@ -361,9 +286,6 @@ def load_business_dataset_for_contamination(
     X_train_abnormal = scaler.transform(X_train_abnormal) if len(X_train_abnormal) > 0 else X_train_abnormal
     X_test = scaler.transform(X_test)
     
-    # =========================================================================
-    # 7. SUMMARY
-    # =========================================================================
     print(f"\n{'='*60}")
     print("FINAL SHAPES")
     print('='*60)
@@ -372,7 +294,6 @@ def load_business_dataset_for_contamination(
     print(f"X_test:          {X_test.shape}")
     print(f"y_test:          {y_test.shape} (Anomaly rate: {y_test.mean()*100:.2f}%)")
     
-    # Anomalie-Typen
     print(f"\n{'='*60}")
     print("ANOMALY TYPES IN DATASET")
     print('='*60)
@@ -390,10 +311,6 @@ def load_business_dataset_for_contamination(
 
 
 
-    #LÖSCHEN
-    # =========================================================================
-# 8. ANOMALIEN IM TESTSET AUSGEBEN
-# =========================================================================
     print(f"\n{'='*60}")
     print("ANOMALIES IN TEST SET")
     print('='*60)
@@ -409,31 +326,17 @@ def load_business_dataset_for_contamination(
         
         return X_train_normal, X_train_abnormal, X_test, y_test
 
-
-# =============================================================================
-# HELPER: Kontaminiertes Training Set erstellen
-# =============================================================================
 def create_contaminated_training_set(
     X_train_normal: np.ndarray,
     X_train_abnormal: np.ndarray,
     contamination_ratio: float
 ) -> np.ndarray:
-    """
-    Erstellt ein kontaminiertes Training Set.
-    
-    Args:
-        X_train_normal: Normale Trainingsdaten
-        X_train_abnormal: Abnormale Trainingsdaten
-        contamination_ratio: Gewünschter Anteil an Anomalien (0.0 bis 1.0)
-    
-    Returns:
-        X_train_contaminated: Kombiniertes Training Set
-    """
+
     if contamination_ratio <= 0:
         return X_train_normal.copy()
     
     n_normal = len(X_train_normal)
-    # Formel: n_abnormal / (n_normal + n_abnormal) = ratio
+    # formula: n_abnormal / (n_normal + n_abnormal) = ratio
     # => n_abnormal = ratio * n_normal / (1 - ratio)
     n_abnormal_needed = int(contamination_ratio * n_normal / (1 - contamination_ratio))
     n_abnormal_available = len(X_train_abnormal)
@@ -457,9 +360,6 @@ def create_contaminated_training_set(
     return X_train_contaminated
 
 
-# =============================================================================
-# TEST
-# =============================================================================
 if __name__ == "__main__":
     print("Testing preprocessing pipeline for Business Dataset (Contamination)...")
     print()
