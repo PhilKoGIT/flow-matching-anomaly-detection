@@ -1,0 +1,19 @@
+== Job Start: Sat Jan  3 06:24:35 PM CET 2026 ==
+Python: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/.venv/bin/python
+Imports dauern ~2-3 Minuten, bitte warten...
+== Job Ende: Sat Jan  3 06:24:35 PM CET 2026 ==
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n844
+Job ID: 2753981
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 50
+CPU Utilized: 00:00:04
+CPU Efficiency: 0.29% of 00:23:20 core-walltime
+Job Wall-clock time: 00:00:28
+Memory Utilized: 42.79 MB
+Memory Efficiency: 0.07% of 64.00 GB (64.00 GB/node)

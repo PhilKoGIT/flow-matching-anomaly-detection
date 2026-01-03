@@ -1,7 +1,0 @@
-Traceback (most recent call last):
-  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/contamination.py", line 886, in <module>
-    plot_model_scores_comparison(all_results_combined, model_name, metric="auroc", dataset_names=dataset_names)
-  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/contamination.py", line 692, in plot_model_scores_comparison
-    ax.plot(contam_levels, values[:, 0], label=score, 
-                           ~~~~~~^^^^^^
-IndexError: too many indices for array: array is 1-dimensional, but 2 were indexed

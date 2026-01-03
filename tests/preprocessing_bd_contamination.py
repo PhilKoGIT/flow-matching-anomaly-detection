@@ -1,18 +1,5 @@
 """
-Preprocessing Pipeline für Business Dataset - CONTAMINATION STUDIES (V5)
-OHNE DATA LEAKAGE - Chronologischer Split für ALLE Daten
-
-Änderungen gegenüber V4:
-- Chronologischer Split auch für Anomalien (basierend auf split_date der Normal-Daten)
-- Feature-Berechnung für alle Trainingsdaten GEMEINSAM
-- Trennung in Normal/Abnormal erst NACH Feature-Engineering
-- Klarere, einfachere Struktur
-
-Returns:
-    X_train_normal: Normale Trainingsdaten (scaled)
-    X_train_abnormal: Abnormale Trainingsdaten (scaled) - für kontrollierte Kontamination
-    X_test: Testdaten (scaled) - Normal + Abnormal
-    y_test: Test Labels
+Preprocessing Pipeline für das Business Dataset (Contamination Studies).
 """
 
 import numpy as np
@@ -52,20 +39,9 @@ def compute_features_no_leakage(
     known_name_iban_pairs: Set = None,
     fit: bool = True
 ) -> Tuple[pd.DataFrame, Dict, Set, Set, Set]:
-    """
-    Berechnet Features für jede Transaktion NUR basierend auf vergangenen Daten.
-    
-    Args:
-        df: DataFrame mit Transaktionen
-        known_*: Vorhandene Statistiken (für fit=False)
-        fit: True = Statistiken aufbauen, False = nur vorhandene nutzen
-    
-    Returns:
-        df_processed, series_stats, seen_ref_names, seen_ibans, seen_name_iban_pairs
-    """
+
     df = df.copy()
     
-    # Datum parsen falls nötig
     if df['date_post'].dtype == 'object' or df['date_post'].dtype == 'int64':
         df['date_post'] = pd.to_datetime(df['date_post'], format='%Y%m%d')
     

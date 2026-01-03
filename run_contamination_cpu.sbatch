@@ -8,22 +8,14 @@
 #SBATCH -e slurm/%x-%j.err
 
 source ~/.bashrc
-conda deactivate
+conda deactivate 2>/dev/null
 
-cd /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests
-source ../.venv/bin/activate
+cd "$SLURM_SUBMIT_DIR"
+
+source .venv/bin/activate
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
-export MKL_NUM_THREADS=$SLURM_CPUS_PER_TASK
-export OPENBLAS_NUM_THREADS=$SLURM_CPUS_PER_TASK
-export NUMEXPR_NUM_THREADS=$SLURM_CPUS_PER_TASK
-export XGBOOST_NUM_THREADS=$SLURM_CPUS_PER_TASK
-export KMP_AFFINITY=granularity=fine,compact,1,0
 
 echo "== Job Start: $(date) =="
-echo "Python: $(which python)"
-echo "Imports dauern ~2-3 Minuten, bitte warten..."
-
-python -u contamination.py
-
+python -u tests/contamination.py
 echo "== Job Ende: $(date) =="

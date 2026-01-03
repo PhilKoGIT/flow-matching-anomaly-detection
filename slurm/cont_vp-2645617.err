@@ -1,7 +1,0 @@
-Traceback (most recent call last):
-  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/contamination.py", line 922, in <module>
-    plot_score_models_comparison(all_results_combined,  score, metric="auroc", dataset_names=dataset_names, model_names=list(models_to_run.keys()), colors = colors)
-  File "/pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/contamination.py", line 650, in plot_score_models_comparison
-    model_names = list(all_results[dataset_names[0]].keys())
-                       ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
-KeyError: '5_campaign.npz'

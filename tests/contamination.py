@@ -47,7 +47,7 @@ File runs contamination studies for the given models and datasets.
 
 from preprocessing_bd_contamination import load_business_dataset_for_contamination
 
-results_dir = Path("./0_results_tccm_business")
+results_dir = Path("./test")
 
 # 2. Add this new loading function (after load_adbench_npz):
 # ---------------------------------------------------------------------------
@@ -286,7 +286,8 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
     returns: dict entry for dataset with model name, score, auroc and auprc values for each run and contamination levels
 
     """
-    seed_list = [0,1,2,3,4]
+    #seed_list = [0,1,2,3,4]
+    seed_list = [10]
     all_results = {}
     all_contam_levels = {}
 
@@ -839,24 +840,24 @@ if __name__ == "__main__":
         #     },
         # },
 
-        # "ForestFlow_nt3_dk1": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 3,
-        #         "duplicate_K": 1,
-        #         "duplicate_K_test": 1,
-        #         "diffusion_type": "flow"
-        #     },
-        # },
-        # "ForestFlow_nt20_dk20": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 20,
-        #         "duplicate_K": 20,
-        #         "duplicate_K_test": 20,
-        #         "diffusion_type": "flow"
-        #     },
-        # },
+        "ForestFlow_nt5_dk1": {
+            "type": "forest",
+            "params": {
+                "n_t": 5,
+                "duplicate_K": 2,
+                "duplicate_K_test": 2,
+                "diffusion_type": "flow"
+            },
+        },
+        "ForestDiffusion_nt5_dk1": {
+            "type": "forest",
+            "params": {
+                "n_t": 5,
+                "duplicate_K": 2,
+                "duplicate_K_test": 2,
+                "diffusion_type": "vp"
+            },
+        },
 
         #  "TCCM_nt50": {
         #     "type": "tccm",
@@ -875,6 +876,7 @@ if __name__ == "__main__":
             "params": {
                 "n_t": 5
             },
+
         },
 
      }

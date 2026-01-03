@@ -15,7 +15,7 @@ executing==2.2.1
 Faker==38.2.0
 flatbuffers==25.9.23
 fonttools==4.60.1
--e git+ssh://git@github.com/PhilKoGIT/ForestDiffusion.git@de2ce8f3e1d8b201021d776d03e6ea908103c001#egg=ForestDiffusion&subdirectory=Python-Package/base-ForestDiffusion
+git+https://github.com/PhilKoGIT/ForestDiffusion.git@main#egg=ForestDiffusion&subdirectory=Python-Package/base-ForestDiffusion
 gast==0.6.0
 geomloss==0.2.6
 google-pasta==0.2.0

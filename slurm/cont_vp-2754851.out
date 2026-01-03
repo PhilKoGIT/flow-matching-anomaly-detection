@@ -1,0 +1,17 @@
+== Job Start: Sat Jan  3 07:33:22 PM CET 2026 ==
+== Job Ende: Sat Jan  3 07:33:22 PM CET 2026 ==
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n688
+Job ID: 2754851
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 50
+CPU Utilized: 00:00:03
+CPU Efficiency: 0.40% of 00:12:30 core-walltime
+Job Wall-clock time: 00:00:15
+Memory Utilized: 10.17 MB
+Memory Efficiency: 0.02% of 64.00 GB (64.00 GB/node)

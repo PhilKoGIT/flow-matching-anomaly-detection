@@ -1,0 +1,11 @@
+== Job Start: Sat Jan  3 07:41:29 PM CET 2026 ==
+
+ Dataset: 29_Pima.npz with model: ForestFlow_nt5_dk1 and score: deviation
+ 
+Dataset loaded successfully!
+Training data: (250, 8), Normal: 250
+Test data: (518, 8), Normal: 250, Anomalies: 268
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt5_dk1/c8d39949c406ddc1ced08bdcd69b54ec.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt5_dk1/a902cdce3e6d310941c687c1855b06cb.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt5_dk1/dd16e717ee5248406d586409459ec71a.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/tests/saved_models/29_Pima.npz/ForestFlow_nt5_dk1/eb48291e55144f98ee0fde3ec46b1143.joblib
