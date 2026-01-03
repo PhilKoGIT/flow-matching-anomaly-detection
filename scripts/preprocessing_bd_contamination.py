@@ -205,7 +205,7 @@ def load_business_dataset_for_contamination(
 
 
     base_dir = Path(__file__).resolve().parent
-    file_path = base_dir.parent / "data_contamination" / "business_dataset_middle.csv"
+    file_path = base_dir.parent / "data_contamination" / "business_dataset.csv"
     
     for alt_path in [
         base_dir / "output" / "business_dataset.csv",

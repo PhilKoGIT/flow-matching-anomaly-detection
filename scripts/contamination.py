@@ -288,7 +288,7 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
 
     """
     #seed_list = [0,1,2,3,4]
-    seed_list = [10]
+    seed_list = [1]
     all_results = {}
     all_contam_levels = {}
 
@@ -432,7 +432,7 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
 
 
 # # ============================================================================
-# #  Helper functions 
+# #   functions 
 # # ============================================================================
 def build_model_config_dict(dataset_name, model_name, model_cnf, contam_idx, seed):
     """
@@ -546,8 +546,6 @@ def get_or_train_model(dataset_name, model_name, model_cnf, contam_idx, seed, X_
 #needed for theshold metrics saving for extreme cases
 def compute_threshold_metrics(anomaly_scores, y_test):
     """Calculates metrics (precision, recall, f1) for different threshold percentiles
-
-    returns: entry with metrics for each percentile and best f1 score info
     
     """
     
@@ -642,145 +640,11 @@ def aggregate_extreme_cases(extreme_cases_data):
 
 
 
-def plot_score_models_comparison(all_results, score, metric, dataset_names, model_names, colors):
-    """
-    Shows for one scoretype all models comparison plot for all datasets and one metric
-    metric: "auroc" or "auprc"
-    
-    """
-    fig, axs = plt.subplots(1, len(dataset_names), figsize=(14, 5))
-    model_names = list(all_results[dataset_names[0]].keys())
-    colors = colors
-    for idx, dataset_name in enumerate(dataset_names):
-        ax = axs[idx] if len(dataset_names) > 1 else axs
-        
-        for model_name in model_names:
-
-            if score not in all_results[dataset_name][model_name]:
-                print(f"Skipping {model_name} for score '{score}' (not available)")
-                continue
-            data = all_results[dataset_name][model_name][score]
-            contam_levels = data["contamination_levels"]
-            values = np.array(data[metric])
-            
-            ax.plot(contam_levels, values[:, 0], label=model_name,
-                   color=colors.get(model_name, "black"), marker='o')
-            ax.fill_between(contam_levels,
-                          values[:, 0] - values[:, 1],
-                          values[:, 0] + values[:, 1],
-                          color=colors.get(model_name, "black"), alpha=0.2)
-        
-        ax.set_title(f"{dataset_name} - {score}")
-        ax.set_xlabel("Contamination Level")
-        ax.set_ylabel(metric.upper())
-        ax.set_ylim(0, 1.05)
-        ax.grid(True)
-        ax.legend()
-    
-    plt.tight_layout()
-    plt.savefig(f"./{results_dir}/all_models_{score}_{metric}.pdf")
-    plt.show()
-
-
-def plot_model_scores_comparison(all_results, model_name, metric, dataset_names):
-    """
-    Shows for one model all 3 scores on each dataset for one metric
-    metric: "auroc" or "auprc"
-
-    """
-    fig, axs = plt.subplots(1, len(dataset_names), figsize=(14, 5))
-    
-    first_dataset = dataset_names[0]
-    scores = list(all_results[first_dataset][model_name].keys())
-    
-    # Define colors for all possible scores
-    colors = {
-        "deviation": "blue", 
-        "reconstruction": "green", 
-        "decision": "red"
-    }
-    for idx, dataset_name in enumerate(dataset_names):
-        ax = axs[idx] if len(dataset_names) > 1 else axs
-        
-        for score in scores:
-            data = all_results[dataset_name][model_name][score]
-            contam_levels = data["contamination_levels"]
-            values = np.array(data[metric])
-            
-            ax.plot(contam_levels, values[:, 0], label=score, 
-                   color=colors[score], marker='o')
-            ax.fill_between(contam_levels,
-                          values[:, 0] - values[:, 1],
-                          values[:, 0] + values[:, 1],
-                          color=colors[score], alpha=0.2)
-        
-        ax.set_title(f"{dataset_name} - {model_name}")
-        ax.set_xlabel("Contamination Level")
-        ax.set_ylabel(metric.upper())
-        ax.set_ylim(0, 1.05)
-        ax.grid(True)
-        ax.legend()
-    
-    plt.tight_layout()
-    plt.savefig(f"./{results_dir}/{model_name}_all_scores_{metric}.pdf")
-    plt.show()
-
-
-
-def plot_all_scores_percentile_comparison(all_extreme_cases, dataset_names, model_name, case_key="no_contamination", output_dir=results_dir):
-    """
-    Vergleicht alle 3 Scores (deviation, reconstruction, decision) für ein Modell
-    in einem Plot - nur F1 für bessere Übersichtlichkeit.
-    """
-    Path(output_dir).mkdir(parents=True, exist_ok=True)
-    
-    colors = {"deviation": "blue", "reconstruction": "green", "decision": "red"}
-    
-    for dataset_name in dataset_names:
-        fig, ax = plt.subplots(figsize=(10, 6))
-        
-        for score in ["deviation", "reconstruction", "decision"]:
-            if score not in all_extreme_cases.get(model_name, {}):
-                continue
-            if dataset_name not in all_extreme_cases[model_name][score]:
-                continue
-            if case_key not in all_extreme_cases[model_name][score][dataset_name]:
-                continue
-                
-            metrics = all_extreme_cases[model_name][score][dataset_name][case_key]["threshold_metrics"]
-            
-            percs = sorted(metrics.keys())
-            f1_means = [metrics[p]["f1_mean"] for p in percs]
-            f1_stds = [metrics[p]["f1_std"] for p in percs]
-            
-            ax.plot(percs, f1_means, '-o', label=f'{score}', 
-                   color=colors[score], linewidth=2)
-            ax.fill_between(percs,
-                           np.array(f1_means) - np.array(f1_stds),
-                           np.array(f1_means) + np.array(f1_stds),
-                           color=colors[score], alpha=0.2)
-        
-        case_title = "No Contamination" if case_key == "no_contamination" else "Full Contamination"
-        ax.set_title(f"{model_name} - {dataset_name} - {case_title}\nF1 Score vs Threshold Percentile")
-        ax.set_xlabel("Threshold Percentile")
-        ax.set_ylabel("F1 Score")
-        ax.set_ylim(0, 1.05)
-        ax.grid(True, alpha=0.3)
-        ax.legend()
-        
-        plt.tight_layout()
-        filename = f"{output_dir}/f1_comparison_{model_name}_{dataset_name.replace('.npz', '')}_{case_key}.pdf"
-        plt.savefig(filename)
-        plt.close()
-        print(f"Saved: {filename}")
-
-
-
 if __name__ == "__main__":
-    dataset_names = ["29_Pima.npz"]
+    #dataset_names = ["29_Pima.npz"]
 
     #dataset_names = ["5_campaign.npz"]
-    #dataset_names = ["business_dataset_middle.csv"]
+    dataset_names = ["business_dataset.csv"]
     #MAX three models!
 #----------------------------------------------
     #Change names in plot_score_models_comparison!!
@@ -916,25 +780,6 @@ if __name__ == "__main__":
                 all_extreme_cases[model_name] = {}
             all_extreme_cases[model_name][score] = aggregated
 
-    # Plots
-    for model_name in models_to_run.keys():
-        plot_model_scores_comparison(all_results_combined, model_name, metric="auroc", dataset_names=dataset_names)
-        plot_model_scores_comparison(all_results_combined, model_name, metric="auprc", dataset_names=dataset_names)
-
-    for score in ["deviation", "reconstruction", "decision"]:
-        plot_score_models_comparison(all_results_combined,  score, metric="auroc", dataset_names=dataset_names, model_names=list(models_to_run.keys()), colors = colors)
-        plot_score_models_comparison(all_results_combined, score, metric="auprc", dataset_names=dataset_names, model_names=list(models_to_run.keys()), colors = colors)
-    
-    # F1-Vergleich aller Scores pro Modell
-    for model_name in models_to_run.keys():
-        plot_all_scores_percentile_comparison(
-            all_extreme_cases, dataset_names, model_name, 
-            case_key="no_contamination"
-        )
-        plot_all_scores_percentile_comparison(
-            all_extreme_cases, dataset_names, model_name, 
-            case_key="full_contamination"
-        )
     # Printing extreme cases summary
     #redundant but useful for quick overview
     print("\n" + "="*80)
@@ -968,8 +813,8 @@ if __name__ == "__main__":
     # Safe results for further analysis
     # ============================================================================
         
-    results_dir = Path(f"./{results_dir}/results_data")
-    results_dir.mkdir(parents=True, exist_ok=True)
+    # results_dir = Path(f"./{results_dir}/results_data")
+    # results_dir.mkdir(parents=True, exist_ok=True)
     
     # Timestap for unique filenames
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -983,11 +828,11 @@ if __name__ == "__main__":
         "all_extreme_cases": all_extreme_cases,
         "dataset_names": dataset_names,
         "models_to_run": models_to_run,
-        "percentiles": percentiles,  # Falls du die Percentile-Liste brauchst
+        "percentiles": percentiles,  
     }
     
     # Save
-    save_path = results_dir / f"extreme_cases_{dataset_str}_{timestamp}.joblib"
+    save_path = results_dir / f"trained_models.joblib"
     joblib.dump(save_data, save_path)
     print(f"\n{'='*60}")
     print(f"Results saved at: {save_path}")

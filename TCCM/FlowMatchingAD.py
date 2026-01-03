@@ -37,7 +37,7 @@ class TCCM:
                 optimizer.step()
                 total_loss += loss.item()
 
-
+    #orginally implemented
     def decision_function(self, X_test):
         """
         Compute the anomaly scores of X_test
@@ -52,8 +52,6 @@ class TCCM:
 
         anomaly_scores = anomaly_scores.cpu().numpy()
         return anomaly_scores
-    
-    
     #----------------------------------------------------------------------------
     #----------------------------------------------------------------------------
 
@@ -74,16 +72,8 @@ class TCCM:
         t_levels = torch.linspace(0, 1.0, n_t)
 
         with torch.no_grad():
-            # for i, t_val in enumerate(t_levels[n_t//2:]):
-            #     t = torch.full((X.shape[0], 1), t_val.item(), device=X.device)
-            #     x_t_i = torch.tensor(x_t[i], dtype=torch.float32, device=X.device)
-            #for i, t_val in enumerate(t_levels[n_t//2:-1]):
-            #for i, t_val in enumerate(t_levels[:-1]):
-
             for i, t_val in enumerate(t_levels[:n_t//2]):
-                #actual_time_idx = n_t // 2 + i
                 actual_time_idx = i
-                #only have one x_t_i per time step
                 x_t_i = torch.tensor(x_t[actual_time_idx], dtype=torch.float32, device=X.device)
                 t = torch.full((X.shape[0], 1), t_val.item(), device=X.device)
                 v_pred = self.model(x_t_i, t)
@@ -103,7 +93,6 @@ class TCCM:
         t = np.linspace(0, 1.0, num=n_t)
         X_expanded = np.expand_dims(X, axis=0)        
         t_expanded = np.expand_dims(t, axis=(1, 2))   
-        #calculate interpolated points
         x_t = (1 - t_expanded) * X_expanded          
         
         return x_t
@@ -113,11 +102,11 @@ class TCCM:
             """
             Follow the learned flow from t_start to t=1. Same as Forest-Flow implementation.
             """
-            y = x_t.clone() # starting point (Tensor)
-            h = 1/(n_t -1) # delta t (Float)
-            t_float = t0 # Speichert die Zeit als Python Float
+            y = x_t.clone() 
+            h = 1/(n_t -1) 
+            t_float = t0 
 
-            device = y.device # Gerät vom Startpunkt übernehmen
+            device = y.device 
 
             with torch.no_grad():
                 for step in range(steps_left):          
@@ -127,7 +116,6 @@ class TCCM:
                         dtype=torch.float32,
                         device=device
                     )
-                    # Euler-Schritt:
                     y = y + h * self.model(y, t_tensor) 
                     t_float = t_float + h          
             return y
@@ -140,23 +128,16 @@ class TCCM:
         .
         """
         device = next(self.model.parameters()).device
-        
-        # Build interpolated points
         x_t = self.build_data_xt_tccm(X_test, n_t) 
         t_values = np.linspace(0, 1.0, num=n_t)  
         b = X_test.shape[0]
         anomaly_scores = np.zeros(b) 
         with torch.no_grad():
             for i, t_val in enumerate(t_values[:n_t//2]):
-            #for i, t_val in enumerate(t_values[:-1]):
-            #for i, t_val in enumerate(t_values[n_t//2:-1]):
-                #actual_time_idx = n_t // 2 + i
                 actual_time_idx = i
                 x_t_i = torch.tensor(x_t[actual_time_idx], dtype=torch.float32, device=device)
                 steps_left = (n_t - 1) - actual_time_idx
                 x_endpos = self.euler_solve_from_x_t(x_t_i, t0=t_val, steps_left=steps_left, n_t=n_t)
-                
-                # Distance to the origin
                 squared_error = torch.sum((x_endpos - 0) ** 2, dim=1).cpu().numpy()
                 anomaly_scores += squared_error
         anomaly_scores = anomaly_scores 
@@ -164,10 +145,10 @@ class TCCM:
         return anomaly_scores
 
     
-#----------------------------------------------------------------------------
-#----------------------------------------------------------------------------
-#----------------------------------------------------------------------------
-#----------------------------------------------------------------------------
+    #----------------------------------------------------------------------------
+    #----------------------------------------------------------------------------
+    #----------------------------------------------------------------------------
+    #----------------------------------------------------------------------------
 
 
 # The implementation of TCCM for robustness verification docked in nn.Module

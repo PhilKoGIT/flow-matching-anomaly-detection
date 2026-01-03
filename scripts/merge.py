@@ -27,6 +27,14 @@ SHOW_ONLY_MODELS = [
 
     # "TCCM_nt5",
     # "TCCM_nt20",
+
+
+
+    "ForestFlow_nt5_dk1", 
+    "ForestDiffusion_nt5_dk1",
+    "TCCM_nt5",
+
+
 ]
 
 COLORS_MODELS = {
@@ -383,9 +391,7 @@ def create_compact_pdfs(merged, output_dir):
             
             for case_key, case_title in [("no_contamination", "No Contamination"), 
                                           ("full_contamination", "Full Contamination")]:
-                
-                # Seite: Modellvergleich pro Score (3 Zeilen × 3 Spalten)
-                # Zeilen: F1, Precision, Recall | Spalten: deviation, reconstruction, decision
+
                 fig, axes = plt.subplots(3, 3, figsize=(15, 12))
                 fig.suptitle(f"{display_name} - Percentile ({case_title}): score-centric", 
                             fontsize=20, fontweight='semibold')
@@ -431,17 +437,16 @@ if __name__ == "__main__":
     # DATEIEN HIER EINTRAGEN
     # =========================================================================
     result_files = [
-        # Path("./0_results_diff/results_data/extreme_cases_5_campaign_20251221_233310.joblib"),
+        Path("./test/trained_models.joblib"),
         # Path("./0_results_flow/results_data/extreme_cases_5_campaign_20251221_201216.joblib"),
         # Path("./0_results_tccm/results_data/extreme_cases_5_campaign_20251223_093801.joblib"),
 
 
         #only for the business dataset experiment
-        Path("./0_results_business/results_data/extreme_cases_business_dataset_middle.csv_20251222_173347.joblib"),
-        
+
     ]
     
-    output_dir = Path("./1_results_business")
+    output_dir = Path("./test")
     
 
     merged = load_and_merge_results(result_files)
