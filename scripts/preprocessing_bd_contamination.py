@@ -1,5 +1,5 @@
 """
-Preprocessing Pipeline für das Business Dataset (Contamination Studies).
+Preprocessing Pipeline for business datasets.
 """
 
 import numpy as np
@@ -233,6 +233,7 @@ def load_business_dataset_for_contamination(
     print(f"\nChronological split at: {split_date}")
     print(f"Train: {len(df_train)} transactions (until {split_date})")
     print(f"Test: {len(df_test)} transactions (after {split_date})")
+    #print out for llm analysis
     output_path = base_dir / "df_test_raw.csv"
     df_test.to_csv(output_path, index=False)
     print(f"Test DataFrame saved to: {output_path}")
@@ -325,39 +326,6 @@ def load_business_dataset_for_contamination(
         print("-" * 40)
         
         return X_train_normal, X_train_abnormal, X_test, y_test
-
-def create_contaminated_training_set(
-    X_train_normal: np.ndarray,
-    X_train_abnormal: np.ndarray,
-    contamination_ratio: float
-) -> np.ndarray:
-
-    if contamination_ratio <= 0:
-        return X_train_normal.copy()
-    
-    n_normal = len(X_train_normal)
-    # formula: n_abnormal / (n_normal + n_abnormal) = ratio
-    # => n_abnormal = ratio * n_normal / (1 - ratio)
-    n_abnormal_needed = int(contamination_ratio * n_normal / (1 - contamination_ratio))
-    n_abnormal_available = len(X_train_abnormal)
-    n_abnormal_to_add = min(n_abnormal_needed, n_abnormal_available)
-    
-    if n_abnormal_to_add == 0:
-        print(f"Warning: No abnormal samples available for contamination")
-        return X_train_normal.copy()
-    
-    X_train_contaminated = np.vstack([
-        X_train_normal,
-        X_train_abnormal[:n_abnormal_to_add]
-    ])
-    
-    actual_ratio = n_abnormal_to_add / len(X_train_contaminated)
-    print(f"Contamination: Added {n_abnormal_to_add} abnormal samples")
-    print(f"  Requested ratio: {contamination_ratio*100:.1f}%")
-    print(f"  Actual ratio: {actual_ratio*100:.2f}%")
-    print(f"  Final training set size: {len(X_train_contaminated)}")
-    
-    return X_train_contaminated
 
 
 if __name__ == "__main__":

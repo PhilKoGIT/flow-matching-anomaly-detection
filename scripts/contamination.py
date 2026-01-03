@@ -50,19 +50,11 @@ from preprocessing_bd_contamination import load_business_dataset_for_contaminati
 results_dir = Path("./test")
 results_dir.mkdir(parents=True, exist_ok=True)  
 
-# 2. Add this new loading function (after load_adbench_npz):
 # ---------------------------------------------------------------------------
 def load_business_dataset_contamination(test_size=0.5, random_state=42):
     """
-    Load business dataset for contamination studies.
-    Returns same structure as load_adbench_npz but with separate train_abnormal.
+    Load business dataset for contamination studies. Data is returned that it can be processed for contamination studies.
     
-    Returns:
-        X_train_normal: Normal training data (scaled)
-        y_train_normal: Labels (all zeros)
-        X_train_abnormal: Abnormal data for contamination (scaled)
-        X_test: Test set (scaled)
-        y_test: Test labels
     """
     X_train_normal, X_train_abnormal, X_test, y_test = load_business_dataset_for_contamination(
         test_size=test_size, 
@@ -278,7 +270,6 @@ def calculate_tccm_scores(X_test, model, n_t, score):
 # # ============================================================================
 
 def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names, model):
-
     """
     Runs training and evaluation for different contamination levels on fixed train/test split. A model is trained for each seed and contamination level.
     
@@ -287,8 +278,7 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
     returns: dict entry for dataset with model name, score, auroc and auprc values for each run and contamination levels
 
     """
-    #seed_list = [0,1,2,3,4]
-    seed_list = [1]
+    seed_list = [0,1,2,3,4]
     all_results = {}
     all_contam_levels = {}
 
@@ -307,7 +297,6 @@ def run_training_contamination_ablation_dynamic_fixed_split(score, dataset_names
         # Split normal / anomaly using fixed random seed 42
         # ============================
         if dataset_name.startswith("business_dataset"):
-            # Business dataset - already returns split data
             X_train_normal, y_train_normal, X_train_abnormal_full, X_test, y_test = load_business_dataset_contamination(
                 test_size=0.5
             )
@@ -641,108 +630,128 @@ def aggregate_extreme_cases(extreme_cases_data):
 
 
 if __name__ == "__main__":
-    #dataset_names = ["29_Pima.npz"]
-
-    #dataset_names = ["5_campaign.npz"]
-    dataset_names = ["business_dataset.csv"]
-    #MAX three models!
-#----------------------------------------------
-    #Change names in plot_score_models_comparison!!
-    #change resultfiles!!
 
 
-    #colors = {"TCCM_nt5": "blue", "TCCM_nt20": "green", "TCCM_nt20": "red"}
-    colors = {"TCCM_nt20": "red", "TCCM_nt5": "blue", "ForestFlow_nt20_dk20": "green"}
-    #define models to run
-    #change names in plot_score_models_comparison accordingly
+    # ============================================================================
+    #   How to use:
+    #   1. Go to the top and set results_dir
+    #   2. Choose datasets below
+    #   3. Choose models below (depending on the study, uncomment/comment models)
+    # ============================================================================
 
-    models_to_run = {
+    # ============================================================================
+    #2.
+    dataset_names = ["5_campaign.npz"]
+    #dataset_names = ["business_dataset.csv"]
 
-        # "ForestFlow_nt100_dk20": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 100,
-        #         "duplicate_K": 20,
-        #         "duplicate_K_test": 20,
-        #         "diffusion_type": "flow"
-        #     },
-        # },
+    # ============================================================================
+    models_to_run = {  
+    #choose the models to run here
 
-        # "ForestDiffusion_nt50_dk20": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 50,
-        #         "duplicate_K": 20,
-        #         "duplicate_K_test": 20,
-        #         "diffusion_type": "vp"
-        #     },
-        # },
-        # "ForestDiffusion_nt50_dk20": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 50,
-        #         "duplicate_K": 20,
-        #         "duplicate_K_test": 20,
-        #         "diffusion_type": "vp"
-        #     },
-        # },
-        # "ForestDiffusion_nt50_dk10": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 50,
-        #         "duplicate_K": 10,
-        #         "duplicate_K_test": 10,
-        #         "diffusion_type": "vp"
-        #     },
-        # },
-        # "ForestDiffusion_nt20_dk20": {
-        #     "type": "forest",
-        #     "params": {
-        #         "n_t": 20,
-        #         "duplicate_K": 20,
-        #         "duplicate_K_test": 20,
-        #         "diffusion_type": "vp"
-        #     },
-        # },
 
-        "ForestFlow_nt5_dk1": {
+    # main study configurations:
+        "ForestDiffusion_nt20_dk20": {
             "type": "forest",
             "params": {
-                "n_t": 5,
-                "duplicate_K": 2,
-                "duplicate_K_test": 2,
-                "diffusion_type": "flow"
-            },
-        },
-        "ForestDiffusion_nt5_dk1": {
-            "type": "forest",
-            "params": {
-                "n_t": 5,
-                "duplicate_K": 2,
-                "duplicate_K_test": 2,
+                "n_t": 20,
+                "duplicate_K": 20,
+                "duplicate_K_test": 20,
                 "diffusion_type": "vp"
             },
         },
 
-        #  "TCCM_nt50": {
-        #     "type": "tccm",
-        #     "params": {
-        #         "n_t": 50
-        #     },
-        # },
-        # "TCCM_nt20": {
-        #     "type": "tccm",
-        #     "params": {
-        #         "n_t": 20
-        #     },
-        # },
-                "TCCM_nt5": {
+                "ForestFlow_nt20_dk10": {
+            "type": "forest",
+            "params": {
+                "n_t": 20,
+                "duplicate_K": 10,
+                "duplicate_K_test": 10,
+                "diffusion_type": "flow"
+            },
+        },
+
+                "TCCM_nt20": {
             "type": "tccm",
             "params": {
-                "n_t": 5
+                "n_t": 20
             },
-
         },
+    
+
+#----------------------------------------------
+
+#         "ForestDiffusion_nt50_dk20": {
+#             "type": "forest",
+#             "params": {
+#                 "n_t": 50,
+#                 "duplicate_K": 20,
+#                 "duplicate_K_test": 20,
+#                 "diffusion_type": "vp"
+#             },
+#         },
+#         "ForestDiffusion_nt50_dk10": {
+#             "type": "forest",
+#             "params": {
+#                 "n_t": 50,
+#                 "duplicate_K": 10,
+#                 "duplicate_K_test": 10,
+#                 "diffusion_type": "vp"
+#             },
+#         },
+#         "ForestDiffusion_nt20_dk20": {
+#             "type": "forest",
+#             "params": {
+#                 "n_t": 20,
+#                 "duplicate_K": 20,
+#                 "duplicate_K_test": 20,
+#                 "diffusion_type": "vp"
+#             },
+#         },
+
+# #----------------------------------------------
+#         "ForestFlow_nt20_dk10": {
+#             "type": "forest",
+#             "params": {
+#                 "n_t": 20,
+#                 "duplicate_K": 10,
+#                 "duplicate_K_test": 10,
+#                 "diffusion_type": "flow"
+#             },
+#         },
+
+#         "ForestFlow_nt50_dk20": {
+#             "type": "forest",
+#             "params": {
+#                 "n_t": 50,
+#                 "duplicate_K": 20,
+#                 "duplicate_K_test": 20,
+#                 "diffusion_type": "flow"
+#             },
+#         },
+#         "ForestFlow_nt20_dk20": {
+#             "type": "forest",
+#             "params": {
+#                 "n_t": 20,
+#                 "duplicate_K": 20,
+#                 "duplicate_K_test": 20,
+#                 "diffusion_type": "flow"
+#             },
+#         },
+
+# #----------------------------------------------
+#         "TCCM_nt20": {
+#             "type": "tccm",
+#             "params": {
+#                 "n_t": 20
+#             },
+#         },
+#         "TCCM_nt5": {
+#             "type": "tccm",
+#             "params": {
+#                 "n_t": 5
+#             },
+
+#         },
 
      }
     
@@ -810,14 +819,8 @@ if __name__ == "__main__":
                     print(f"\n    ✓ Best F1: {best_p[1]['f1_mean']:.4f} @ {best_p[0]}th percentile")
 
     # ============================================================================
-    # Safe results for further analysis
+    # Safe results for plotting
     # ============================================================================
-        
-    # results_dir = Path(f"./{results_dir}/results_data")
-    # results_dir.mkdir(parents=True, exist_ok=True)
-    
-    # Timestap for unique filenames
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
     # Dataset name for filenames
     dataset_str = "_".join([d.replace(".npz", "") for d in dataset_names])
@@ -832,7 +835,7 @@ if __name__ == "__main__":
     }
     
     # Save
-    save_path = results_dir / f"trained_models.joblib"
+    save_path = results_dir / f"results.joblib"
     joblib.dump(save_data, save_path)
     print(f"\n{'='*60}")
     print(f"Results saved at: {save_path}")

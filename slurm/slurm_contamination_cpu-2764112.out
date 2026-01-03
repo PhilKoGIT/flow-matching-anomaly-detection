@@ -1,0 +1,286 @@
+== Job Start: Sun Jan  4 12:07:20 AM CET 2026 ==
+
+ Dataset: business_dataset.csv with model: ForestFlow_nt5_dk1 and score: deviation
+Loading data from: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset.csv
+
+Total transactions: 6088
+Date range: 2018-01-01 00:00:00 to 2024-02-26 00:00:00
+
+Chronological split at: 2021-02-05 00:00:00
+Train: 3048 transactions (until 2021-02-05 00:00:00)
+Test: 3040 transactions (after 2021-02-05 00:00:00)
+Test DataFrame saved to: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/df_test_raw.csv
+
+Computing features on training data...
+Computing features on test data...
+
+Train split:
+  Normal: 3032
+  Abnormal: 16
+Test: 3040 (Normal: 3029, Abnormal: 11)
+
+Scaling data...
+  Scaler fitted on NORMAL training data only
+
+============================================================
+FINAL SHAPES
+============================================================
+X_train_normal:  (3032, 21)
+X_train_abnormal: (16, 21)
+X_test:          (3040, 21)
+y_test:          (3040,) (Anomaly rate: 0.36%)
+
+============================================================
+ANOMALY TYPES IN DATASET
+============================================================
+
+Total:
+anomaly_description
+TIMING_ANOMALY           10
+CHANNEL_ANOMALY           6
+IBAN_MISMATCH_ANOMALY     6
+FREQUENCY_ANOMALY         5
+Name: count, dtype: int64
+
+In Train: 16
+In Test: 11
+
+============================================================
+ANOMALIES IN TEST SET
+============================================================
+
+Date: 2021-07-16 00:00:00
+Amount: 133213.54
+Ref Name: Smith and Sons Solutions
+Anomaly: IBAN_MISMATCH_ANOMALY: IBAN changed from GB96CNSS68... to GB54CSOK24...
+----------------------------------------
+[*] No cached model found. Training model for business_dataset.csv, ForestFlow_nt5_dk1, contam_idx=0, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: business_dataset.csv_ForestFlow_nt5_dk1 with n_t=5, duplicate_K=2, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/d45c242d278c514829040eb375edde86.joblib
+[*] No cached model found. Training model for business_dataset.csv, ForestFlow_nt5_dk1, contam_idx=1, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: business_dataset.csv_ForestFlow_nt5_dk1 with n_t=5, duplicate_K=2, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/804560f7a4ae3cc8728634e01580c450.joblib
+[*] No cached model found. Training model for business_dataset.csv, ForestFlow_nt5_dk1, contam_idx=2, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: business_dataset.csv_ForestFlow_nt5_dk1 with n_t=5, duplicate_K=2, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/2cdc8b21f2c6c8ea6f20df758bb93ef3.joblib
+[*] No cached model found. Training model for business_dataset.csv, ForestFlow_nt5_dk1, contam_idx=3, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: business_dataset.csv_ForestFlow_nt5_dk1 with n_t=5, duplicate_K=2, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/af8ef09d6dc6ba8e8b53214f804bb52f.joblib
+[*] No cached model found. Training model for business_dataset.csv, ForestFlow_nt5_dk1, contam_idx=4, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: business_dataset.csv_ForestFlow_nt5_dk1 with n_t=5, duplicate_K=2, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/4023b4acac1c64069106f6e2c231ce36.joblib
+[*] No cached model found. Training model for business_dataset.csv, ForestFlow_nt5_dk1, contam_idx=5, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: business_dataset.csv_ForestFlow_nt5_dk1 with n_t=5, duplicate_K=2, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/c3844e581b6935dcee4e26708864b0cc.joblib
+[*] No cached model found. Training model for business_dataset.csv, ForestFlow_nt5_dk1, contam_idx=6, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: business_dataset.csv_ForestFlow_nt5_dk1 with n_t=5, duplicate_K=2, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/0d94ffba204708c812d46127a6e55e31.joblib
+[*] No cached model found. Training model for business_dataset.csv, ForestFlow_nt5_dk1, contam_idx=7, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: business_dataset.csv_ForestFlow_nt5_dk1 with n_t=5, duplicate_K=2, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/8a6c7f556bba2bc1432d6080b4d24904.joblib
+[*] No cached model found. Training model for business_dataset.csv, ForestFlow_nt5_dk1, contam_idx=8, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: business_dataset.csv_ForestFlow_nt5_dk1 with n_t=5, duplicate_K=2, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/e62692e557e2299a7d489ca7b8aff902.joblib
+[*] No cached model found. Training model for business_dataset.csv, ForestFlow_nt5_dk1, contam_idx=9, seed=1
+
+Training ForestDiffusionModel (flow) on dataset: business_dataset.csv_ForestFlow_nt5_dk1 with n_t=5, duplicate_K=2, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/c760f0551a1c7297d2cdb81a79480169.joblib
+
+ Dataset: business_dataset.csv with model: ForestFlow_nt5_dk1 and score: reconstruction
+Loading data from: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset.csv
+
+Total transactions: 6088
+Date range: 2018-01-01 00:00:00 to 2024-02-26 00:00:00
+
+Chronological split at: 2021-02-05 00:00:00
+Train: 3048 transactions (until 2021-02-05 00:00:00)
+Test: 3040 transactions (after 2021-02-05 00:00:00)
+Test DataFrame saved to: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/df_test_raw.csv
+
+Computing features on training data...
+Computing features on test data...
+
+Train split:
+  Normal: 3032
+  Abnormal: 16
+Test: 3040 (Normal: 3029, Abnormal: 11)
+
+Scaling data...
+  Scaler fitted on NORMAL training data only
+
+============================================================
+FINAL SHAPES
+============================================================
+X_train_normal:  (3032, 21)
+X_train_abnormal: (16, 21)
+X_test:          (3040, 21)
+y_test:          (3040,) (Anomaly rate: 0.36%)
+
+============================================================
+ANOMALY TYPES IN DATASET
+============================================================
+
+Total:
+anomaly_description
+TIMING_ANOMALY           10
+CHANNEL_ANOMALY           6
+IBAN_MISMATCH_ANOMALY     6
+FREQUENCY_ANOMALY         5
+Name: count, dtype: int64
+
+In Train: 16
+In Test: 11
+
+============================================================
+ANOMALIES IN TEST SET
+============================================================
+
+Date: 2021-07-16 00:00:00
+Amount: 133213.54
+Ref Name: Smith and Sons Solutions
+Anomaly: IBAN_MISMATCH_ANOMALY: IBAN changed from GB96CNSS68... to GB54CSOK24...
+----------------------------------------
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/d45c242d278c514829040eb375edde86.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/804560f7a4ae3cc8728634e01580c450.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/2cdc8b21f2c6c8ea6f20df758bb93ef3.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/af8ef09d6dc6ba8e8b53214f804bb52f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/4023b4acac1c64069106f6e2c231ce36.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/c3844e581b6935dcee4e26708864b0cc.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/0d94ffba204708c812d46127a6e55e31.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/8a6c7f556bba2bc1432d6080b4d24904.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/e62692e557e2299a7d489ca7b8aff902.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/c760f0551a1c7297d2cdb81a79480169.joblib
+
+ Dataset: business_dataset.csv with model: ForestFlow_nt5_dk1 and score: decision
+Loading data from: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset.csv
+
+Total transactions: 6088
+Date range: 2018-01-01 00:00:00 to 2024-02-26 00:00:00
+
+Chronological split at: 2021-02-05 00:00:00
+Train: 3048 transactions (until 2021-02-05 00:00:00)
+Test: 3040 transactions (after 2021-02-05 00:00:00)
+Test DataFrame saved to: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/df_test_raw.csv
+
+Computing features on training data...
+Computing features on test data...
+
+Train split:
+  Normal: 3032
+  Abnormal: 16
+Test: 3040 (Normal: 3029, Abnormal: 11)
+
+Scaling data...
+  Scaler fitted on NORMAL training data only
+
+============================================================
+FINAL SHAPES
+============================================================
+X_train_normal:  (3032, 21)
+X_train_abnormal: (16, 21)
+X_test:          (3040, 21)
+y_test:          (3040,) (Anomaly rate: 0.36%)
+
+============================================================
+ANOMALY TYPES IN DATASET
+============================================================
+
+Total:
+anomaly_description
+TIMING_ANOMALY           10
+CHANNEL_ANOMALY           6
+IBAN_MISMATCH_ANOMALY     6
+FREQUENCY_ANOMALY         5
+Name: count, dtype: int64
+
+In Train: 16
+In Test: 11
+
+============================================================
+ANOMALIES IN TEST SET
+============================================================
+
+Date: 2021-07-16 00:00:00
+Amount: 133213.54
+Ref Name: Smith and Sons Solutions
+Anomaly: IBAN_MISMATCH_ANOMALY: IBAN changed from GB96CNSS68... to GB54CSOK24...
+----------------------------------------
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/d45c242d278c514829040eb375edde86.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/804560f7a4ae3cc8728634e01580c450.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/2cdc8b21f2c6c8ea6f20df758bb93ef3.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/af8ef09d6dc6ba8e8b53214f804bb52f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/4023b4acac1c64069106f6e2c231ce36.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/c3844e581b6935dcee4e26708864b0cc.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/0d94ffba204708c812d46127a6e55e31.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/8a6c7f556bba2bc1432d6080b4d24904.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/e62692e557e2299a7d489ca7b8aff902.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/c760f0551a1c7297d2cdb81a79480169.joblib
+
+ Dataset: business_dataset.csv with model: ForestDiffusion_nt5_dk1 and score: deviation
+Loading data from: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset.csv
+
+Total transactions: 6088
+Date range: 2018-01-01 00:00:00 to 2024-02-26 00:00:00
+
+Chronological split at: 2021-02-05 00:00:00
+Train: 3048 transactions (until 2021-02-05 00:00:00)
+Test: 3040 transactions (after 2021-02-05 00:00:00)
+Test DataFrame saved to: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/df_test_raw.csv
+
+Computing features on training data...
+Computing features on test data...
+
+Train split:
+  Normal: 3032
+  Abnormal: 16
+Test: 3040 (Normal: 3029, Abnormal: 11)
+
+Scaling data...
+  Scaler fitted on NORMAL training data only
+
+============================================================
+FINAL SHAPES
+============================================================
+X_train_normal:  (3032, 21)
+X_train_abnormal: (16, 21)
+X_test:          (3040, 21)
+y_test:          (3040,) (Anomaly rate: 0.36%)
+
+============================================================
+ANOMALY TYPES IN DATASET
+============================================================
+
+Total:
+anomaly_description
+TIMING_ANOMALY           10
+CHANNEL_ANOMALY           6
+IBAN_MISMATCH_ANOMALY     6
+FREQUENCY_ANOMALY         5
+Name: count, dtype: int64
+
+In Train: 16
+In Test: 11
+
+============================================================
+ANOMALIES IN TEST SET
+============================================================
+
+Date: 2021-07-16 00:00:00
+Amount: 133213.54
+Ref Name: Smith and Sons Solutions
+Anomaly: IBAN_MISMATCH_ANOMALY: IBAN changed from GB96CNSS68... to GB54CSOK24...
+----------------------------------------
+[*] No cached model found. Training model for business_dataset.csv, ForestDiffusion_nt5_dk1, contam_idx=0, seed=1
+
+Training ForestDiffusionModel (vp) on dataset: business_dataset.csv_ForestDiffusion_nt5_dk1 with n_t=5, duplicate_K=2, seed=1
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestDiffusion_nt5_dk1/bfae1cedd899da72d731ed8e21296566.joblib
+[*] No cached model found. Training model for business_dataset.csv, ForestDiffusion_nt5_dk1, contam_idx=1, seed=1

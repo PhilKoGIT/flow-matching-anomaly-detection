@@ -1,66 +1,15 @@
-== Job Start: Sat Jan  3 11:33:10 PM CET 2026 ==
 
- Dataset: business_dataset.csv with model: ForestFlow_nt5_dk1 and score: deviation
-Loading data from: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/data_contamination/business_dataset.csv
+============================= JOB FEEDBACK =============================
 
-Total transactions: 6088
-Date range: 2018-01-01 00:00:00 to 2024-02-26 00:00:00
-
-Chronological split at: 2021-02-05 00:00:00
-Train: 3048 transactions (until 2021-02-05 00:00:00)
-Test: 3040 transactions (after 2021-02-05 00:00:00)
-Test DataFrame saved to: /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/df_test_raw.csv
-
-Computing features on training data...
-Computing features on test data...
-
-Train split:
-  Normal: 3032
-  Abnormal: 16
-Test: 3040 (Normal: 3029, Abnormal: 11)
-
-Scaling data...
-  Scaler fitted on NORMAL training data only
-
-============================================================
-FINAL SHAPES
-============================================================
-X_train_normal:  (3032, 21)
-X_train_abnormal: (16, 21)
-X_test:          (3040, 21)
-y_test:          (3040,) (Anomaly rate: 0.36%)
-
-============================================================
-ANOMALY TYPES IN DATASET
-============================================================
-
-Total:
-anomaly_description
-TIMING_ANOMALY           10
-CHANNEL_ANOMALY           6
-IBAN_MISMATCH_ANOMALY     6
-FREQUENCY_ANOMALY         5
-Name: count, dtype: int64
-
-In Train: 16
-In Test: 11
-
-============================================================
-ANOMALIES IN TEST SET
-============================================================
-
-Date: 2021-07-16 00:00:00
-Amount: 133213.54
-Ref Name: Smith and Sons Solutions
-Anomaly: IBAN_MISMATCH_ANOMALY: IBAN changed from GB96CNSS68... to GB54CSOK24...
-----------------------------------------
-[*] No cached model found. Training model for business_dataset.csv, ForestFlow_nt5_dk1, contam_idx=0, seed=0
-
-Training ForestDiffusionModel (flow) on dataset: business_dataset.csv_ForestFlow_nt5_dk1 with n_t=5, duplicate_K=2, seed=0
-[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/400cd29e797712654a1f618a3a3d8e8a.joblib
-[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/d45c242d278c514829040eb375edde86.joblib
-[*] No cached model found. Training model for business_dataset.csv, ForestFlow_nt5_dk1, contam_idx=0, seed=2
-
-Training ForestDiffusionModel (flow) on dataset: business_dataset.csv_ForestFlow_nt5_dk1 with n_t=5, duplicate_K=2, seed=2
-[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/business_dataset.csv/ForestFlow_nt5_dk1/36a04284a5dc87920afb5f5504ceec07.joblib
-[*] No cached model found. Training model for business_dataset.csv, ForestFlow_nt5_dk1, contam_idx=0, seed=3
+NodeName=uc2n703
+Job ID: 2760349
+Cluster: uc3
+User/Group: ma_pkonz/ma_ma
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 50
+CPU Utilized: 00:30:07
+CPU Efficiency: 1.87% of 1-02:50:50 core-walltime
+Job Wall-clock time: 00:32:13
+Memory Utilized: 871.71 MB
+Memory Efficiency: 1.33% of 64.00 GB (64.00 GB/node)
