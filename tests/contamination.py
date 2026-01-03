@@ -775,10 +775,10 @@ def plot_all_scores_percentile_comparison(all_extreme_cases, dataset_names, mode
 
 
 if __name__ == "__main__":
-    #dataset_names = ["29_Pima.npz"]
+    dataset_names = ["29_Pima.npz"]
 
     #dataset_names = ["5_campaign.npz"]
-    dataset_names = ["business_dataset_middle.csv"]
+    #dataset_names = ["business_dataset_middle.csv"]
     #MAX three models!
 #----------------------------------------------
     #Change names in plot_score_models_comparison!!
