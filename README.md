@@ -32,6 +32,7 @@ This repo includes additionally to the code of the thesis:
 ### Requirements
 
 - Python 3.11
+- used macOS, others not tested
 
 ### Setup
 
@@ -45,15 +46,15 @@ cd flow-matching-anomaly-detection
 **2. Create virtual environment**
 
 ```bash
-python3.11 -m venv myenv
-source myenv/bin/activate
+python3.11 -m venv .venv
+source .venv/bin/activate
 pip install --upgrade pip setuptools wheel
 ```
 
 **3. Install dependencies**
 
 ```bash
-pip install -r requirements_mac.txt
+pip install -r requirements.txt
 ```
 
 **4. Install ForestDiffusion**
