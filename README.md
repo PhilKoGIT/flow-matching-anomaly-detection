@@ -1,7 +1,5 @@
 # Unsupervised Anomaly Detection with Flow-Matching Models on Tabular Data
 
-> **IMPORTANT:** Please read all the information!
-
 This is the implementation of the thesis with the title "Unsupervised Anomaly Detection with Flow-Matching Models on Tabular Data".
 
 Different scoring functions were implemented in:
@@ -100,3 +98,20 @@ sbatch run_contamination_cpu.sbatch
 ```bash
 python plot_and_merge.py
 ```
+
+### Generate Plots
+
+> For configuration, please look into the description in the file.
+
+```bash
+python plot_and_merge.py
+```
+
+### Generate Business Dataset
+
+```bash
+cd generator
+python generator.py
+```
+
+> After generation, move the dataset into `data_contamination`.

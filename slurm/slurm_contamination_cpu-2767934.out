@@ -19,3 +19,11 @@ Test data: (22914, 62), Normal: 18274, Anomalies: 4640
 [*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/f795f3615552cccefb07a4488da3e621.joblib
 [*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/7cf272ab02648803adeb84e9528b40ef.joblib
 [*] No cached model found. Training model for 5_campaign.npz, ForestDiffusion_nt20_dk20, contam_idx=2, seed=3
+
+Training ForestDiffusionModel (vp) on dataset: 5_campaign.npz_ForestDiffusion_nt20_dk20 with n_t=20, duplicate_K=20, seed=3
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/ed5d663aa3c728cab1e4bcecab300cdc.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestDiffusion_nt20_dk20, contam_idx=2, seed=4
+
+Training ForestDiffusionModel (vp) on dataset: 5_campaign.npz_ForestDiffusion_nt20_dk20 with n_t=20, duplicate_K=20, seed=4
+[*] Model saved to /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/2550ee7e08a929bca3e7b4abca27e031.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestDiffusion_nt20_dk20, contam_idx=3, seed=0
