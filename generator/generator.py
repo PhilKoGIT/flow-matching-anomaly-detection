@@ -2,8 +2,7 @@
 
 ##################################################
 
-#Generator for the SAP Fioneer business transaction dataset
-#not my own work, received from SAP Fioneer
+#not part of my thesis, but used to generate the synthetic business dataset
 
 ####################################################
 
@@ -61,7 +60,6 @@ def generate_transaction_series(
         elif growth_type == 'regression':
             cur_base = base_amount * ((1 + monthly_growth) ** -month_idx)
         
-        #Erzeugt eine zufällige Zahl aus einer Normalverteilung (Glockenkurve).
         transaction_amount = round(np.random.normal(cur_base, amount_std_dev), 2)
 
         inv_day = max(1, min(28, day_of_month))
@@ -324,6 +322,6 @@ if __name__ == "__main__":
     print(f"Saved to '{OUTPUT_FILENAME}'")
     df.head(10)  # Display first 10 rows for verification
 
-    pd.set_option('display.max_columns', None)  # Zeigt alle Spalten
-    pd.set_option('display.width', None)        # 
+    pd.set_option('display.max_columns', None)  
+    pd.set_option('display.width', None)        
     print(df.head(10))  # Display first 10 rows for verification

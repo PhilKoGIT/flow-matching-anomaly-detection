@@ -122,7 +122,7 @@ class TCCM:
 
     def compute_reconstruction_score(self, X_test, n_t):
         """
-        Same principle as the reconstruction score from the Forest-Models
+        Similar principle as the reconstruction score from the Forest-Models
         For every time step t, start from x(t) and follow the flow to t=1.
         Measure the distance (squared error) to the origin as anomaly score and sum up for all starting points
         .

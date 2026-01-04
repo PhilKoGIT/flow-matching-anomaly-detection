@@ -20,7 +20,7 @@ This repo includes additionally to the code of the thesis:
 
 ## Datasets
 
-- Both can be found on the USB stick
+- Campaign and business dataset can be found on the USB stick
 - Additionally:
   - **Campaign dataset:** Public or available [here](https://github.com/ZhongLIFR/TCCM-NIPS/tree/main/datasets/high_dim)
   - **Business dataset:** Can be generated (but due to random effects it won't be exactly the same as in the thesis). After generation, move it into `data_contamination`
@@ -32,7 +32,6 @@ This repo includes additionally to the code of the thesis:
 ### Requirements
 
 - Python 3.11
-- Mac (Apple Silicon) works — others not tested
 
 ### Setup
 
@@ -77,7 +76,6 @@ python -c "import torch; import ForestDiffusion; print('OK!')"
 
 ### Training the Models
 
-> Skip this step if models already exist.  
 > For configuration, please look into the description in the file.
 
 ```bash

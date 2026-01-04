@@ -643,12 +643,9 @@ if __name__ == "__main__":
     #2.
     dataset_names = ["5_campaign.npz"]
     #dataset_names = ["business_dataset.csv"]
-
     # ============================================================================
     models_to_run = {  
     #choose the models to run here
-
-
     # main study configurations:
         "ForestDiffusion_nt20_dk20": {
             "type": "forest",
@@ -753,7 +750,7 @@ if __name__ == "__main__":
 
 #         },
 
-     }
+    }
     
     all_results_combined = {}
     all_extreme_cases = {}
