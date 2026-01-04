@@ -1,1 +1,14 @@
 == Job Start: Sun Jan  4 12:19:26 AM CET 2026 ==
+
+ Dataset: 5_campaign.npz with model: ForestDiffusion_nt20_dk20 and score: deviation
+ 
+Dataset loaded successfully!
+Training data: (18274, 62), Normal: 18274
+Test data: (22914, 62), Normal: 18274, Anomalies: 4640
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/ec8b08df7620b23fbaaf2497e3edb5e7.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/a1547befeac7e86232d521b07011cad2.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/5cdbbc1f4a912fbeaa5432ad94200397.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/3b6fb68019d919a8d789dfee34a6a649.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/88884922a217b032a3c680e5303bb5f7.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/4f1ffbfea3ddae3d443e7fe3592fc561.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/fb3f1e9a0be30085d24b00ce0f2841e2.joblib

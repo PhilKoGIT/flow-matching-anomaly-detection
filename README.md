@@ -3,11 +3,20 @@
 - source angeben!
 -dataset umbenennen
 -pfade anpassen in der merge
-- oben das resultdataset rein
+- oben das resultdataset reins
+- dateien ordner erstellen auf repo!
 
 - install requirements and run with correct python version 
 
 
+
+- wie man die dateien darein läd
+- ich nutze mac
+
+- environment auch rein machen in stick
+
+
+- clusterunterscheidung
 
 - code of me ... what is in contamination
 

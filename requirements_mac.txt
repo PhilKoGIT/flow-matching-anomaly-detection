@@ -1,0 +1,32 @@
+# Core - REIHENFOLGE WICHTIG
+torch
+numpy==1.26.4
+scikit-learn==1.2.1
+
+# ML Frameworks
+xgboost
+lightgbm
+catboost
+
+# Data
+pandas
+scipy
+statsmodels
+
+# Plotting
+matplotlib
+seaborn
+plotly
+
+# Optimal Transport
+POT
+geomloss
+
+# Utils
+joblib
+tqdm
+PyYAML
+requests
+openpyxl
+Faker
+icecream
