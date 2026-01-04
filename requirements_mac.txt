@@ -1,4 +1,4 @@
-# Core - REIHENFOLGE WICHTIG
+# Core 
 torch
 numpy==1.26.4
 scikit-learn==1.2.1

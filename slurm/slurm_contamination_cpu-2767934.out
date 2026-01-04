@@ -12,3 +12,10 @@ Test data: (22914, 62), Normal: 18274, Anomalies: 4640
 [*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/88884922a217b032a3c680e5303bb5f7.joblib
 [*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/4f1ffbfea3ddae3d443e7fe3592fc561.joblib
 [*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/fb3f1e9a0be30085d24b00ce0f2841e2.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/f05959543e6921a6033adfef326855da.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/520f73de93a74ae9adb2359d8d82f22b.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/7c312da5257577e12727e9877739582e.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/ad396d66da0f1c8e2ac7eefb9850514f.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/f795f3615552cccefb07a4488da3e621.joblib
+[*] Loading cached forest model from /pfs/work9/workspace/scratch/ma_pkonz-thesis/ForestDiffusion/scripts/saved_models/5_campaign.npz/ForestDiffusion_nt20_dk20/7cf272ab02648803adeb84e9528b40ef.joblib
+[*] No cached model found. Training model for 5_campaign.npz, ForestDiffusion_nt20_dk20, contam_idx=2, seed=3
