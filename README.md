@@ -75,7 +75,7 @@ python -c "import torch; import ForestDiffusion; print('OK!')"
 
 ## Usage
 
-### Training of the models (if not already existent) and do anomaly detection on the test set
+### Training of the models (if not already existent) and anomaly detection on the test set
 
 > For configuration, please look into the description in the file.
 
