@@ -657,12 +657,12 @@ if __name__ == "__main__":
             },
         },
 
-                "ForestFlow_nt20_dk10": {
+                "ForestFlow_nt20_dk20": {
             "type": "forest",
             "params": {
                 "n_t": 20,
-                "duplicate_K": 10,
-                "duplicate_K_test": 10,
+                "duplicate_K": 20,
+                "duplicate_K_test": 20,
                 "diffusion_type": "flow"
             },
         },
