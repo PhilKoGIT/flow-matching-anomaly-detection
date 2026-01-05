@@ -75,7 +75,7 @@ python -c "import torch; import ForestDiffusion; print('OK!')"
 
 ## Usage
 
-### Training the Models
+### Training of the models (if not already existent) and do anomaly detection on the test set
 
 > For configuration, please look into the description in the file.
 
@@ -88,14 +88,6 @@ python contamination.py
 
 ```bash
 sbatch run_contamination_cpu.sbatch
-```
-
-### Generate Plots
-
-> For configuration, please look into the description in the file.
-
-```bash
-python plot_and_merge.py
 ```
 
 ### Generate Plots
